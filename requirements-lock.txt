@@ -1,0 +1,15 @@
+absl-py==2.5.1
+colorama==0.4.6
+etils==1.14.0
+fsspec==2026.9.0
+glfw==2.10.2
+iniconfig==2.3.1
+mujoco==3.8.0
+numpy==2.2.6
+packaging==26.3
+pluggy==1.6.0
+PyOpenGL==3.1.10
+pytest==8.3.5
+ruff==0.11.13
+typing_extensions==4.16.0
+zipp==4.1.1

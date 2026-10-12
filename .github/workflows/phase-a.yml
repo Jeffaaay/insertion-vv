@@ -1,0 +1,37 @@
+name: Phase A SIL
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lab-frame-pd:
+    runs-on: windows-2022
+    timeout-minutes: 15
+    env:
+      PYTHONHASHSEED: "0"
+      OMP_NUM_THREADS: "1"
+      OPENBLAS_NUM_THREADS: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12.10"
+          cache: pip
+          cache-dependency-path: requirements-lock.txt
+      - name: Install pinned dependencies
+        run: python -m pip install -r requirements-lock.txt
+      - name: Run full local-compatible CI job
+        run: python -m sim.ci --output artifacts
+      - name: Upload metrics, traces, calibration, timings, and test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase-a-lab-frame-pd-${{ github.sha }}
+          path: artifacts/
+          if-no-files-found: error
+          retention-days: 30

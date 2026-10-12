@@ -1,0 +1,33 @@
+<mujoco model="insertion-vv-phase-a">
+  <compiler angle="radian" autolimits="true"/>
+  <option timestep="0.001" gravity="0 0 0" integrator="implicitfast"
+          solver="Newton" iterations="100" tolerance="1e-12"/>
+  <default>
+    <joint damping="0" armature="0" limited="false"/>
+    <geom friction="0 0 0" condim="1" margin="0" gap="0"/>
+  </default>
+  <worldbody>
+    <!-- qpos is the height of the bottom of the spherical needle tip. -->
+    <body name="needle">
+      <joint name="needle_z" type="slide" axis="0 0 1"/>
+      <inertial pos="0 0 0.00025" mass="0.001" diaginertia="2.5e-11 2.5e-11 2.5e-11"/>
+      <geom name="needle_tip" type="sphere" pos="0 0 0.00025" size="0.00025"/>
+    </body>
+    <!-- Box top is qpos; thick enough for the full soft-penetration range. -->
+    <body name="tissue">
+      <joint name="tissue_z" type="slide" axis="0 0 1"/>
+      <inertial pos="0 0 -0.005" mass="1" diaginertia="0.0001 0.0001 0.0001"/>
+      <geom name="tissue_surface" type="box" pos="0 0 -0.005" size="0.01 0.01 0.005"/>
+    </body>
+  </worldbody>
+  <contact>
+    <!-- Direct solref is acceleration-space stiffness, NOT N/m.
+         Calibrated by the force-controlled quasi-static experiment. -->
+    <pair geom1="needle_tip" geom2="tissue_surface" condim="1"
+          solref="-2669.3333333333335 -179" solimp="0.5 0.5 0.001 0.5 2"/>
+  </contact>
+  <actuator>
+    <motor name="needle_motor" joint="needle_z" gear="1"/>
+    <position name="tissue_servo" joint="tissue_z" kp="1000000" kv="2000"/>
+  </actuator>
+</mujoco>

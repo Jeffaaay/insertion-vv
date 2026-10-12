@@ -1,0 +1,11 @@
+{
+  "version": "phase-a-v1",
+  "contact_rms_e_um_strictly_less_than": 20.0,
+  "contact_peak_abs_edot_mm_s_strictly_less_than": 2.0,
+  "free_window_us": [1000000, 2000000],
+  "contact_window_us": [3000000, 8000000],
+  "window_end_exclusive": true,
+  "safety_stop_allowed": false,
+  "require_complete_finite_data": true,
+  "require_verified_reproducibility": true
+}
