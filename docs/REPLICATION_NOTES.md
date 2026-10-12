@@ -308,3 +308,63 @@ fingerprint is not applied. Same-platform replay remains mandatory on new/unregi
 platforms. Linux runner results are canonical; Windows results are supporting
 cross-platform evidence. Visualization tools replay the Linux run's recorded truth
 locally and remain outside CI and test dependencies.
+
+### Verified two-tier checkpoint and canonical delayed feedback
+
+At commit `3303572ccc1f45146fc1b8bc75f687143550bada`,
+[hosted run 38316499846](https://github.com/Jeffaaay/insertion-vv/actions/runs/38316499846)
+completed with all three jobs green: Ubuntu 24.04, Windows Server 2022, and
+cross-platform comparison. Both platform jobs passed **96 tests** with zero
+failures/errors/skips, calibrated both profiles, and ran all four controller/profile
+cases with seed 42 and exact same-platform replay. Local Windows executed the same
+CI entry point on this clean commit; its four trace/truth hashes matched the hosted
+Windows files exactly. Downloaded Linux/Windows artifacts were independently
+rechecked with the same standard-library comparator.
+
+The largest differences across all four comparisons, including evaluator truth,
+were **2.168404344971009e-19 m** position, **1.7780915628762273e-17 m/s** velocity,
+and **2.7755575615628914e-17 N** force. The largest physical-metric relative
+difference was **1.7754149153478065e-15**. All are strictly within the registered
+limits; all corresponding verdicts and discrete fields agree.
+
+The already implemented delayed-feedback controller was verified without changing
+gains, estimator, plant or task thresholds. It follows the 15 ms-delayed measured
+surface and uses a 5 ms filtered capture-time difference for velocity; it performs
+no position prediction. These are the **canonical Linux** results:
+
+| Seed 42 metric | `primary` | `paper_effective` |
+| --- | ---: | ---: |
+| Free RMS | 19.310017584602836 µm | 19.310017584602836 µm |
+| Contact RMS | 184.4305797579661 µm | 78.09269727426855 µm |
+| Contact peak absolute error velocity | 0.12506631717776914 mm/s | 0.19602246516378652 mm/s |
+| Contact peak normal force | 2.1324453956586886 mN | 1.0127573960638219 mN |
+| Task verdict | FAIL: contact RMS >=20 µm | FAIL: contact RMS >=20 µm |
+| Reproduction acceptance | PASS: free 15–25 µm, contact 150–200 µm | PASS: free 15–25 µm; primary contact range does not apply |
+
+```text
+Linux delayed_feedback primary:
+74b760f84911f8c12e1de7eb9aa638c97db56119eb0618e6565b8cce17cdbf60
+Linux delayed_feedback paper_effective:
+cbd213fe4a0848c196688ef1f5c4f9b17fdc3309fd0c2cd91866df2d6fffe3a7
+```
+
+### Optional delayed-feedback visualizations
+
+The Linux job artifact is `phase-a-ubuntu-24.04-3303572ccc1f45146fc1b8bc75f687143550bada`.
+Locally it was downloaded to `artifacts/hosted-two-tier-38316499846/linux/`.
+For each of `primary` and `paper_effective`, in the separate visualization environment:
+
+```text
+python tools/plot_run.py --run artifacts/hosted-two-tier-38316499846/linux/primary/delayed_feedback
+python tools/render_video.py --run artifacts/hosted-two-tier-38316499846/linux/primary/delayed_feedback
+python tools/plot_run.py --run artifacts/hosted-two-tier-38316499846/linux/paper_effective/delayed_feedback
+python tools/render_video.py --run artifacts/hosted-two-tier-38316499846/linux/paper_effective/delayed_feedback
+```
+
+Outputs: `artifacts/viz/delayed_feedback_primary_seed42.{png,mp4}` and
+`artifacts/viz/delayed_feedback_paper_effective_seed42.{png,mp4}`, plus provenance
+JSON sidecars. Both PNGs were visually reviewed. Both encoded videos were decoded
+to verify 1280×720, 20 fps, 160 frames, 8 s; frames at 0, 3.2, 5.1 and 7.95 s were
+inspected for the HUD, needle/tissue contrast and moving 300 µm depth marker.
+Rendering reads recorded states and does not integrate physics. These local
+artifacts are ignored by Git and are never CI/test dependencies.

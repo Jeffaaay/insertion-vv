@@ -8,6 +8,9 @@ measurements, and CI.
 Reported numbers use the **Linux x86_64 runner** (Ubuntu 24.04, Python 3.12.10,
 MuJoCo 3.8.0, NumPy 2.2.6) as the canonical platform. Windows is independently
 verified and compared with Linux using the two-tier determinism contract below.
+The [two-tier checkpoint](https://github.com/Jeffaaay/insertion-vv/actions/runs/38316499846)
+passed **96 tests on each OS**, both calibrations, four deterministic experiments
+per OS, and all four cross-platform comparisons. Tables below use that Linux run.
 
 | Lab-frame PD, seed 42 | `primary` | `paper_effective` |
 | --- | ---: | ---: |
@@ -137,5 +140,9 @@ See [findings](docs/FINDINGS.md) for the evidence and Phase B implications.
 [Plot and video tools](tools/README.md) replay saved Linux artifacts locally, with
 a separate visualization environment. They are never executed by CI or imported by
 tests, and their optional dependencies are not part of the test environment.
+The delayed-feedback checkpoint produced both `.png` and `.mp4` outputs under
+`artifacts/viz/delayed_feedback_{primary,paper_effective}_seed42.*`; each video is
+1280×720, 20 fps, 160 frames / 8 seconds. See the replication notes for provenance
+and commands to regenerate them from the canonical Linux artifacts.
 
 Directory layout follows [PROJECT_BRIEF.md §8](PROJECT_BRIEF.md).
