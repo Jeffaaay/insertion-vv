@@ -14,10 +14,10 @@ from pathlib import Path
 import mujoco
 import numpy as np
 
-from .config import Config
+from .config import CONTACT_TARGETS_N_PER_M, Config
 from .controllers import LabFramePD
 from .metrics import CONTRACT, CONTRACT_PATH, verdict, window_metrics
-from .plant import MODEL_PATH, MujocoPlant
+from .plant import MODEL_PATH, MujocoPlant, build_model, contact_parameters
 from .reference import reference
 
 REPO = Path(__file__).resolve().parents[1]
@@ -133,6 +133,7 @@ def run(cfg: Config, output: Path, *, write_truth: bool = True) -> dict:
         raise ValueError("output directory must be empty; preserve previous run evidence")
     effective_config = {
         "parameters": asdict(cfg),
+        "contact": contact_parameters(build_model(cfg), cfg.contact_profile),
         "mjcf_sha256": sha256(MODEL_PATH.read_bytes()),
         "verdict_contract_sha256": sha256(CONTRACT_PATH.read_bytes()),
     }
@@ -169,6 +170,8 @@ def run(cfg: Config, output: Path, *, write_truth: bool = True) -> dict:
         "schema_version": 1,
         "run_id": str(uuid.uuid4()),
         "controller": cfg.controller,
+        "contact_profile": cfg.contact_profile,
+        "contact_parameters": effective_config["contact"],
         "seed": cfg.seed,
         **git_provenance(),
         "source_sha256": source_hash(),
@@ -229,6 +232,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--seed", type=int, default=42)
+    parser.add_argument("--contact-profile", choices=CONTACT_TARGETS_N_PER_M, default="primary")
     parser.add_argument("--sample-hz", type=int, choices=(25, 1000), default=1000)
     parser.add_argument("--noise-std-m", type=float, default=0.0)
     parser.add_argument("--dropout-probability", type=float, default=0.0)
@@ -236,6 +240,7 @@ def main() -> int:
     args = parser.parse_args()
     cfg = Config(
         seed=args.seed,
+        contact_profile=args.contact_profile,
         surface_sample_hz=args.sample_hz,
         surface_noise_std_m=args.noise_std_m,
         surface_dropout_probability=args.dropout_probability,

@@ -228,3 +228,18 @@ The user will create public `github.com/Jeffaaay/insertion-vv` and add the remot
 No GitHub repository creation or push is authorized in this checkpoint.
 See `docs/model-and-evaluation.md` for explicit modeling choices and measured results.
 The original brief above is preserved; Phase A overall acceptance is still pending.
+
+## 14. Contact-profile decision (2026-10-12)
+
+Phase A targets paper-magnitude baselines with documented deviations, not bit-exact
+paper replication. Tissue servo gains are aligned to v1 Appendix B-B (8000/120),
+and the needle tip is a capsule. The primary contact remains measured 16 N/m.
+A `paper_effective` diagnostic targets measured 3.5 N/m by changing only the contact
+stiffness term; no further parameter tuning is authorized after its result.
+
+The prior 6.52 mN primary-force stop condition is resolved by this user decision.
+The diagnostic's expected 2–4 mN peak force is a hypothesis to report, not a reason
+to fit parameters or change the task verdict. Both profiles belong in local CI.
+`docs/REPLICATION_NOTES.md` records the version-specific paper evidence and differences.
+This checkpoint stops after reporting local CI; no delayed_feedback, GitHub repository
+creation, remote addition, or push is authorized.

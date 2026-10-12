@@ -25,7 +25,7 @@ jobs:
           cache-dependency-path: requirements-lock.txt
       - name: Install pinned dependencies
         run: python -m pip install -r requirements-lock.txt
-      - name: Run full local-compatible CI job
+      - name: Run full CI matrix (primary and paper_effective)
         run: python -m sim.ci --output artifacts
       - name: Upload metrics, traces, calibration, timings, and test report
         if: always()

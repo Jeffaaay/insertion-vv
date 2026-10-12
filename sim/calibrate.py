@@ -7,15 +7,20 @@ from pathlib import Path
 import mujoco
 import numpy as np
 
-from .plant import MODEL_PATH
+from .config import CONTACT_TARGETS_N_PER_M, Config
+from .plant import build_model, contact_parameters
 
 
-def calibrate() -> dict:
-    model = mujoco.MjModel.from_xml_path(str(MODEL_PATH))
+def calibrate(contact_profile: str = "primary") -> dict:
+    model = build_model(Config(contact_profile=contact_profile))
+    target = CONTACT_TARGETS_N_PER_M[contact_profile]
     points = []
-    for load_n in (0.0008, 0.0016, 0.0032, 0.0048, 0.0064, 0.0080):
+    # Match the physical depth range across profiles, including trajectory peaks.
+    # Targets choose loads and initial guesses only; position is never constrained.
+    for depth_um in (50, 100, 200, 300, 400, 500, 750, 900):
+        load_n = target * depth_um * 1e-6
         data = mujoco.MjData(model)
-        data.qpos[0] = -load_n / 16.0  # Initial guess only, never a constraint.
+        data.qpos[0] = -depth_um * 1e-6
         data.ctrl[:] = (-load_n, 0.0)
         for _ in range(5000):
             mujoco.mj_step(model, data)
@@ -38,17 +43,16 @@ def calibrate() -> dict:
     slope, intercept = np.polyfit(depths, forces, 1)
     residual = forces - (slope * depths + intercept)
     result = {
-        "method": "6 constant motor loads; 5 s settling per load; linear F versus true penetration",
+        "method": "8 constant motor loads; 5 s each; 50-900 um target range; fit F vs true depth",
         "mujoco_version": mujoco.__version__,
-        "solref": model.pair_solref[0].tolist(),
-        "solimp": model.pair_solimp[0].tolist(),
+        **contact_parameters(model, contact_profile),
         "measured_stiffness_n_per_m": float(slope),
         "fit_intercept_n": float(intercept),
         "fit_max_abs_residual_n": float(np.max(np.abs(residual))),
         "points": points,
     }
     result["passed"] = bool(
-        15.2 <= slope <= 16.8
+        0.95 * target <= slope <= 1.05 * target
         and max(p["max_abs_velocity_m_s"] for p in points) < 1e-8
         and max(abs(p["contact_force_n"] - p["applied_load_n"]) for p in points) < 1e-7
     )
@@ -58,8 +62,9 @@ def calibrate() -> dict:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--contact-profile", choices=CONTACT_TARGETS_N_PER_M, default="primary")
     args = parser.parse_args()
-    result = calibrate()
+    result = calibrate(args.contact_profile)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(result, indent=2, allow_nan=False) + "\n", encoding="utf-8")
     print(json.dumps(result, indent=2, allow_nan=False))

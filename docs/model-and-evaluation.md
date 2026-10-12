@@ -11,39 +11,50 @@ The user owns creation of the public GitHub repository and adding its remote.
 
 All calculations use metres, seconds, kilograms and newtons. The MJCF has two z-slide
 joints: a motor-driven 0.001 kg needle and a 1 kg tissue body driven by a position
-servo (1,000,000 N/m, 2,000 N·s/m). Tissue mass and servo gains are explicit modeling
-choices because the brief does not specify them. Gravity is zero, representing ideal
+servo (8,000 N/m, 120 N·s/m), aligned to paper v1 Appendix B-B. Tissue mass remains
+our explicit modeling choice. Gravity is zero, representing ideal
 gravity compensation along the axis; no gravity compensation accesses ground truth.
 The timestep and control tick are both 1 ms, with implicitfast integration and a Newton
 solver (100 iterations, tolerance 1e-12). The backend also supports integer substeps.
 
-The needle tip is a 0.25 mm-radius sphere. Its joint coordinate is the bottom of the
-sphere, so its signed gap is needle_z minus tissue_z. The tissue box has a 20 × 20 mm
+The needle tip is a capsule with a 0.25 mm radius and a 1 mm axial segment; the
+paper states the capsule shape but does not establish these dimensions. Its joint
+coordinate is the bottom tip, so its signed gap is needle_z minus tissue_z.
+The tissue box has a 20 × 20 mm
 top and is 10 mm thick. Soft overlap represents penetration; there is no cutting or
 deformable-tissue model. Contact has one frictionless normal constraint.
 
 The servo target is the sum of 200 µm at 1.2 Hz, 60 µm at 2.4 Hz, and 300 µm at
 0.25 Hz. The unspecified harmonic phase is fixed to **0 radians**, not randomized or
 fitted. Evaluation uses actual tissue qpos/qvel, not the waveform or its derivative.
-The slight servo lag is therefore included in every metric.
+The finite servo lag is therefore included in every metric. The servo test checks
+each harmonic against the independent mass-spring-damper frequency response; the
+old <5 µm tracking bound for the much stiffer servo no longer applies.
 
 MuJoCo's direct `solref` parameters are acceleration-space quantities; assigning
 `-16` would not establish a 16 N/m physical spring. See the official
 [MuJoCo 3.8 solver documentation](https://mujoco.readthedocs.io/en/3.8.0/modeling.html#solver-parameters).
-Calibration holds the tissue target at zero and applies six constant needle motor
-loads, 0.8–8 mN, allowing five seconds to settle for each. It fits measured normal
+Calibration holds the tissue target at zero and applies eight constant needle motor
+loads spanning a 50–900 µm depth range, allowing five seconds to settle for each.
+Loads scale with the selected target stiffness so both profiles cover the same
+depths; positions remain unconstrained. It fits measured normal
 force against actual penetration, checking residual velocity and force balance.
 The initial `solref=-8008 -179` measured 48 N/m. Changing only the stiffness term to
-`solref=-2669.3333333333335 -179` gives 16.000 N/m at 50–500 µm penetration, with
+`solref=-2669.3333333333335 -179` gives 16.000 N/m, now verified at 50–900 µm, with
 `solimp=0.5 0.5 0.001 0.5 2`. The CI calibration file records every point and fit.
 The measured stiffness tolerance, fixed before acceptance, is ±5%.
+The `paper_effective` diagnostic scales only the first `solref` entry by 3.5/16,
+giving `-583.9166666666667 -179` and measured stiffness 3.500 N/m. Primary physics
+is unchanged by adding this selectable profile. It is explicitly not the author's MJCF.
 
 ## Task and controller
 
 Positive z is away from tissue. A cubic smoothstep approaches from 1 mm to 0.5 mm
 over 0–1 s; 1–2 s holds 0.5 mm; a cubic ramp moves to -0.3 mm over 2–2.5 s; the
 setpoint holds until 8 s. The initial 1 mm height and cubic profiles are documented
-choices where the brief specifies only smooth approach/ramp.
+choices where the brief specifies only smooth approach/ramp. PDF v1 explicitly
+describes a cosine approach; our cubic approach is recorded as a deliberate deviation
+and was held fixed during the contact-only diagnostic.
 
 The lab-frame PD uses `F = 400*(z_ref - z_encoder) + 0.8*(v_ref - v_encoder)` in SI
 units. The gains were selected before the first trajectory run; they are not tuned
@@ -103,9 +114,12 @@ timing, not controller-only firmware timing or a real-time deadline guarantee.
 
 ## Interpretation
 
-The 256.208 µm contact RMS meets the brief's baseline magnitude gate (250–300 µm).
+The aligned primary's 256.592 µm contact RMS meets the brief's magnitude gate (250–300 µm).
 Force and velocity are not exact reproductions of
 [the paper's Table IV](https://arxiv.org/html/2608.08860v1). Unspecified phase, gains,
-contact damping, geometry and servo properties are declared here, so no claim of
+contact damping and geometry are declared in the [replication notes](REPLICATION_NOTES.md),
+including the paper's version-dependent contact-stiffness statements. No claim of
 full numerical replication or real-tissue validity is made. No thresholds were changed
-to make the baseline PASS. Delayed-feedback acceptance and hosted CI remain pending.
+to make the baseline PASS. The diagnostic's peak force is 4.708 mN, outside the
+2–4 mN expectation; no tuning follows that result. Delayed-feedback acceptance and
+hosted CI remain pending.

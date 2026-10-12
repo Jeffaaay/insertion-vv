@@ -5,6 +5,10 @@ import subprocess
 import sys
 from pathlib import Path
 
+import pytest
+
+from sim.config import CONTACT_TARGETS_N_PER_M
+
 REPO = Path(__file__).resolve().parents[1]
 
 
@@ -12,7 +16,8 @@ def digest(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def test_independent_process_trace_sha_and_optional_truth(tmp_path):
+@pytest.mark.parametrize("profile", CONTACT_TARGETS_N_PER_M)
+def test_independent_process_trace_sha_and_optional_truth(tmp_path, profile):
     # No display server, renderer, or shared process/RNG state is required.
     env = dict(os.environ)
     env.pop("DISPLAY", None)
@@ -24,6 +29,8 @@ def test_independent_process_trace_sha_and_optional_truth(tmp_path):
                 sys.executable,
                 "-m",
                 "sim.run",
+                "--contact-profile",
+                profile,
                 "--output",
                 str(output),
                 "--seed",
@@ -44,6 +51,7 @@ def test_independent_process_trace_sha_and_optional_truth(tmp_path):
         )
         metrics = json.loads((output / "metrics.json").read_text())
         assert metrics["complete"]
+        assert metrics["contact_profile"] == profile
         assert metrics["determinism"]["verified"]
         assert metrics["verdict"]["status"] != "INVALID"
         assert digest(output / "trace.jsonl") == digest(output / "repeat_trace.jsonl")

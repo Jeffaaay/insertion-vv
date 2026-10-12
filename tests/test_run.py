@@ -2,14 +2,15 @@ import json
 
 import pytest
 
-from sim.config import Config
+from sim.config import CONTACT_TARGETS_N_PER_M, Config
 from sim.metrics import CONTRACT, window_metrics
 from sim.plant import MujocoPlant
 from sim.run import run, simulate
 
 
-def test_baseline_regression_and_true_velocity():
-    execution = simulate(Config())
+@pytest.mark.parametrize("profile", CONTACT_TARGETS_N_PER_M)
+def test_baseline_regression_and_true_velocity(profile):
+    execution = simulate(Config(contact_profile=profile))
     assert execution.complete
     assert execution.completed_ticks == 8000
     assert not execution.safety_stop

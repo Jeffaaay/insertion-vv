@@ -6,11 +6,31 @@ from pathlib import Path
 import mujoco
 import numpy as np
 
-from .config import Config, tissue_target
+from .config import CONTACT_TARGETS_N_PER_M, Config, tissue_target
 from .contracts import Command, Sensors
 from .sensors import SensorModel
 
 MODEL_PATH = Path(__file__).with_name("plant.xml")
+
+
+def build_model(cfg: Config) -> mujoco.MjModel:
+    cfg.validate()
+    model = mujoco.MjModel.from_xml_path(str(MODEL_PATH))
+    model.opt.timestep = cfg.physics_dt_us / 1e6
+    if cfg.contact_profile == "paper_effective":
+        # One predetermined diagnostic change: scale only the stiffness term.
+        # Damping, impedance, geometry, servo and controller are unchanged.
+        model.pair_solref[0, 0] *= CONTACT_TARGETS_N_PER_M["paper_effective"] / 16.0
+    return model
+
+
+def contact_parameters(model: mujoco.MjModel, profile: str) -> dict:
+    return {
+        "profile": profile,
+        "target_stiffness_n_per_m": CONTACT_TARGETS_N_PER_M[profile],
+        "solref": model.pair_solref[0].tolist(),
+        "solimp": model.pair_solimp[0].tolist(),
+    }
 
 
 @dataclass(frozen=True, slots=True)
@@ -26,8 +46,7 @@ class MujocoPlant:
     def __init__(self, cfg: Config):
         cfg.validate()
         self.cfg = cfg
-        self.model = mujoco.MjModel.from_xml_path(str(MODEL_PATH))
-        self.model.opt.timestep = cfg.physics_dt_us / 1e6
+        self.model = build_model(cfg)
         self.data = mujoco.MjData(self.model)
         self.reset(cfg.seed)
 

@@ -3,10 +3,13 @@
 import math
 from dataclasses import asdict, dataclass
 
+CONTACT_TARGETS_N_PER_M = {"primary": 16.0, "paper_effective": 3.5}
+
 
 @dataclass(frozen=True)
 class Config:
     controller: str = "lab_frame_pd"
+    contact_profile: str = "primary"
     seed: int = 42
     control_dt_us: int = 1000
     physics_dt_us: int = 1000
@@ -28,6 +31,8 @@ class Config:
     kd_ns_per_m: float = 0.8
 
     def validate(self) -> None:
+        if self.contact_profile not in CONTACT_TARGETS_N_PER_M:
+            raise ValueError("contact_profile must be primary or paper_effective")
         if self.controller != "lab_frame_pd":
             raise ValueError("Only lab_frame_pd is implemented; CI determinism gates expansion")
         if not 0 <= self.seed < 2**64:

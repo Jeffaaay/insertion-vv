@@ -4,19 +4,23 @@ Headless, deterministic MuJoCo SIL for a 1-axis needle and pulsating tissue.
 The project asks when simulation can predict firmware PASS/FAIL; this checkpoint
 implements only the Phase A plant, `lab_frame_pd`, sensors, measurements, and CI.
 
-| Local baseline, seed 42 | Measured |
-| --- | ---: |
-| Free-window RMS error, 1–2 s | 263.621 µm |
-| Contact-window RMS error, 3–8 s | 256.208 µm |
-| Contact peak absolute error velocity | 2.761 mm/s |
-| Contact peak normal force | 12.552 mN |
-| Quasi-static contact stiffness | 16.000 N/m |
-| Task verdict | **FAIL** (RMS and velocity exceed the contract) |
+| Local baseline, seed 42 | `primary` | `paper_effective` |
+| --- | ---: | ---: |
+| Free-window RMS error, 1–2 s | 270.369 µm | 270.396 µm |
+| Contact-window RMS error, 3–8 s | 256.592 µm | 262.055 µm |
+| Contact peak absolute error velocity | 2.757 mm/s | 2.846 mm/s |
+| Contact peak normal force | 13.283 mN | 4.708 mN |
+| Quasi-static contact stiffness | 16.000 N/m | 3.500 N/m |
+| Task verdict | **FAIL** | **FAIL** |
 
 The baseline meets the brief's 250–300 µm contact-RMS regression range. This is a
 scale reproduction, not an exact reproduction of the paper's force/velocity values.
 CI must pass while this deliberately inadequate controller receives a task FAIL.
-See [model decisions](docs/model-and-evaluation.md) for assumptions and differences.
+The 3.5 N/m diagnostic reduces force but **does not meet the expected 2–4 mN range**;
+it is preserved without further tuning. This scientific expectation is reported
+separately from the verification job's pass/fail status.
+See [replication notes](docs/REPLICATION_NOTES.md) for the complete parameter inventory,
+versioned paper evidence, prior results and bounded source-code search.
 
 ## Run
 
@@ -40,6 +44,7 @@ For a single experiment (the runner automatically checks a second identical exec
 
 ```powershell
 python -m sim.run --seed 42 --output artifacts/experiment
+python -m sim.run --seed 42 --contact-profile paper_effective --output artifacts/diagnostic
 python -m sim.run --seed 42 --sample-hz 25 --noise-std-m 0.000002 --dropout-probability 0.1 --output artifacts/sparse
 ```
 
@@ -55,6 +60,10 @@ non-reproducible runs are INVALID and return a nonzero exit code.
 `lab_frame_pd` is the only implemented controller. Tests cover independent-process
 SHA-256 determinism, enabled/disabled truth-file equivalence, sensor timing,
 contract boundaries, early termination, stiffness, and baseline regression.
+The CI entry point runs both contact profiles as a matrix, producing
+`artifacts/{primary,paper_effective}/contact_calibration.json` and
+`artifacts/{primary,paper_effective}/lab_frame_pd/metrics.json` plus traces/timings.
+It reports separate SHA-256 values and the diagnostic expectation in `ci_report.json`.
 GitHub Actions runs on every push and PR and uploads all measurement evidence,
 including on failures. It requires no repository-specific URLs, credentials, or secrets.
 

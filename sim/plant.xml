@@ -7,11 +7,14 @@
     <geom friction="0 0 0" condim="1" margin="0" gap="0"/>
   </default>
   <worldbody>
-    <!-- qpos is the height of the bottom of the spherical needle tip. -->
+    <!-- qpos is the height of the bottom of the capsule needle tip.
+         Paper specifies capsule shape, not dimensions: keep the existing
+         0.25 mm radius and choose a 1 mm axial segment (not fitted). -->
     <body name="needle">
       <joint name="needle_z" type="slide" axis="0 0 1"/>
       <inertial pos="0 0 0.00025" mass="0.001" diaginertia="2.5e-11 2.5e-11 2.5e-11"/>
-      <geom name="needle_tip" type="sphere" pos="0 0 0.00025" size="0.00025"/>
+      <geom name="needle_tip" type="capsule"
+            fromto="0 0 0.00025 0 0 0.00125" size="0.00025"/>
     </body>
     <!-- Box top is qpos; thick enough for the full soft-penetration range. -->
     <body name="tissue">
@@ -28,6 +31,6 @@
   </contact>
   <actuator>
     <motor name="needle_motor" joint="needle_z" gear="1"/>
-    <position name="tissue_servo" joint="tissue_z" kp="1000000" kv="2000"/>
+    <position name="tissue_servo" joint="tissue_z" kp="8000" kv="120"/>
   </actuator>
 </mujoco>
