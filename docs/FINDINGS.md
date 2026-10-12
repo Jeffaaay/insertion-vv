@@ -158,3 +158,18 @@ cross-platform tier. All three older controllers remain exact, and both jobs pas
 170 tests. This is a measured association between dispatch/platform and rounding;
 it is not an experiment isolating dispatch as the only cause. The earlier v1 run
 still has no recoverable CPU metadata.
+## Finding #4 — Nominal C32 precision reference for F8
+
+Before hardware, the portable C32 controller was compared with Python preview on
+both contact profiles, seed 42. Canonical Linux primary maximum needle-position
+difference is 1.71782082924e-8 m, full-run RMS difference 3.42763844255e-9 m.
+Contact RMS differs by 0.05087935%; both profiles retain PASS. No controller
+parameter was tuned. Full max/RMS position, velocity and force deltas are recorded
+in REPLICATION_NOTES and the B1.2 evidence JSON.
+
+This is the nominal F8 precision reference for later experiments, sometimes called
+a quantization floor in the review. It is **not a universal lower/upper error
+bound**: the port also changes QR arithmetic order and libm calls, and different
+inputs/conditioning/compilers can change accumulated rounding. A later hardware
+gap above 0.02 µm cannot, by itself, rule out precision. Phase C must compare the
+same inputs and build against this measured reference and the preregistered budget.

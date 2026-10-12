@@ -759,3 +759,38 @@ C32 is an experimental choice. Disabling FMA does not establish equal host/ARM
 libm output. Same board binary lockstep/replay requires bitwise equality, while
 host/ARM comparison uses the registered Phase B physical tolerances. No board run
 or timing result is claimed here.
+## B1.2 canonical hosted confirmation
+
+Commit `c11fc27` passes [Phase B CI 38324263962](https://github.com/Jeffaaay/insertion-vv/actions/runs/38324263962)
+(six adapter tests per OS, C core checks, ARM compile, both profiles, repeats and
+cross-C32 comparison) and [Phase A CI 38324263921](https://github.com/Jeffaaay/insertion-vv/actions/runs/38324263921)
+(170 tests per OS, eight cross-platform cases). Local runs of both workflow entry
+points pass. All sixteen comparisons to prior Phase A artifacts pass; old three
+controller trace/truth hashes remain exact, with no `sim/` source changes.
+
+| Canonical Linux C32, seed 42 | primary | paper_effective |
+| --- | ---: | ---: |
+| Free RMS (µm) | 2.709114502634 | 2.709114502634 |
+| Contact RMS (µm) | 1.121992453479 | 7.349675690702 |
+| Contact peak absolute error velocity (mm/s) | 0.072666755770 | 0.481095502815 |
+| Contact peak force (mN) | 4.853316613458 | 1.353113188218 |
+| Nominal verdict | PASS | PASS |
+
+| Full-run difference from Python, max / RMS | primary | paper_effective |
+| --- | ---: | ---: |
+| Needle position (m) | 1.71782e-8 / 3.42764e-9 | 1.71782e-8 / 3.70651e-9 |
+| Needle velocity (m/s) | 4.73796e-7 / 5.65654e-8 | 4.73796e-7 / 6.02900e-8 |
+| Command force (N) | 1.02681e-7 / 4.44156e-8 | 7.50017e-8 / 2.71512e-8 |
+| Contact force (N) | 1.02751e-7 / 4.43794e-8 | 7.50576e-8 / 2.70940e-8 |
+
+Primary contact RMS differs by 0.05087935%, passing the 5% budget. Maximum needle
+deviation is 0.0171782 µm, passing 0.1 µm. Its slightly smaller RMS is rounding,
+not a controller improvement. Linux trace SHA: primary
+`d10c9a26602bf94a99789a9c4ef02986aaa823cc909071dede91901c5b3c336f`, diagnostic
+`47126e3b76d0ae8209e62bd84af859b6b50713936e3ab8df8aa721680f4c9e34`.
+The complete delivered evidence is `artifacts/release/b1_c32_report.json`.
+
+B1.3 registers [the full-input protocol](PROTOCOL.md) with a session ID to reject
+previous-run responses, exact tick echoes and CRC. Its 41 B / 29 B request/reply
+requires at least 1.5191 ms at 460800 baud. Firmware timing will use separate board
+replay; no hardware has been detected or measured at this checkpoint.

@@ -1,0 +1,68 @@
+{
+  "schema": 1,
+  "crc_check_ascii": "123456789",
+  "crc_check_hex": "29b1",
+  "generator": "Python stdlib struct + binascii.crc_hqx, init=0xffff",
+  "frames": [
+    {
+      "name": "hello",
+      "type": 1,
+      "session": 0,
+      "values": {},
+      "payload_hex": "",
+      "frame_hex": "a55a01010000000000008cce"
+    },
+    {
+      "name": "reset_lockstep",
+      "type": 2,
+      "session": 16909060,
+      "values": {
+        "mode": 0,
+        "expected_ticks": 8000
+      },
+      "payload_hex": "00401f0000",
+      "frame_hex": "a55a010205000403020100401f00009c92"
+    },
+    {
+      "name": "sensors_tick15",
+      "type": 3,
+      "session": 16909060,
+      "values": {
+        "tick": 15,
+        "time_us": 15000,
+        "sample_time_us": 0,
+        "sequence": 0,
+        "needle_position": 0.001,
+        "needle_velocity": 0,
+        "surface_position": 0,
+        "flags": 3
+      },
+      "payload_hex": "0f000000983a000000000000000000006f12833a000000000000000003",
+      "frame_hex": "a55a01031d00040302010f000000983a000000000000000000006f12833a000000000000000003fa87"
+    },
+    {
+      "name": "command_tick15",
+      "type": 131,
+      "session": 16909060,
+      "values": {
+        "tick": 15,
+        "force_n": -0.005,
+        "entry_cycles": 4294966784,
+        "compute_cycles": 5000,
+        "status": 0
+      },
+      "payload_hex": "0f0000000ad7a3bb00feffff8813000000",
+      "frame_hex": "a55a01831100040302010f0000000ad7a3bb00feffff88130000009adf"
+    },
+    {
+      "name": "finish",
+      "type": 4,
+      "session": 16909060,
+      "values": {
+        "completed_ticks": 8000
+      },
+      "payload_hex": "401f0000",
+      "frame_hex": "a55a0104040004030201401f0000ce8c"
+    }
+  ]
+}
