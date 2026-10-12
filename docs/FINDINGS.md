@@ -90,3 +90,43 @@ trajectory error bound. Phase B will use the tolerance tier for SIL/HIL comparis
 with unit-specific limits and a metric budget registered before experiments.
 The current binary64 SIL limits are unchanged and are not automatically suitable
 for single precision, quantization or real timing jitter.
+
+## Finding #3 — Coarse platform identity and covariance conditioning
+
+The optional preview controller introduced NumPy Kalman linear algebra. At
+`02ef8e4`, local Windows 10 and hosted Windows Server 2022 shared the original
+Windows/x86_64/Python 3.12.10/MuJoCo 3.8.0/NumPy 2.2.6 fingerprint and matching
+source/config/seed, yet their preview trace and truth SHA-256 values differed.
+All three earlier controllers remained bitwise unchanged. Each environment's
+independent-process and same-run repeats remained exact. The largest local/hosted
+Windows discrepancy was 1.9516e-17 m, 8.7734e-16 m/s, 1.0978e-16 N; maximum
+metric relative difference was 3.02333e-13, with identical verdicts.
+
+NumPy delegates linear algebra to BLAS/LAPACK, whose runtime CPU dispatch is absent
+from the old fingerprint. Local inspection reports an AMD Ryzen 9 8940HX,
+AVX2/AVX-512/FMA3 support, OpenBLAS 0.3.29 and selected `SkylakeX` kernel. The kernel
+name is a dispatch implementation, not a claim the processor is an Intel CPU.
+This supports the platform linear-algebra explanation; it does not isolate a
+particular QR instruction or prove CPU dispatch alone caused every different bit.
+See [NumPy runtime provenance](https://numpy.org/doc/2.2/reference/generated/numpy.show_runtime.html).
+
+There was a separate amplification issue: the first Joseph covariance form had
+initial condition numbers about 1.9e7 and Linux/Windows free RMS relative drift
+1.5351e-8, exceeding the 1e-9 metric limit. The single allowed adjustment used QR
+square-root covariance arithmetic with **identical P0/Q/R, state equations and
+control gains**. Maximum cross-platform metric difference fell to 6.59754e-13.
+Both original and corrected versions passed nominal task performance. This was a
+numerical representation correction; no threshold, sine function or trace was changed.
+
+The B0 contract now records OS release/build, CPU model, detected ISA flags, and
+BLAS/LAPACK build/runtime dispatch/thread count in a versioned full fingerprint.
+Equal full fingerprints require bitwise equality; different ones use the unchanged
+physical tolerances and exact verdicts. Old artifacts are not retroactively amended.
+Fresh local/hosted comparison results and both fingerprints belong in the closeout
+record. A missing fingerprint field or mixed metadata schema cannot silently pass.
+
+Float32 has much less precision than binary64 (epsilon about 1.19e-7 versus
+2.22e-16). Ill-conditioning is therefore more consequential for Phase B, but the
+epsilon ratio does **not** establish an actual HIL error multiplier or guarantee
+that square-root filtering will meet MCU timing/accuracy requirements. Those need
+measurement with a preregistered HIL error budget.

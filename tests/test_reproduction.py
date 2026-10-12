@@ -101,3 +101,9 @@ def test_all_previous_controller_hashes_are_registered_for_both_platforms(contro
         assert set(baseline["trace_sha256"]) == {"primary", "paper_effective"}
         unknown = dict(baseline["platform_fingerprint"], python="unregistered")
         assert reference_trace_hashes(unknown, controller) is None
+
+
+def test_extended_metadata_does_not_disable_old_controller_regression_anchors():
+    baseline = REPRODUCTION["lab_frame_pd"]["platform_baselines"][0]
+    extended = dict(baseline["platform_fingerprint"], cpu_model="extra runtime provenance")
+    assert reference_trace_hashes(extended) == baseline["trace_sha256"]

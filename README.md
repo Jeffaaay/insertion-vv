@@ -176,8 +176,12 @@ remain deferred.
 1. **Intra-platform:** identical source/config/seed and platform fingerprint must
    produce bitwise-identical trace and evaluator-truth SHA-256 values. Every run
    replays twice; tests also compare independent processes with truth output on/off.
-   Historical hashes are checked only for their registered platform fingerprint.
-2. **Cross-platform:** compare complete Linux/Windows artifacts for all eight cases.
+   The v2 fingerprint includes OS release/build, CPU model and ISA flags,
+   BLAS/LAPACK build/runtime/dispatch/thread count, architecture and library versions.
+   Historical hashes for the three older controllers keep their original five-field
+   scope as additional regression anchors; this is separate from tier selection.
+2. **Cross-platform:** different full fingerprints (including different Windows
+   machines) select the tolerance tier. Compare all eight Linux/Windows cases.
    Every position difference must be **<1e-12 m**, velocity **<1e-9 m/s**, force
    **<1e-12 N**. Tick times, frame flags/counts and verdicts must match exactly.
    Physical metrics (free/contact RMS and peaks, whole-run peaks) require

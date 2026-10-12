@@ -1,7 +1,7 @@
 # Insertion Verification Stack — Project Brief
 
 **Owner:** Jeff Young  
-**Status:** Required Phase A and Step 1 accepted; optional harmonic preview authorized (Step 2). This brief is the single source of truth for scope; update it before changing scope.  
+**Status:** Phase A performance accepted; platform-provenance closeout (B0), then Phase B preparation and hardware verification authorized by the user. This brief is the single source of truth for scope; update it before changing scope.  
 **Audience:** 给人读，也给执行 agent（Codex 等）读。Agent 只做本文件明确授权的事。
 
 ---
@@ -122,7 +122,7 @@ trait Plant {
 **Acceptance criteria（Phase A 结束的硬门槛）：**
 - [ ] `lab_frame_pd` 复现到论文量级（contact RMS ≈ 250–300 µm）
 - [ ] `delayed_feedback` free-space RMS 在 20 µm 附近（15–25 µm），primary contact RMS 150–200 µm
-- [ ] 同平台确定性：同 source/config/seed、OS/arch/Python/MuJoCo/NumPy 版本，trace 与 truth SHA-256 完全一致（CI 强制）；每个 run 记录平台指纹
+- [ ] 同平台确定性：同 source/config/seed 和完整 v2 平台指纹（OS release/build、CPU model/ISA、BLAS/LAPACK build/runtime/dispatch/threads、arch、Python/MuJoCo/NumPy），trace 与 truth SHA-256 完全一致（CI 强制）
 - [ ] 跨平台确定性：Linux/Windows 的位置 |Δ| <1e-12 m、速度 <1e-9 m/s、力 <1e-12 N；时间/离散状态及 verdict 完全一致；物理指标相对差 <1e-9（CI 独立 job）
 - [ ] 相对差定义为 |a-b|/max(|a|,|b|)，两者均零取零；不比较 wall-time/UUID。损坏、缺失、不完整的产物不能通过比较
 - [ ] GitHub Actions：每 push 在 Linux 和 Windows 跑所有已实现 controller × 两种 contact config，上传 metrics JSON、trace 及跨平台比较报告；报告数值以 Linux runner 为准
@@ -182,7 +182,7 @@ insertion-vv/
 
 - 一次只改一个变量；不改代码跑最多 3 次；3 次失败做一次整体对比，不逐次打补丁
 - 控制器 **永远** 拿不到 `Truth`；用自动化测试证明有/无 truth 文件输出 bitwise 相同
-- 每个 run 有 run id、seed、git SHA、source/config hash，以及 OS、arch、Python、MuJoCo、NumPy 版本的平台指纹
+- 每个 run 有 run id、seed、git SHA、source/config hash，以及 §5 的完整 v2 平台指纹；不同完整指纹自动使用容差层，相同完整指纹仍强制 bitwise
 - 同平台同 source/config/seed 必须 bitwise 可复现；否则 run = INVALID，不算任务 FAIL。历史 SHA 只约束相同平台指纹
 - 跨平台按 §5 预注册的 SI 容差和相同 verdict 比较，不要求 SHA 相同；不可比或损坏的产物 = INVALID，超容差/verdict 不同则跨平台 CI 失败，保留原 run 的任务判定
 - 不修改 sin()、不舍入 trace 来掩盖最后一位差异；Linux runner 是报告数值的标准平台
@@ -330,3 +330,29 @@ profiles on Linux/Windows, compare across platforms, and verify all six prior
 controller/profile trace hashes per OS remain unchanged. Generate both plots and
 videos outside CI, update notes, commit/push/report, then send results to the
 existing Claude conversation. No Phase B or firmware implementation is authorized.
+
+## 19. Continuous hardware-verification authorization and B0 closeout (2026-10-12)
+
+The user now explicitly requests a repeated result/review exchange with the existing
+Claude conversation `neralink project`, continuing implementation until verification
+on hardware is possible. This supersedes the prior checkpoint-only stop and Phase B
+prohibition. The user owns a NUCLEO-H723ZG and initially reports it is not connected.
+Do not claim HIL success without real device evidence. Continue independent software
+work while requesting physical connection when needed. Commit/push and scoped result
+delivery to that conversation remain authorized; no purchase is requested.
+
+First close Phase A (B0): add v2 numerical-platform provenance without changing
+controller/plant numerical code; repeat the local/hosted Windows comparison with
+fresh artifacts, publish both fingerprints, Finding #3 and PHASE_A_SUMMARY, confirm
+local and hosted CI, then tag `v0.1-phase-a`. Retain existing numeric tolerances and
+exact full-fingerprint replay. Old v1 artifacts stay immutable; do not invent
+missing historical CPU/BLAS data. Reject mixed-schema comparisons. Frozen hashes
+for the three older controllers remain conservative regression anchors in their
+original five-field scope, separately from the full-fingerprint tier selection.
+
+Then use the review exchange to sequence Phase B per §6: protocol/harness/firmware,
+host tests and cross-compilation before physical board execution. Register each HIL
+tolerance and timing criterion before experiments. The one-pass preview tuning
+limit remains exhausted; B0 is a metadata/contract correction, not further tuning.
+Claude's statements are review input, not independent evidence: distinguish measured
+dispatch differences from a suspected numerical root cause and retain failed runs.

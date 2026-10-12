@@ -158,6 +158,49 @@ def test_same_fingerprint_cannot_use_tolerance_to_bypass_bitwise_equality(pair):
     assert compare_runs(left, right)["status"] == "FAIL"
 
 
+def full_fingerprint(metrics):
+    metrics["platform_fingerprint"].update(
+        fingerprint_version="2",
+        os_release="10",
+        os_version="10.0.19045",
+        cpu_model="test-cpu",
+        cpu_isa="AVX2=1,FMA3=1",
+        blas_lapack="test-backend",
+    )
+
+
+@pytest.mark.parametrize(
+    "field", ["os_release", "os_version", "cpu_model", "cpu_isa", "blas_lapack"]
+)
+def test_full_fingerprint_dispatches_tolerance_only_for_different_environments(pair, field):
+    left, right = pair
+    save_run(left, system="Windows", change_metrics=full_fingerprint)
+    trace, truth = save_run(right, system="Windows", change_metrics=full_fingerprint)
+    trace[0]["command"]["force_n"] = 1e-20
+    save_run(right, trace=trace, truth=truth, system="Windows", change_metrics=full_fingerprint)
+    identical = compare_runs(left, right)
+    assert identical["comparison_tier"] == "intra-platform-bitwise"
+    assert identical["status"] == "FAIL"
+    metrics = json.loads((right / "metrics.json").read_text())
+    metrics["platform_fingerprint"][field] += "-different"
+    save_json(right / "metrics.json", metrics)
+    different = compare_runs(left, right)
+    assert different["comparison_tier"] == "cross-platform-tolerance"
+    assert different["status"] == "PASS"
+
+
+def test_fingerprint_schema_cannot_be_silently_upgraded_or_partially_supplied(pair):
+    left, right = pair
+    save_run(right, system="Windows", change_metrics=full_fingerprint)
+    with pytest.raises(ValueError, match="fingerprint schemas"):
+        compare_runs(left, right)
+    metrics = json.loads((right / "metrics.json").read_text())
+    del metrics["platform_fingerprint"]["cpu_model"]
+    save_json(right / "metrics.json", metrics)
+    with pytest.raises(ValueError, match="incomplete platform fingerprint"):
+        compare_runs(left, right)
+
+
 @pytest.mark.parametrize("delta,passes", [(1e-7, True), (1e-6, False)])
 def test_metric_relative_tolerance(pair, delta, passes):
     left, right = pair

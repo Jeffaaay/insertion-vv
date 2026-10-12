@@ -14,7 +14,12 @@ source/config/experiment identity, exact timing/discrete values and verdicts, th
 all trace/truth signals with strict position/velocity/force tolerances of
 1e-12 m / 1e-9 m/s / 1e-12 N. Physical metric relative differences must be <1e-9;
 both-zero metrics yield zero relative error, one-zero pairs yield one. Timing,
-UUIDs and OS descriptions are excluded. With equal fingerprints, bitwise trace
+UUIDs are excluded. Version 2 fingerprints include OS release/build, CPU model and
+detected ISA flags, plus NumPy's BLAS/LAPACK build and loaded runtime backend,
+dispatch architecture and thread count. All fields must match for the bitwise tier;
+different full fingerprints automatically select the unchanged tolerance tier.
+Legacy v1 pairs remain readable under their original rules; v1/v2 pairs are INVALID
+because missing historical platform data cannot be inferred. With equal fingerprints, bitwise trace
 and truth equality is still required. Exit codes: 0 agreement, 1 mismatch,
 2 INVALID evidence. Full details and up to 20 first mismatches go into the JSON report.
 

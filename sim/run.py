@@ -23,6 +23,7 @@ from .controllers import (
 )
 from .metrics import CONTRACT, CONTRACT_PATH, verdict, window_metrics
 from .plant import MODEL_PATH, MujocoPlant, build_model, contact_parameters
+from .platform_info import platform_fingerprint
 from .preview import HarmonicSurfaceEstimator, PreviewFeedback
 from .reference import reference
 
@@ -37,18 +38,6 @@ def canonical(value: object) -> bytes:
 
 def sha256(value: bytes) -> str:
     return hashlib.sha256(value).hexdigest()
-
-
-def platform_fingerprint() -> dict[str, str]:
-    machine = platform.machine().lower()
-    architecture = {"amd64": "x86_64", "arm64": "aarch64"}.get(machine, machine)
-    return {
-        "os": platform.system(),
-        "arch": architecture,
-        "python": platform.python_version(),
-        "mujoco": mujoco.__version__,
-        "numpy": np.__version__,
-    }
 
 
 @dataclass

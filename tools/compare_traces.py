@@ -14,6 +14,14 @@ from pathlib import Path
 TOLERANCES = {"position_m": 1e-12, "velocity_m_s": 1e-9, "force_n": 1e-12}
 METRIC_RELATIVE_TOLERANCE = 1e-9
 FINGERPRINT_KEYS = {"os", "arch", "python", "mujoco", "numpy"}
+FULL_FINGERPRINT_KEYS = FINGERPRINT_KEYS | {
+    "fingerprint_version",
+    "os_release",
+    "os_version",
+    "cpu_model",
+    "cpu_isa",
+    "blas_lapack",
+}
 TRACE_FIELDS = {
     "command.force_n": "force_n",
     "sensors.needle_z_m": "position_m",
@@ -108,7 +116,10 @@ def read_run(path):
     directory = path.parent if path.name == "trace.jsonl" else path
     metrics = read_json(directory / "metrics.json")
     fingerprint = metrics["platform_fingerprint"]
-    if fingerprint.keys() != FINGERPRINT_KEYS or not all(
+    expected_keys = (
+        FULL_FINGERPRINT_KEYS if fingerprint.get("fingerprint_version") == "2" else FINGERPRINT_KEYS
+    )
+    if fingerprint.keys() != expected_keys or not all(
         isinstance(v, str) and v for v in fingerprint.values()
     ):
         raise ValueError(f"{directory}: incomplete platform fingerprint")
@@ -148,6 +159,12 @@ def read_run(path):
 def compare_runs(left, right):
     a, aa = read_run(Path(left))
     b, bb = read_run(Path(right))
+    if a["platform_fingerprint"].get("fingerprint_version", "1") != b["platform_fingerprint"].get(
+        "fingerprint_version", "1"
+    ):
+        raise ValueError(
+            "Incompatible fingerprint schemas: regenerate both runs with full provenance"
+        )
     # Refuse unrelated experiments; hashes identify evidence, not numeric equivalence.
     for key in (
         "source_sha256",
@@ -167,6 +184,11 @@ def compare_runs(left, right):
         "status": "PASS",
         "left_platform": a["platform_fingerprint"],
         "right_platform": b["platform_fingerprint"],
+        "comparison_tier": (
+            "intra-platform-bitwise"
+            if a["platform_fingerprint"] == b["platform_fingerprint"]
+            else "cross-platform-tolerance"
+        ),
         "trace_sha256": {
             "left": a["determinism"]["trace_sha256"],
             "right": b["determinism"]["trace_sha256"],

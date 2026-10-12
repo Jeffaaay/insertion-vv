@@ -20,7 +20,11 @@ def reference_trace_hashes(
 ) -> dict | None:
     fingerprint = platform_fingerprint() if fingerprint is None else fingerprint
     for baseline in REPRODUCTION[controller].get("platform_baselines", []):
-        if baseline["platform_fingerprint"] == fingerprint:
+        # Frozen pre-v2 hashes for the three old controllers remain conservative
+        # regression anchors in their original five-field scope. This lookup is
+        # separate from comparison-tier selection, which uses the full fingerprint.
+        scope = baseline["platform_fingerprint"]
+        if all(fingerprint.get(key) == value for key, value in scope.items()):
             return baseline["trace_sha256"]
     return None
 
