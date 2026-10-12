@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pytest
 
-from sim.config import CONTACT_TARGETS_N_PER_M
+from sim.config import CONTACT_TARGETS_N_PER_M, CONTROLLERS
 
 REPO = Path(__file__).resolve().parents[1]
 
@@ -17,7 +17,8 @@ def digest(path):
 
 
 @pytest.mark.parametrize("profile", CONTACT_TARGETS_N_PER_M)
-def test_independent_process_trace_sha_and_optional_truth(tmp_path, profile):
+@pytest.mark.parametrize("controller", CONTROLLERS)
+def test_independent_process_trace_sha_and_optional_truth(tmp_path, profile, controller):
     # No display server, renderer, or shared process/RNG state is required.
     env = dict(os.environ)
     env.pop("DISPLAY", None)
@@ -29,6 +30,8 @@ def test_independent_process_trace_sha_and_optional_truth(tmp_path, profile):
                 sys.executable,
                 "-m",
                 "sim.run",
+                "--controller",
+                controller,
                 "--contact-profile",
                 profile,
                 "--output",
@@ -52,6 +55,7 @@ def test_independent_process_trace_sha_and_optional_truth(tmp_path, profile):
         metrics = json.loads((output / "metrics.json").read_text())
         assert metrics["complete"]
         assert metrics["contact_profile"] == profile
+        assert metrics["controller"] == controller
         assert metrics["determinism"]["verified"]
         assert metrics["verdict"]["status"] != "INVALID"
         assert digest(output / "trace.jsonl") == digest(output / "repeat_trace.jsonl")

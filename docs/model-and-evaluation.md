@@ -2,10 +2,11 @@
 
 ## Scope
 
-The user's instruction limits this checkpoint to the Phase A plant and lab-frame PD,
-with no other controller before a hosted CI determinism pass. The brief is the design
-input; its later phases and preview controller are not authorization for implementation.
-The user owns creation of the public GitHub repository and adding its remote.
+This checkpoint implements the Phase A plant and two baselines, lab-frame PD and
+delayed feedback. Hosted run 38309462614 passed the original 43 tests and reproduced
+both complete local hashes before delayed feedback was implemented. The user then
+authorized implementation, commit and push. The brief's later phases and preview
+controller remain outside scope.
 
 ## Physical model
 
@@ -59,8 +60,26 @@ and was held fixed during the contact-only diagnostic.
 The lab-frame PD uses `F = 400*(z_ref - z_encoder) + 0.8*(v_ref - v_encoder)` in SI
 units. The gains were selected before the first trajectory run; they are not tuned
 to the task verdict. Its setpoint never includes surface motion. No force feedforward,
-prediction, integral term, saturation model, or second task controller is implemented.
+prediction, integral term, or saturation model is used by this controller.
 The high-stiffness tissue servo is part of the prescribed plant.
+
+Delayed feedback uses `F = 10*(r_ref + d_delayed - z_encoder)
++ 0.2*(r_ref_dot + v_filtered - v_encoder)`, in SI units. A fresh frame supplies
+`v_raw = (d_new - d_old)/(sample_time_new - sample_time_old)`. A backward-Euler
+first-order low-pass updates `v_filtered += alpha*(v_raw - v_filtered)`, with
+`alpha = sample_spacing/(5 ms + sample_spacing)`. Capture timestamps account for
+sparse sampling or missing frames. Repeated, older and future-dated captures are
+ignored. Between arrivals, both measured position and filtered velocity are held;
+position is never extrapolated by frame age. The first arrival initializes position
+without a derivative spike; before arrival the nominal surface/velocity are zero.
+A new controller is constructed for every simulation, resetting estimator state.
+
+The 10 N/m gain represents finite compliance (100 µm/mN); 0.2 N·s/m is critical
+damping for a 1 g free axis. The 5 ms filter corresponds to an approximately
+32 Hz first-order cutoff. These choices were registered before the first run and
+were not adjusted afterward; the paper does not establish these baseline values.
+This controller uses neither plant stiffness nor a waveform, predictor, integrator,
+contact-force readback, or contact-force feedforward.
 
 The surface sensor has a 15 ms transport delay, 1 kHz or 25 Hz capture, configurable
 Gaussian position noise, and configurable independent frame loss. Before the first
@@ -72,8 +91,9 @@ noise and dropout options apply to the surface channel, consistent with the pape
 surface-sensing latency; this distinction is explicit rather than implicit truth access.
 Sensor loss is an intentional scenario, not a missing evaluation record.
 
-The controller has only immutable scalar Sensors/Command values and time-only task
-parameters. It has no plant handle, Truth import, evaluation file path, or tissue
+Controllers receive immutable scalar Sensors/Command values and time-only task
+parameters; delayed feedback also stores its own measurement history. Neither has
+a plant handle, Truth import, evaluation file path, or tissue
 waveform parameters. Static import checks and an independent-process comparison with
 truth output toggled enforce that boundary. This is a software architecture boundary,
 not a security sandbox against malicious Python code.
@@ -106,7 +126,9 @@ and reports both SHA-256 values. CI also checks independent processes with seede
 noise/loss at 25 Hz and toggles optional truth-file output. The trace contains sensors
 and commands; evaluation truth lives in a separate file. Neither includes UUIDs,
 timestamps from the host, paths, Git metadata, or wall times. Bitwise equality is
-required within the same runtime environment, not across operating systems/CPUs.
+required within the same runtime environment. The original local Windows 10 and
+hosted Windows Server 2022 traces were also verified equal. Their two lab-frame hashes
+are now pinned in CI; this does not establish equality on all operating systems/CPUs.
 
 Each tick's wall time includes controller computation, evaluation readback, physics
 stepping, and sensor update. It excludes JSON serialization/disk I/O; it is SIL host
@@ -121,5 +143,11 @@ contact damping and geometry are declared in the [replication notes](REPLICATION
 including the paper's version-dependent contact-stiffness statements. No claim of
 full numerical replication or real-tissue validity is made. No thresholds were changed
 to make the baseline PASS. The diagnostic's peak force is 4.708 mN, outside the
-2–4 mN expectation; no tuning follows that result. Delayed-feedback acceptance and
-hosted CI remain pending.
+2–4 mN expectation; no contact tuning follows that result.
+
+Delayed-feedback primary gives 19.310 µm free RMS and 184.431 µm contact RMS,
+meeting the pre-registered reproduction bands (15–25 / 150–200 µm). The diagnostic
+gives 19.310 / 78.093 µm. The lower contact error with softer tissue is consistent
+with a finite-stiffness controller yielding to contact, not evidence of prediction.
+Reproduction acceptance is registered separately in `sim/reproduction_contract.json`;
+the task verdict remains FAIL for contact RMS above 20 µm in all four experiments.

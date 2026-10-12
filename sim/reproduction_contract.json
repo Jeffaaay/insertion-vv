@@ -1,0 +1,15 @@
+{
+  "version": "phase-a-two-baselines-v1",
+  "seed": 42,
+  "lab_frame_pd": {
+    "contact_rms_e_um_range": [250.0, 300.0],
+    "trace_sha256": {
+      "primary": "66422ccb08f67fe12d37936578bae832bf5b9a3d8fd73b357e82b1861ff118a2",
+      "paper_effective": "cc7e3e7e556c7719c6ff37ac3f2b1581179f286d8ccf452838acac02e5a8998d"
+    }
+  },
+  "delayed_feedback": {
+    "free_rms_e_um_range": [15.0, 25.0],
+    "primary_contact_rms_e_um_range": [150.0, 200.0]
+  }
+}

@@ -3,10 +3,12 @@
 ## Scope and comparison policy
 
 Phase A targets **paper-magnitude baseline with documented deviations**, not bit-exact
-paper replication. Only `lab_frame_pd` is implemented. The primary plant remains
+paper replication. `lab_frame_pd` and `delayed_feedback` are implemented. The primary plant remains
 16 N/m, as specified in PROJECT_BRIEF.md. `paper_effective` is a diagnostic plant,
-not a claim to possess the author's MJCF. No controller gains, contact damping,
-trajectory, sensor settings or verdict thresholds were tuned after the diagnostic result.
+not a claim to possess the author's MJCF. During the contact-profile experiment,
+no controller gains, contact damping, trajectory, sensor settings or verdict thresholds
+were tuned after the diagnostic result. The later delayed-feedback checkpoint adds
+a separately documented controller while preserving both plants and lab-frame PD.
 
 Unless stated otherwise, paper comparisons mean **arXiv:2608.08860v1, HTML Table IV**:
 [fixed-version HTML](https://arxiv.org/html/2608.08860v1).
@@ -107,9 +109,15 @@ We do not infer missing values from output tables.
 | --- | --- | --- | --- | --- |
 | MuJoCo version | 3.8 | 3.8.0 | VII; Choice patch pin | aligned |
 | Python / NumPy | Not established | 3.12.10 / 2.2.6 | Choice; requirements lock | unknown-in-paper |
-| Controller | Lab-frame PD ignoring surface motion | `lab_frame_pd` only | VII-C | aligned |
-| PD kp / kd | Baseline gains not established | 400 N/m / 0.8 N·s/m | Choice, frozen before first run | unknown-in-paper |
+| Controllers | Lab-frame PD; delayed-feedback impedance | Both Phase A baselines | VII-C | aligned |
+| Lab-frame PD kp / kd | Baseline gains not established | 400 N/m / 0.8 N·s/m | Choice, frozen before first run | unknown-in-paper |
 | PD law | Fixed lab-frame tracking | Position + velocity error, time-only reference | VII-C; Choice implementation | aligned |
+| Delayed-feedback kp / kd | Baseline gains not established | 10 N/m / 0.2 N·s/m | Choice, frozen before first delayed run | unknown-in-paper |
+| Delayed-feedback velocity estimator | Filtered estimate stated; coefficients not established | Backward difference over capture times + backward-Euler low-pass, tau=5 ms | VII-D; Choice coefficients | unknown-in-paper |
+| Delayed-feedback position reference | Delayed measured surface, no prediction | Received position + time-only reference gap; no extrapolation | VII-C | aligned |
+| Delayed-feedback startup / missing frames | Not established | Surface/velocity zero initially; first arrival initializes position; hold both estimates between frames | Choice | unknown-in-paper |
+| Duplicate / old / future captures | Not established | Ignore; require increasing sequence and capture time not after current time | Choice | unknown-in-paper |
+| Reproduction acceptance | Table IV: feedback 18.3 / 176.8 µm free/contact | Free 15–25 µm; primary contact 150–200 µm | User range; Choice definition of near 20 | deliberate deviation |
 | Force saturation | Baseline bound not established | No saturation | Choice | unknown-in-paper |
 | Needle DOF / actuator | z slide / motor | z slide / unit-gear motor | VII-A | aligned |
 | Needle equivalent mass | 1 g | 0.001 kg | VII, Table III | aligned |
@@ -188,3 +196,78 @@ Windows HTTP client downloaded the archive successfully. It was inspected withou
 executing any contents. No author was contacted. **No released code/MJCF was found
 within this bounded search**; this does not establish that no release exists anywhere.
 The search is complete for this checkpoint and does not block the requested CI work.
+
+## Hosted gate and delayed-feedback checkpoint
+
+The user subsequently authorized public repository creation and push. Before changing
+controllers, [hosted run 38309462614](https://github.com/Jeffaaay/insertion-vv/actions/runs/38309462614)
+at commit `24e4dd42cad761f23eabcdf7012c61be4e4a970b` passed all **43 tests**.
+Downloaded trace and repeat-trace files were hashed locally, not merely read from
+the job's status. Both were identical to their local Windows 10 counterparts on the
+Windows Server 2022 runner (Python 3.12.10, MuJoCo 3.8.0, NumPy 2.2.6):
+
+```text
+primary:         66422ccb08f67fe12d37936578bae832bf5b9a3d8fd73b357e82b1861ff118a2
+paper_effective: cc7e3e7e556c7719c6ff37ac3f2b1581179f286d8ccf452838acac02e5a8998d
+```
+
+That evidence satisfied the gate. No delayed-feedback code was implemented before
+it passed. Both hashes remain strict CI regression checks.
+
+### Controller choices fixed before the experiment
+
+The controller is finite impedance about the received delayed surface:
+
+`F = kp * (r_ref + d_delayed - z_encoder) + kd * (r_ref_dot + v_filtered - v_encoder)`.
+
+Set kp=10 N/m (100 µm/mN compliance) and kd=0.2 N·s/m, the critical-damping value
+`2*sqrt(0.001*10)` for the free needle axis. Select a 5 ms causal first-order velocity
+filter. These are our declared engineering choices; the inspected v1 paper states
+filtered velocity feedback but does not disclose these gains or filter coefficients.
+The gains differ from lab-frame PD: this comparison therefore includes finite
+compliance as well as sensing, and cannot attribute all changes solely to delay.
+
+On each new capture, differentiate using capture-time spacing (including dropped
+frames), then update with `alpha = dt_sample/(tau + dt_sample)`. Do not repeatedly
+differentiate held frames. The first sample initializes position with zero velocity;
+before it arrives, use a nominal zero surface. Ignore duplicate/older/future captures.
+Between arrivals, hold position and filtered velocity. There is no `v * frame_age`
+position advance, physiological waveform, truth access, integral correction, or
+contact-force feedback. The independent-process truth-output-toggle test now covers
+both controllers and both profiles at 25 Hz with seeded noise and frame loss.
+
+Before running, `sim/reproduction_contract.json` registered 15–25 µm free RMS
+(our explicit interpretation of "near 20") and 150–200 µm primary contact RMS.
+These are CI reproduction checks, separate from the unchanged task PASS contract.
+No gain, filter, plant parameter or acceptance threshold changed after the first run.
+
+### Measured delayed-feedback result, seed 42
+
+| Metric | `primary` | `paper_effective` |
+| --- | ---: | ---: |
+| Free RMS | 19.310018 µm | 19.310018 µm |
+| Contact RMS | 184.430580 µm | 78.092697 µm |
+| Contact peak absolute error velocity | 0.125066 mm/s | 0.196022 mm/s |
+| Contact peak normal force | 2.132445 mN | 1.012757 mN |
+| Whole-run peak force, including insertion transient | 2.175296 mN | 1.610088 mN |
+| Task verdict | FAIL (contact RMS >=20 µm) | FAIL (contact RMS >=20 µm) |
+| Reproduction checks | PASS: free and primary contact ranges | PASS: free range; contact reported without primary range |
+
+The static spring balance predicts a contact offset `depth*K_env/(kp+K_env)`:
+184.615 µm at 16 N/m and 77.778 µm at 3.5 N/m. This explains the scale of the
+measured 184.431 / 78.093 µm errors; it is not a replacement for the dynamic metrics.
+The softer diagnostic improves contact position at the same gains. Neither result
+is an exact reconstruction of the author's undisclosed implementation.
+
+```text
+delayed_feedback primary:
+13af5a38301ee4c34561f9b4fbe5c64e1d42c877cd9959e3ffec302bacecd71e
+delayed_feedback paper_effective:
+b4b787c827bfa8e55732d99466dada3af682690cce091077e93d476f1cc2ef9d
+```
+
+The expanded CI entry point runs **65 tests**, calibrates both profiles, and runs
+all four controller/profile combinations with deterministic replay. It enforces the
+original lab-frame hashes and the pre-registered delayed-feedback reproduction bands.
+Latest commit-specific hosted status and downloadable metrics/traces are available
+on [Actions](https://github.com/Jeffaaay/insertion-vv/actions).

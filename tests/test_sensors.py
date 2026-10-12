@@ -41,7 +41,10 @@ def test_seed_controls_noise_and_drops():
 @pytest.mark.parametrize(
     "changes",
     [
-        {"controller": "delayed_feedback"},
+        {"controller": "preview"},
+        {"delayed_kp_n_per_m": 0},
+        {"delayed_kd_ns_per_m": -1},
+        {"surface_velocity_filter_tau_us": 0},
         {"surface_sample_hz": 30},
         {"surface_delay_us": -1},
         {"surface_delay_us": 15001},

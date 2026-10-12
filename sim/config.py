@@ -4,6 +4,7 @@ import math
 from dataclasses import asdict, dataclass
 
 CONTACT_TARGETS_N_PER_M = {"primary": 16.0, "paper_effective": 3.5}
+CONTROLLERS = ("lab_frame_pd", "delayed_feedback")
 
 
 @dataclass(frozen=True)
@@ -29,12 +30,15 @@ class Config:
     surface_dropout_probability: float = 0.0
     kp_n_per_m: float = 400.0
     kd_ns_per_m: float = 0.8
+    delayed_kp_n_per_m: float = 10.0
+    delayed_kd_ns_per_m: float = 0.2
+    surface_velocity_filter_tau_us: int = 5000
 
     def validate(self) -> None:
         if self.contact_profile not in CONTACT_TARGETS_N_PER_M:
             raise ValueError("contact_profile must be primary or paper_effective")
-        if self.controller != "lab_frame_pd":
-            raise ValueError("Only lab_frame_pd is implemented; CI determinism gates expansion")
+        if self.controller not in CONTROLLERS:
+            raise ValueError("controller must be lab_frame_pd or delayed_feedback")
         if not 0 <= self.seed < 2**64:
             raise ValueError("seed must fit u64")
         if self.control_dt_us != 1000:
@@ -47,12 +51,23 @@ class Config:
             raise ValueError("surface_sample_hz must be 25 or 1000")
         if self.surface_delay_us < 0 or self.surface_delay_us % self.control_dt_us:
             raise ValueError("surface delay must be a nonnegative whole number of ticks")
+        if self.surface_velocity_filter_tau_us <= 0:
+            raise ValueError("surface velocity filter time constant must be positive")
         if not 0 <= self.surface_dropout_probability <= 1:
             raise ValueError("dropout probability must be in [0, 1]")
         for key, value in asdict(self).items():
             if isinstance(value, float) and not math.isfinite(value):
                 raise ValueError(f"{key} must be finite")
-        if self.surface_noise_std_m < 0 or self.kp_n_per_m <= 0 or self.kd_ns_per_m <= 0:
+        if (
+            self.surface_noise_std_m < 0
+            or min(
+                self.kp_n_per_m,
+                self.kd_ns_per_m,
+                self.delayed_kp_n_per_m,
+                self.delayed_kd_ns_per_m,
+            )
+            <= 0
+        ):
             raise ValueError("noise must be nonnegative and PD gains positive")
 
 

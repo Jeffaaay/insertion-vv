@@ -243,3 +243,23 @@ to fit parameters or change the task verdict. Both profiles belong in local CI.
 `docs/REPLICATION_NOTES.md` records the version-specific paper evidence and differences.
 This checkpoint stops after reporting local CI; no delayed_feedback, GitHub repository
 creation, remote addition, or push is authorized.
+
+## 15. Hosted gate and delayed-feedback authorization (2026-10-12)
+
+The user now authorizes public repository creation, remote setup, commit and push.
+The public remote is https://github.com/Jeffaaay/insertion-vv, branch `main`.
+Hosted run 38309462614 at commit 24e4dd4 passed all 43 tests. Downloaded trace files
+reproduce both full local hashes (primary 66422ccb..., paper_effective cc7e3e7e...).
+This satisfies the hosted determinism gate; it does not claim determinism on all CPUs.
+
+Implement `delayed_feedback` only: delayed measured position plus a filtered measured
+surface velocity, without prediction, integral action or contact-force compensation.
+Before the first experiment, select finite impedance gains kp=10 N/m and
+kd=0.2 N s/m (critical damping for the 1 g free axis), and a 5 ms backward-Euler
+velocity-filter time constant. These are documented implementation choices, not
+recovered author settings. Keep both plants and the lab-frame PD unchanged.
+Define "near 20 um" as 15–25 um free-window RMS; primary contact RMS must be
+150–200 um. Register these reproduction checks before running. They are distinct
+from the unchanged task PASS contract (<20 um contact RMS and <2 mm/s velocity).
+Run seed 42 for both controllers and contact profiles in local and hosted CI;
+preserve the known lab-frame trace hashes as regression gates. Stop after reporting.

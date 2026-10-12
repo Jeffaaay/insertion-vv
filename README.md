@@ -2,7 +2,8 @@
 
 Headless, deterministic MuJoCo SIL for a 1-axis needle and pulsating tissue.
 The project asks when simulation can predict firmware PASS/FAIL; this checkpoint
-implements only the Phase A plant, `lab_frame_pd`, sensors, measurements, and CI.
+implements the Phase A plant, `lab_frame_pd`, `delayed_feedback`, sensors,
+measurements, and CI.
 
 | Local baseline, seed 42 | `primary` | `paper_effective` |
 | --- | ---: | ---: |
@@ -21,6 +22,21 @@ it is preserved without further tuning. This scientific expectation is reported
 separately from the verification job's pass/fail status.
 See [replication notes](docs/REPLICATION_NOTES.md) for the complete parameter inventory,
 versioned paper evidence, prior results and bounded source-code search.
+
+| Delayed feedback, seed 42 | `primary` | `paper_effective` |
+| --- | ---: | ---: |
+| Free-window RMS error | 19.310 µm | 19.310 µm |
+| Contact-window RMS error | 184.431 µm | 78.093 µm |
+| Contact peak absolute error velocity | 0.125 mm/s | 0.196 mm/s |
+| Contact peak normal force | 2.132 mN | 1.013 mN |
+| Task verdict | **FAIL** | **FAIL** |
+
+Delayed feedback tracks the 15 ms-delayed surface without extrapolation, using a
+filtered difference of received position measurements for surface velocity.
+Its gains (10 N/m, 0.2 N·s/m) and 5 ms filter are declared implementation choices,
+selected before the first run; they are not recovered author settings. Primary
+meets the registered 15–25 µm free / 150–200 µm contact reproduction ranges.
+Both task verdicts still fail the unchanged <20 µm contact-RMS contract.
 
 ## Run
 
@@ -45,6 +61,8 @@ For a single experiment (the runner automatically checks a second identical exec
 ```powershell
 python -m sim.run --seed 42 --output artifacts/experiment
 python -m sim.run --seed 42 --contact-profile paper_effective --output artifacts/diagnostic
+python -m sim.run --controller delayed_feedback --seed 42 --output artifacts/delayed
+python -m sim.run --controller delayed_feedback --contact-profile paper_effective --seed 42 --output artifacts/delayed-diagnostic
 python -m sim.run --seed 42 --sample-hz 25 --noise-std-m 0.000002 --dropout-probability 0.1 --output artifacts/sparse
 ```
 
@@ -57,20 +75,25 @@ non-reproducible runs are INVALID and return a nonzero exit code.
 
 ## Scope and CI gate
 
-`lab_frame_pd` is the only implemented controller. Tests cover independent-process
+Both Phase A baseline controllers are implemented. Tests cover independent-process
 SHA-256 determinism, enabled/disabled truth-file equivalence, sensor timing,
-contract boundaries, early termination, stiffness, and baseline regression.
-The CI entry point runs both contact profiles as a matrix, producing
+contract boundaries, early termination, stiffness, baseline regression, filtered
+velocity, missing/old frames, and absence of position extrapolation.
+The CI entry point runs two controllers × two contact profiles, producing
 `artifacts/{primary,paper_effective}/contact_calibration.json` and
-`artifacts/{primary,paper_effective}/lab_frame_pd/metrics.json` plus traces/timings.
+`artifacts/{primary,paper_effective}/{lab_frame_pd,delayed_feedback}/metrics.json`
+plus traces/timings. Reproduction ranges and the two original lab-frame trace hashes
+are enforced by [the reproduction contract](sim/reproduction_contract.json).
 It reports separate SHA-256 values and the diagnostic expectation in `ci_report.json`.
 GitHub Actions runs on every push and PR and uploads all measurement evidence,
 including on failures. It requires no repository-specific URLs, credentials, or secrets.
 
-The user will create public `Jeffaaay/insertion-vv` and attach the remote. This local
-checkpoint creates no GitHub repository and performs no push. **Hosted CI has not
-run.** `delayed_feedback` stays unimplemented until hosted determinism passes;
-Phase A overall acceptance therefore remains incomplete. Rust harness, firmware,
-preview control, HIL, and Phase C fault campaigns are deferred.
+The public remote is [Jeffaaay/insertion-vv](https://github.com/Jeffaaay/insertion-vv).
+Before delayed-feedback implementation, [hosted run 38309462614](https://github.com/Jeffaaay/insertion-vv/actions/runs/38309462614)
+passed all 43 original tests and reproduced both full local trace hashes on Windows
+Server 2022. This released the controller gate. The expanded suite has 65 tests;
+see [Actions](https://github.com/Jeffaaay/insertion-vv/actions) for commit-specific status.
+Evidence establishes the tested local/hosted pair, not every OS or CPU. Rust harness,
+firmware, preview control, HIL, and Phase C fault campaigns are deferred.
 
 Directory layout follows [PROJECT_BRIEF.md §8](PROJECT_BRIEF.md).

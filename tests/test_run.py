@@ -2,20 +2,32 @@ import json
 
 import pytest
 
-from sim.config import CONTACT_TARGETS_N_PER_M, Config
+from sim.ci import reproduction_checks
+from sim.config import CONTACT_TARGETS_N_PER_M, CONTROLLERS, Config
 from sim.metrics import CONTRACT, window_metrics
 from sim.plant import MujocoPlant
-from sim.run import run, simulate
+from sim.run import run, sha256, simulate
 
 
 @pytest.mark.parametrize("profile", CONTACT_TARGETS_N_PER_M)
-def test_baseline_regression_and_true_velocity(profile):
-    execution = simulate(Config(contact_profile=profile))
+@pytest.mark.parametrize("controller", CONTROLLERS)
+def test_baseline_regression_and_true_velocity(profile, controller):
+    execution = simulate(Config(contact_profile=profile, controller=controller))
     assert execution.complete
     assert execution.completed_ticks == 8000
     assert not execution.safety_stop
     contact = window_metrics(execution.rows, *CONTRACT["contact_window_us"])
-    assert 250 <= contact["rms_e_um"] <= 300
+    assert all(
+        reproduction_checks(
+            {
+                "controller": controller,
+                "contact_profile": profile,
+                "contact": contact,
+                "free": window_metrics(execution.rows, *CONTRACT["free_window_us"]),
+            },
+            sha256(execution.trace),
+        ).values()
+    )
     assert contact["samples"] == 5000
     for row in execution.rows:
         assert row["edot_m_s"] == pytest.approx(
