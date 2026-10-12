@@ -116,7 +116,9 @@ def test_square_root_filter_matches_covariance_kalman_equations():
     e._sample_time_us, e._sequence = 0, 0
     transition = e.transition(40000)
     predicted = transition @ state
-    covariance = transition @ covariance @ transition.T + np.eye(7) * e.process_std_m_sqrt_s**2 * 0.04
+    covariance = (
+        transition @ covariance @ transition.T + np.eye(7) * e.process_std_m_sqrt_s**2 * 0.04
+    )
     h, variance = e._position_row, e.measurement_std_m**2
     gain = covariance @ h / (h @ covariance @ h + variance)
     expected_state = predicted + gain * (83e-6 - h @ predicted)
