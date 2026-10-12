@@ -242,12 +242,16 @@ def test_matrix_checks_every_case_and_requires_complete_artifacts(tmp_path):
                 "status": "PASS",
                 "git_sha": "same-commit",
                 "contact_profile_matrix": ["primary", "paper_effective"],
-                "controller_matrix": ["lab_frame_pd", "delayed_feedback"],
+                "controller_matrix": [
+                    "lab_frame_pd",
+                    "delayed_feedback",
+                    "delayed_feedback_offsetfree",
+                ],
             },
         )
         for profile in ("primary", "paper_effective"):
             (root / profile).mkdir()
-            for controller in ("lab_frame_pd", "delayed_feedback"):
+            for controller in ("lab_frame_pd", "delayed_feedback", "delayed_feedback_offsetfree"):
                 save_run(
                     root / profile / controller,
                     system=system,
@@ -256,14 +260,14 @@ def test_matrix_checks_every_case_and_requires_complete_artifacts(tmp_path):
                     ),
                 )
     result = compare_matrix(left, right)
-    assert result["status"] == "PASS" and len(result["comparisons"]) == 4
-    target = right / "paper_effective/delayed_feedback"
+    assert result["status"] == "PASS" and len(result["comparisons"]) == 6
+    target = right / "paper_effective/delayed_feedback_offsetfree"
     save_run(
         target,
         system="Windows",
         change_metrics=lambda m: m.update(
             contact_profile="paper_effective",
-            controller="delayed_feedback",
+            controller="delayed_feedback_offsetfree",
             verdict={"status": "PASS", "reasons": []},
         ),
     )

@@ -27,6 +27,11 @@ def reproduction_checks(metrics: dict, trace_hash: str) -> dict[str, bool]:
     controller = metrics["controller"]
     profile = metrics["contact_profile"]
     limits = REPRODUCTION[controller]
+    if controller == "delayed_feedback_offsetfree":
+        low, high = limits["contact_rms_e_um_range"]
+        return {
+            "offsetfree_contact_rms_in_20_to_40_um": low <= metrics["contact"]["rms_e_um"] <= high
+        }
     if controller == "lab_frame_pd":
         low, high = limits["contact_rms_e_um_range"]
         hashes = reference_trace_hashes(metrics.get("platform_fingerprint"))
@@ -171,7 +176,10 @@ def main() -> int:
     )
     report["status"] = "PASS" if passed else "FAIL"
     report_path.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
-    print(f"CI job commands: {report['status']}; all four baseline task verdicts: FAIL")
+    print(
+        f"CI job commands: {report['status']}; "
+        f"all {len(profiles) * len(CONTROLLERS)} task verdicts: FAIL"
+    )
     print(f"Diagnostic 2-4 mN expectation met: {report['diagnostic_expectation']['met']}")
     return 0 if report["status"] == "PASS" else 1
 

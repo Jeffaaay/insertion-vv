@@ -15,7 +15,12 @@ import mujoco
 import numpy as np
 
 from .config import CONTACT_TARGETS_N_PER_M, CONTROLLERS, Config
-from .controllers import DelayedFeedback, LabFramePD
+from .controllers import (
+    AccelerationBiasObserver,
+    DelayedFeedback,
+    DelayedFeedbackOffsetFree,
+    LabFramePD,
+)
 from .metrics import CONTRACT, CONTRACT_PATH, verdict, window_metrics
 from .plant import MODEL_PATH, MujocoPlant, build_model, contact_parameters
 from .reference import reference
@@ -77,6 +82,17 @@ def simulate(cfg: Config, *, write_truth: bool = True) -> Execution:
             cfg.insertion_depth_m,
             cfg.surface_velocity_filter_tau_us,
         )
+        if cfg.controller == "delayed_feedback_offsetfree":
+            controller = DelayedFeedbackOffsetFree(
+                controller,
+                AccelerationBiasObserver(
+                    cfg.observer_mass_kg,
+                    cfg.control_dt_us * 1e-6,
+                    cfg.observer_gain_position,
+                    cfg.observer_gain_velocity,
+                    cfg.observer_gain_acceleration,
+                ),
+            )
     trace, truth_trace, rows, wall_ns = [], [], [], []
     completed_ticks = 0
     error = None

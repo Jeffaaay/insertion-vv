@@ -248,8 +248,8 @@ def compare_matrix(left, right):
             raise ValueError(f"CI artifact {field} mismatch")
     if set(a["contact_profile_matrix"]) != {"primary", "paper_effective"} or set(
         a["controller_matrix"]
-    ) != {"lab_frame_pd", "delayed_feedback"}:
-        raise ValueError("Expected the complete two-controller/two-profile CI matrix")
+    ) != {"lab_frame_pd", "delayed_feedback", "delayed_feedback_offsetfree"}:
+        raise ValueError("Expected the complete three-controller/two-profile CI matrix")
     results = {}
     for profile in a["contact_profile_matrix"]:
         for controller in a["controller_matrix"]:

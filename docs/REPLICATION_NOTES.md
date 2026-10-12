@@ -3,7 +3,8 @@
 ## Scope and comparison policy
 
 Phase A targets **paper-magnitude baseline with documented deviations**, not bit-exact
-paper replication. `lab_frame_pd` and `delayed_feedback` are implemented. The primary plant remains
+paper replication. `lab_frame_pd`, `delayed_feedback`, and the separately authorized
+`delayed_feedback_offsetfree` ablation are implemented. The primary plant remains
 16 N/m, as specified in PROJECT_BRIEF.md. `paper_effective` is a diagnostic plant,
 not a claim to possess the author's MJCF. During the contact-profile experiment,
 no controller gains, contact damping, trajectory, sensor settings or verdict thresholds
@@ -120,6 +121,13 @@ We do not infer missing values from output tables.
 | Delayed-feedback velocity estimator | Filtered estimate stated; coefficients not established | Backward difference over capture times + backward-Euler low-pass, tau=5 ms | VII-D; Choice coefficients | unknown-in-paper |
 | Delayed-feedback position reference | Delayed measured surface, no prediction | Received position + time-only reference gap; no extrapolation | VII-C | aligned |
 | Delayed-feedback startup / missing frames | Not established | Surface/velocity zero initially; first arrival initializes position; hold both estimates between frames | Choice | unknown-in-paper |
+| Offset-free observer state / measurement | [p,v,a], position only | Same; needle encoder, not surface or force readback | V, Eq. (8) | aligned |
+| Offset-free discrete prediction | p+=Ts*v; v+=Ts*(a+u/m); a held | Same; previous commanded force, Ts=1 ms | V, Eq. (8) | aligned |
+| Offset-free correction gain L | [0.6,12,400] | Same | V | aligned |
+| Offset-free nominal mass | 1 g | 0.001 kg | V, Eq. (8); Table III | aligned |
+| Observer initialization | Not established | First measured p, v=0, a=0; no fabricated pre-start step | Choice | unknown-in-paper |
+| Bias compensation in controller | Bias enters QP horizon | Subtract m*a from unchanged delayed PD command | User single-variable Step 1; Choice | deliberate deviation |
+| Offset-free-only ablation | 30.3±0.2 µm contact, fixed QP, 30 seeds | PD + observer, seed 42, pre-registered 20–40 µm for both profiles | Table XII; user acceptance | deliberate deviation |
 | Duplicate / old / future captures | Not established | Ignore; require increasing sequence and capture time not after current time | Choice | unknown-in-paper |
 | Reproduction acceptance | Table IV: feedback 18.3 / 176.8 µm free/contact | Free 15–25 µm; primary contact 150–200 µm | User range; Choice definition of near 20 | deliberate deviation |
 | Force saturation | Baseline bound not established | No saturation | Choice | unknown-in-paper |
@@ -368,3 +376,62 @@ to verify 1280×720, 20 fps, 160 frames, 8 s; frames at 0, 3.2, 5.1 and 7.95 s w
 inspected for the HUD, needle/tissue contrast and moving 300 µm depth marker.
 Rendering reads recorded states and does not integrate physics. These local
 artifacts are ignored by Git and are never CI/test dependencies.
+
+## Optional Step 1: delayed feedback plus acceleration-bias observer
+
+The user requests a single-variable extension and a stop after commit/push/report.
+No harmonic estimator or preview is implemented at this checkpoint. Before the
+first experiment, register **20–40 µm contact RMS for both profiles**, seed 42, in
+`sim/reproduction_contract.json`. Keep task PASS (<20 µm, <2 mm/s, no safety stop),
+plant/contact parameters, PD gains, surface delay/filter and reference unchanged.
+
+Use [v1 HTML §V, Eq. (8)](https://arxiv.org/html/2608.08860v1#S5)'s position-only
+Luenberger observer with state [p,v,a], nominal mass 1 g, Ts=1 ms and fixed gains
+L=[0.6,12,400]. At tick k, predict from corrected state k-1 and previous total
+command u[k-1]; then correct all three states with current encoder-position
+innovation. Initialize p from the first encoder and v/a at zero. Command
+`u = unchanged_delayed_feedback(sensors) - mass * estimated_acceleration_bias`.
+This uses the commanded input, not measured contact force. Neither the observer
+nor controller receives tissue truth, contact stiffness, waveform or future data.
+No observer saturation, contact-mode switch, gain scheduling or tuning is added.
+
+The paper's Table XII 30.3±0.2 µm is a 30-seed **QP** ablation; our seed-42 **PD**
+ablation tests the same disturbance-rejection mechanism and the user-requested
+magnitude range, not exact table replication. The literal Eq. (8) Euler observer
+is preserved although the plant's integrator is implicitfast; discretization
+residual can therefore also enter the bias estimate. The actual predict/correct
+error transition is `(I-L*C)*A`; no eigenvalue claim is inferred from the paper's
+separately written `A-L*C` expression.
+
+### First-run evidence (Windows development environment)
+
+The first run already met the registered range on both profiles. **No tuning was
+performed.** These initial records are preserved at `artifacts/offsetfree-first/`;
+canonical Linux evidence is recorded separately after hosted verification.
+
+| Seed 42 metric | `primary` | `paper_effective` |
+| --- | ---: | ---: |
+| Free RMS | 19.300852 µm | 19.300852 µm |
+| Contact RMS | 20.630832 µm | 33.618597 µm |
+| Contact peak absolute error velocity | 0.361917 mm/s | 0.880340 mm/s |
+| Contact peak normal force | 5.592349 mN | 1.979979 mN |
+| Whole-run peak normal force | 6.304965 mN | 3.543761 mN |
+| Task verdict | FAIL: contact RMS >=20 µm | FAIL: contact RMS >=20 µm |
+| Step 1 reproduction acceptance | PASS | PASS |
+
+Primary contact RMS drops from 184.431 to 20.631 µm; diagnostic from 78.093 to
+33.619 µm. Free-space RMS remains near 19.3 µm: this step cancels the contact bias,
+not the surface-sensing delay. Contact peak force increases from 2.132 to 5.592 mN
+and from 1.013 to 1.980 mN as cancellation removes the baseline's under-penetration.
+The unchanged task contract has no force threshold; this increase is reported,
+not hidden or tuned away. The softer contact is not guaranteed lower error with
+the same dynamic observer; no profile-specific gains were used.
+
+Local CI used the workflow's pinned install and `python -m sim.ci` commands:
+**130 tests passed**, both calibrations passed, all six seed-42 experiments passed
+their reproduction gates and bitwise replay. The four original baseline trace
+hashes are unchanged, including both delayed-feedback hashes. New independent
+process/truth-output-toggle tests also cover offset-free control with 25 Hz
+measurements, seeded noise and frame loss. Unit checks cover hidden-bias
+identification with varying input, startup, cancellation sign/previous total
+command, invalid frames and bitwise equivalence when bias cancellation is disabled.

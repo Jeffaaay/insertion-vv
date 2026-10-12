@@ -1,7 +1,7 @@
 # Insertion Verification Stack — Project Brief
 
 **Owner:** Jeff Young  
-**Status:** Phase 0 (not started). This brief is the single source of truth for scope; update it before changing scope.  
+**Status:** Required Phase A complete; optional offset-free ablation authorized (Step 1). This brief is the single source of truth for scope; update it before changing scope.  
 **Audience:** 给人读，也给执行 agent（Codex 等）读。Agent 只做本文件明确授权的事。
 
 ---
@@ -104,10 +104,11 @@ trait Plant {
 
 **Task timeline（照论文）：** 0–1 s 平滑接近；1–2 s 悬停 0.5 mm（free-space 窗口）；2–2.5 s ramp 到 0.3 mm penetration；2.5–8 s hold（3–8 s 为 contact 窗口）。
 
-**Controllers（A 阶段只做前两个）：**
+**Controllers（必做 baseline 已完成；可选扩展分两步）：**
 1. `lab_frame_pd`：固定 lab-frame setpoint，忽略 d(t)
 2. `delayed_feedback`：跟踪延迟 15 ms 的测量表面，无预测
-3. `preview`（Phase A 末或 B）：简化版预测（Kalman/exosystem + 简单 MPC 或 LQR）。**只要够用，不追求论文精度**
+3. `delayed_feedback_offsetfree`（本轮 Step 1）：保留 delayed-feedback，只增加 §V 加速度偏置观测器；无力读回、无真值、无预测。两配置 seed 42 的 contact RMS 验收 20–40 µm；提交、推送、报告后停止。
+4. `preview`（后续 Step 2）：只增加已知频率 exosystem（1.2/2.4/0.25 Hz），前推 15 ms；简单 MPC/LQR 可用，不做 QP/shear 约束。primary nominal verdict PASS；最多一轮调参，不达标则停止报告。**本轮不开始 Step 2。**
 
 **Sensors 模型（控制器能看到的）：** 延迟 τ=15 ms，可配置采样率（1 kHz / 25 Hz），可配置高斯噪声，可配置缺帧。
 
@@ -124,7 +125,7 @@ trait Plant {
 - [ ] 同平台确定性：同 source/config/seed、OS/arch/Python/MuJoCo/NumPy 版本，trace 与 truth SHA-256 完全一致（CI 强制）；每个 run 记录平台指纹
 - [ ] 跨平台确定性：Linux/Windows 的位置 |Δ| <1e-12 m、速度 <1e-9 m/s、力 <1e-12 N；时间/离散状态及 verdict 完全一致；物理指标相对差 <1e-9（CI 独立 job）
 - [ ] 相对差定义为 |a-b|/max(|a|,|b|)，两者均零取零；不比较 wall-time/UUID。损坏、缺失、不完整的产物不能通过比较
-- [ ] GitHub Actions：每 push 在 Linux 和 Windows 跑两个 controller × 两种 contact config，上传 metrics JSON、trace 及跨平台比较报告；报告数值以 Linux runner 为准
+- [ ] GitHub Actions：每 push 在 Linux 和 Windows 跑所有已实现 controller × 两种 contact config，上传 metrics JSON、trace 及跨平台比较报告；报告数值以 Linux runner 为准
 - [ ] 无 GUI 依赖，headless 可跑
 
 ---
@@ -282,3 +283,21 @@ and Windows plus the cross-platform comparison. Commit/push are authorized.
 After this gate, verify the existing delayed_feedback implementation on both contact
 profiles with seed 42 and regenerate its optional plot/video from Linux artifacts.
 Preview, firmware and Phase B implementation remain outside this authorization.
+
+## 17. Optional controller ablation authorization (2026-10-12)
+
+The user confirms required Phase A is complete and requests two single-variable
+steps. This checkpoint implements Step 1 only and stops after commit/push/report.
+Keep delayed-feedback gains (10 N/m, 0.2 N s/m), its 5 ms velocity filter, delayed
+surface hold, both plants, seed 42, and the task verdict unchanged. Add only the
+position-encoder acceleration-bias observer in paper v1 HTML §V, Eq. (8), with
+L=(0.6,12,400), mass=0.001 kg, Ts=0.001 s. Initialize position from the first encoder,
+velocity/bias at zero, then predict from the previous commanded force and correct
+with the current position. Subtract mass*bias from the original feedback force.
+No force sensor, truth, tissue parameters, preview or observer gain tuning.
+Before running, register contact RMS 20–40 µm for both profiles, separately from
+the unchanged <20 µm task PASS specification. Paper Table XII's 30.3 µm reference
+uses a fixed QP and 30 seeds, so this PD/seed-42 ablation is a magnitude comparison.
+Extend both platform CI matrices and cross-platform comparison to six cases;
+render optional plots/videos from the canonical Linux results, outside CI.
+Step 2 is deferred until after this checkpoint's requested stop.

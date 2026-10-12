@@ -1,5 +1,5 @@
 {
-  "version": "phase-a-two-tier-determinism-v2",
+  "version": "phase-a-offsetfree-ablation-v3",
   "seed": 42,
   "lab_frame_pd": {
     "contact_rms_e_um_range": [250.0, 300.0],
@@ -29,5 +29,8 @@
   "delayed_feedback": {
     "free_rms_e_um_range": [15.0, 25.0],
     "primary_contact_rms_e_um_range": [150.0, 200.0]
+  },
+  "delayed_feedback_offsetfree": {
+    "contact_rms_e_um_range": [20.0, 40.0]
   }
 }

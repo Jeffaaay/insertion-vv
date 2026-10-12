@@ -4,7 +4,7 @@ import math
 from dataclasses import asdict, dataclass
 
 CONTACT_TARGETS_N_PER_M = {"primary": 16.0, "paper_effective": 3.5}
-CONTROLLERS = ("lab_frame_pd", "delayed_feedback")
+CONTROLLERS = ("lab_frame_pd", "delayed_feedback", "delayed_feedback_offsetfree")
 
 
 @dataclass(frozen=True)
@@ -33,12 +33,16 @@ class Config:
     delayed_kp_n_per_m: float = 10.0
     delayed_kd_ns_per_m: float = 0.2
     surface_velocity_filter_tau_us: int = 5000
+    observer_mass_kg: float = 0.001
+    observer_gain_position: float = 0.6
+    observer_gain_velocity: float = 12.0
+    observer_gain_acceleration: float = 400.0
 
     def validate(self) -> None:
         if self.contact_profile not in CONTACT_TARGETS_N_PER_M:
             raise ValueError("contact_profile must be primary or paper_effective")
         if self.controller not in CONTROLLERS:
-            raise ValueError("controller must be lab_frame_pd or delayed_feedback")
+            raise ValueError(f"controller must be one of {CONTROLLERS}")
         if not 0 <= self.seed < 2**64:
             raise ValueError("seed must fit u64")
         if self.control_dt_us != 1000:
@@ -58,6 +62,16 @@ class Config:
         for key, value in asdict(self).items():
             if isinstance(value, float) and not math.isfinite(value):
                 raise ValueError(f"{key} must be finite")
+        if (
+            min(
+                self.observer_mass_kg,
+                self.observer_gain_position,
+                self.observer_gain_velocity,
+                self.observer_gain_acceleration,
+            )
+            <= 0
+        ):
+            raise ValueError("observer mass and gains must be positive")
         if (
             self.surface_noise_std_m < 0
             or min(

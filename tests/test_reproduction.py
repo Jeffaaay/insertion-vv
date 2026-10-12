@@ -24,6 +24,19 @@ def test_diagnostic_contact_is_not_constrained_to_primary_paper_range():
     assert all(reproduction_checks(metrics, "unused").values())
 
 
+@pytest.mark.parametrize("profile", ["primary", "paper_effective"])
+@pytest.mark.parametrize(
+    "contact,passes", [(19.9, False), (20.0, True), (40.0, True), (40.1, False)]
+)
+def test_offsetfree_contact_gate_is_registered_for_both_profiles(profile, contact, passes):
+    metrics = {
+        "controller": "delayed_feedback_offsetfree",
+        "contact_profile": profile,
+        "contact": {"rms_e_um": contact},
+    }
+    assert all(reproduction_checks(metrics, "unused").values()) == passes
+
+
 @pytest.mark.parametrize("baseline", REPRODUCTION["lab_frame_pd"]["platform_baselines"])
 def test_lab_frame_hash_regression_rejects_a_different_trace(baseline):
     metrics = {
