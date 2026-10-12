@@ -9,16 +9,16 @@ measurements, and CI.
 Reported numbers use the **Linux x86_64 runner** (Ubuntu 24.04, Python 3.12.10,
 MuJoCo 3.8.0, NumPy 2.2.6) as the canonical platform. Windows is independently
 verified and compared with Linux using the two-tier determinism contract below.
-The [preview checkpoint](https://github.com/Jeffaaay/insertion-vv/actions/runs/38321451277)
-passed **162 tests on each OS**, both calibrations, eight deterministic experiments
-per OS, and all eight Linux/Windows comparisons. Tables below use canonical Linux
-results; all six previous controller/profile trace and truth hashes remain unchanged
-on each OS. **One additional verification issue remains:** local Windows and hosted
-Windows `preview` hashes differ despite identical coarse fingerprints. Numeric
-tolerances and verdicts pass, but the existing same-fingerprint bitwise comparison
-correctly fails. CI repeats within each runner and does not cover that machine pair.
-This limitation is recorded without weakening the contract; see the
-[Step 2 verification record](docs/REPLICATION_NOTES.md#step-2-verification-and-unresolved-platform-fingerprint-limit).
+The [Phase A closeout](https://github.com/Jeffaaay/insertion-vv/actions/runs/38322571543)
+passed **170 tests in local Windows, hosted Windows and Linux**, both calibrations,
+eight deterministic experiments per environment, and all eight Linux/Windows and
+local/hosted Windows comparisons. Tables below use canonical Linux results; all
+six old-controller/profile trace and truth hashes remain unchanged on each OS.
+The coarse-fingerprint issue is closed by recording OS release/build, CPU and
+BLAS provenance and selecting the comparison tier from the complete fingerprint;
+numeric code and tolerances are unchanged. Old failed evidence is preserved.
+See the [Phase A summary](docs/PHASE_A_SUMMARY.md) and
+[B0 verification record](docs/REPLICATION_NOTES.md#b0-full-platform-fingerprint-closeout).
 
 | Lab-frame PD, seed 42 | `primary` | `paper_effective` |
 | --- | ---: | ---: |
@@ -169,7 +169,7 @@ see [Actions](https://github.com/Jeffaaay/insertion-vv/actions) for commit-speci
 The later Linux verification exposed harmless last-ulp differences; it did not
 establish cross-platform bitwise equality. Step 2 adds fixed-frequency preview;
 frequency adaptation, Rust harness, firmware, HIL and Phase C fault campaigns
-remain deferred.
+are now authorized as Phase B work; hardware results are not yet claimed.
 
 ## Two-tier determinism
 

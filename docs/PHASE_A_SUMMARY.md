@@ -59,9 +59,28 @@ Legacy v1 pairs remain under their historical rules; v1/v2 pairs require fresh r
 
 The preview checkpoint passed 162 tests per OS, eight experiments per OS and eight
 Linux/Windows comparisons in [run 38321802925](https://github.com/Jeffaaay/insertion-vv/actions/runs/38321802925).
-B0 adds full-fingerprint classification tests; fresh closeout counts, comparisons
-and the release tag will be appended after verification. Frozen old-controller
-hashes remain additional regression anchors, and plots/videos remain outside CI.
+B0 passes **170 tests in each of local Windows, hosted Windows and Linux** in
+[run 38322571543](https://github.com/Jeffaaay/insertion-vv/actions/runs/38322571543).
+All eight Linux/Windows comparisons and all eight local/hosted Windows comparisons
+pass; the latter correctly use different-platform tolerances. All old-controller
+regression anchors remain exact. Local and Linux preview traces are unchanged;
+the fresh Windows runner now reproduces local preview SHA rather than the earlier
+runner's SHA. Old missing CPU metadata is not backfilled. `v0.1-phase-a` marks this
+closeout plus its documentation. Plots/videos remain outside CI.
+
+| Full fingerprint component | Local Windows | Fresh hosted Windows |
+| --- | --- | --- |
+| OS release / build | 10 / 10.0.19045 | 2022Server / 10.0.20348 |
+| CPU | AMD Ryzen 9 8940HX | Intel Xeon Platinum 8573C |
+| AVX2 / AVX512F / FMA3 | yes / yes / yes | yes / yes / yes |
+| BLAS/LAPACK | OpenBLAS 0.3.29 | OpenBLAS 0.3.29 |
+| Runtime dispatch / threads | SkylakeX / 1 | SkylakeX / 1 |
+| Python / MuJoCo / NumPy | 3.12.10 / 3.8.0 / 2.2.6 | same |
+
+Complete flags and build strings are preserved in every run and
+`artifacts/release/phase_a_closeout.json`; no numeric code or tolerance changed.
+The fresh Windows pair happens to have identical traces. This does not justify
+inventing CPU/BLAS metadata for the older mismatching runner.
 
 ## Targets for later fault injection
 

@@ -1,7 +1,7 @@
 # Insertion Verification Stack — Project Brief
 
 **Owner:** Jeff Young  
-**Status:** Phase A performance accepted; platform-provenance closeout (B0), then Phase B preparation and hardware verification authorized by the user. This brief is the single source of truth for scope; update it before changing scope.  
+**Status:** Phase A and B0 verified; release checkpoint v0.1-phase-a. Phase B preparation and hardware verification authorized by the user. This brief is the single source of truth for scope; update it before changing scope.  
 **Audience:** 给人读，也给执行 agent（Codex 等）读。Agent 只做本文件明确授权的事。
 
 ---

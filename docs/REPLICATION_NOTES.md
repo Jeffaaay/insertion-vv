@@ -681,3 +681,48 @@ PASS, and `verification_acceptance: false`, with both comparison reports and
 per-case local/hosted SHA matches. No gate was relaxed or fingerprint altered.
 The single adjustment allowance is exhausted, so controller changes stop here;
 the fingerprint/bitwise scope needs a separate decision. No Phase B work started.
+
+## B0: full platform fingerprint closeout
+
+The user authorized continuous work and review exchange toward actual hardware
+verification. B0 adopts full platform identity without changing controller or
+plant numeric code. Version 2 adds OS release/build, CPU model, NumPy-detected ISA
+flags, BLAS/LAPACK build backend and loaded runtime backend/dispatch/thread count.
+Data comes from platform/CPU records, NumPy's pinned CPU feature API and
+`show_config(mode='dicts')`, plus read-only threadpoolctl 3.6.0. No dispatch or
+thread setting is changed by metadata collection. No hostname/install path is stored.
+
+Equal full fingerprints retain exact trace/truth SHA. Different full fingerprints
+automatically use the existing position/velocity/force/metric tolerances and exact
+verdict checks. Old v1 artifacts are immutable; v1/v2 comparisons are INVALID rather
+than inventing provenance. The three old controllers' frozen five-field regression
+anchors remain enforced independently of the full-fingerprint comparison tier.
+
+Local full workflow commands pass **170 tests** and eight experiments at `a5c503b`.
+Hosted [38322571543](https://github.com/Jeffaaay/insertion-vv/actions/runs/38322571543)
+passes 170 tests per OS and all eight Linux/Windows comparisons. Downloaded artifacts
+also pass all eight local/hosted Windows comparisons, correctly labelled
+`cross-platform-tolerance`. Full evidence: `artifacts/release/phase_a_closeout.json`.
+
+| Field | Local | Hosted Windows |
+| --- | --- | --- |
+| OS release / version | Windows 10 / 10.0.19045 | Windows 2022Server / 10.0.20348 |
+| CPU model | AMD Ryzen 9 8940HX with Radeon Graphics | INTEL(R) XEON(R) PLATINUM 8573C |
+| AVX2 / AVX512F / FMA3 | true / true / true | true / true / true |
+| BLAS/LAPACK build | scipy-openblas 0.3.29, DYNAMIC_ARCH, Haswell, max threads 24 | same |
+| Loaded backend / dispatch / active threads | OpenBLAS 0.3.29 / SkylakeX / 1 | same |
+| Python / MuJoCo / NumPy | 3.12.10 / 3.8.0 / 2.2.6 | same |
+
+In this **fresh** Windows pairing all signal and metric deltas are zero, and the
+two preview traces have local hashes `3231bcd4...` / `5081e553...`. The prior hosted
+Windows hashes `2b37e3ae...` / `9e8323a4...` remain preserved in earlier artifacts.
+We do not claim that adding metadata changed arithmetic: local and Linux preview
+trace/truth hashes are unchanged, all three older controllers' hashes remain exact
+in all three environments, and numeric-source diffs are empty. Hosted runners may
+differ between jobs; the old runner's CPU/dispatch was not captured. A specific
+historical CPU/BLAS causal assignment is therefore unproven, even though the new
+comparison classification and measured acceptance are now correct.
+
+Finding #3 and PHASE_A_SUMMARY include this evidence, four-controller comparisons,
+the two transient fault targets, and float32 limitations. Closeout is tagged
+`v0.1-phase-a`; Phase B continues only after the requested result/review exchange.

@@ -65,6 +65,9 @@ equivalent. No sine implementation or stored trace is patched or rounded.
 
 ### Two-tier correction
 
+This is the historical first contract; Finding #3 extends its platform identity
+to the full v2 fingerprint without changing any numeric tolerance.
+
 - **Intra-platform:** same OS, normalized architecture, Python/MuJoCo/NumPy versions,
   source, config and seed require identical trace and truth SHA-256. Every run stores
   that fingerprint. Replay and independent-process tests enforce equality;
@@ -130,3 +133,16 @@ Float32 has much less precision than binary64 (epsilon about 1.19e-7 versus
 epsilon ratio does **not** establish an actual HIL error multiplier or guarantee
 that square-root filtering will meet MCU timing/accuracy requirements. Those need
 measurement with a preregistered HIL error budget.
+
+### Fresh full-fingerprint observation
+
+B0 [run 38322571543](https://github.com/Jeffaaay/insertion-vv/actions/runs/38322571543)
+passes all comparisons with 170 tests per environment. The fresh Windows runner
+is an Intel Xeon Platinum 8573C / Server 2022; local is AMD Ryzen 9 8940HX /
+Windows 10. Both report OpenBLAS 0.3.29, `SkylakeX` dispatch and the same detected
+AVX2/AVX-512/FMA3 flags. In this fresh pairing, all eight traces are actually
+bitwise equal despite the correctly different full fingerprints. The old hosted
+Windows preview hashes differ from this new runner, while local and Linux hashes
+are unchanged. The prior v1 artifact lacks CPU/dispatch metadata, so we cannot
+assert which specific historical feature caused the old mismatch. This observation
+supports retaining runtime provenance and explicitly limits the causal claim.
