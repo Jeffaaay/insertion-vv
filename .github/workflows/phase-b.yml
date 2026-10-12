@@ -1,4 +1,4 @@
-name: Phase B portable core
+name: Phase B C32
 
 on:
   push:
@@ -16,18 +16,54 @@ jobs:
         os: [ubuntu-24.04, windows-2022]
     runs-on: ${{ matrix.os }}
     timeout-minutes: 10
+    env:
+      PYTHONHASHSEED: "0"
+      OMP_NUM_THREADS: "1"
+      OPENBLAS_NUM_THREADS: "1"
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12.10"
-      - name: Build portable core and run numerical/API checks
-        run: python tools/build_controller.py --output artifacts/controller-build
+          cache: pip
+          cache-dependency-path: requirements-lock.txt
+      - name: Install frozen simulation dependencies
+        run: python -m pip install -r requirements-lock.txt
+      - name: Build core, test adapter and compare C32 against Python preview
+        run: python -m harness.ci --output artifacts/phase-b
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: phase-b-core-${{ matrix.os }}-${{ github.sha }}
-          path: artifacts/controller-build/
+          name: phase-b-c32-${{ matrix.os }}-${{ github.sha }}
+          path: artifacts/phase-b/
+          if-no-files-found: error
+
+  cross-c32:
+    needs: host-core
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12.10"
+      - uses: actions/download-artifact@v4
+        with:
+          name: phase-b-c32-ubuntu-24.04-${{ github.sha }}
+          path: artifacts/linux
+      - uses: actions/download-artifact@v4
+        with:
+          name: phase-b-c32-windows-2022-${{ github.sha }}
+          path: artifacts/windows
+      - name: Compare primary with registered C32 budget
+        run: python -m harness.compare artifacts/linux/primary/preview_c32 artifacts/windows/primary/preview_c32 --output artifacts/comparison/primary.json
+      - name: Compare diagnostic with registered C32 budget
+        run: python -m harness.compare artifacts/linux/paper_effective/preview_c32 artifacts/windows/paper_effective/preview_c32 --output artifacts/comparison/paper_effective.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: phase-b-c32-comparison-${{ github.sha }}
+          path: artifacts/comparison/
           if-no-files-found: error
 
   arm-core:

@@ -70,3 +70,8 @@ must include compiler, flags, ELF digest, clock and FPU configuration.
 The user owns NUCLEO-H723ZG but initially reports it disconnected. Software work
 continues independently. Frequency adaptation and full Phase C fault campaigns
 remain future work, outside these Phase B checkpoints.
+
+Hardware fact correction: [ST's H723ZG specification](https://www.st.com/en/microcontrollers-microprocessors/stm32h723zg.html)
+states single- and double-precision FPU support. Binary32 is the registered
+experimental choice, not a chip limitation. A double-precision board build is a
+possible later ablation; it is not needed for this checkpoint.

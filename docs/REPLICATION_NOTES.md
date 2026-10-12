@@ -726,3 +726,36 @@ comparison classification and measured acceptance are now correct.
 Finding #3 and PHASE_A_SUMMARY include this evidence, four-controller comparisons,
 the two transient fault targets, and float32 limitations. Closeout is tagged
 `v0.1-phase-a`; Phase B continues only after the requested result/review exchange.
+# Phase B B1.1/B1.2 — portable C32, before hardware
+
+Preregistration commit `289eb7c` fixed all thresholds before the first closed-loop
+C32 run. The portable C11 implementation uses the same parameters/equations with
+binary32 and Householder square-root QR, strict arithmetic, FMA contraction off,
+fixed-size arrays and no heap. Phase A source under `sim/` is unchanged.
+B1.1 [core CI 38323626662](https://github.com/Jeffaaay/insertion-vv/actions/runs/38323626662)
+passes both host builds and Arm GNU 14.2 Cortex-M7 compilation; its accompanying
+[Phase A CI 38323626654](https://github.com/Jeffaaay/insertion-vv/actions/runs/38323626654)
+passes 170 tests per OS and all comparisons. Sixteen downloaded historical
+comparisons pass, including all old-controller SHA anchors.
+
+First B1.2 experiment (local Windows, clang 22.1.8; not canonical Linux):
+
+| Profile | C32 contact RMS (µm) | Peak error velocity (mm/s) | Peak force (mN) | Verdict |
+| --- | ---: | ---: | ---: | --- |
+| primary | 1.12199245348 | 0.07266675577 | 4.85331661346 | PASS |
+| paper_effective | 7.34967569070 | 0.48109550282 | 1.35311318822 | PASS |
+
+Primary original RMS is 1.12256360653 µm; the difference is about 0.0509%, below
+the preregistered 5%. Across all 8000 ticks, maximum needle-position difference is
+1.71782082763e-8 m (0.017178 µm), below 1e-7 m. Both runs repeat bitwise. Six adapter
+tests include full sensor fields, parameter quantization, invalid inputs/reset and
+truth-output blindness. Full per-field max/RMS deltas and metrics are preserved in
+`artifacts/b1-c32-first/ci_report.json`; no gain/model/noise parameter was tuned.
+Hosted C32 values and cross-platform comparison follow in the checkpoint report.
+
+The new controller has a separate CI job/contract, not a relaxed Phase A matrix.
+H723's [DP-FPU supports single and double precision](https://www.st.com/en/microcontrollers-microprocessors/stm32h723zg.html);
+C32 is an experimental choice. Disabling FMA does not establish equal host/ARM
+libm output. Same board binary lockstep/replay requires bitwise equality, while
+host/ARM comparison uses the registered Phase B physical tolerances. No board run
+or timing result is claimed here.

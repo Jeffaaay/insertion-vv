@@ -375,3 +375,7 @@ with truth or a changed observer. Primary C32 nominal PASS, contact RMS within 5
 1.1225636065319848 µm and max needle-position deviation <1e-7 m are registered before
 the first experiment. B2 timing budgets and hardware evidence requirements are
 registered in that plan. The user authorizes continuation after each review checkpoint.
+
+H723 has a DP-FPU supporting binary32 and binary64. The C32 implementation is an
+experimental precision choice, not a hardware restriction. A later double build
+can be a separate ablation; no such numeric change is included in B1.

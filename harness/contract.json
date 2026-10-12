@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "preregistered_in": "289eb7c6ddcd59ca406ecba79c259476de59d05c:docs/PHASE_B_PLAN.md",
+  "seed": 42,
+  "primary_task_verdict": "PASS",
+  "primary_reference_contact_rms_um": 1.1225636065319848,
+  "primary_contact_rms_relative_difference_max_inclusive": 0.05,
+  "primary_max_needle_position_difference_m_strict": 1e-7,
+  "cross_c32_strict_tolerances": {"position_m": 1e-7, "velocity_m_s": 1e-5, "force_n": 1e-6, "metric_relative": 0.05},
+  "same_host_build_backend_comparison": "bitwise trace and truth SHA-256",
+  "board_replay_compute_p99_us_strict": 100,
+  "board_replay_deadline_misses": 0,
+  "board_replay_ticks": 8000,
+  "board_replay_tick_us": 1000
+}
