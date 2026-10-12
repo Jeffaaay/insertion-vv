@@ -435,3 +435,70 @@ process/truth-output-toggle tests also cover offset-free control with 25 Hz
 measurements, seeded noise and frame loss. Unit checks cover hidden-bias
 identification with varying input, startup, cancellation sign/previous total
 command, invalid frames and bitwise equivalence when bias cancellation is disabled.
+
+### Canonical Linux result and hosted verification
+
+Code commit `ca364c71f19dfccf388f1c2a207a8a9571cdf3ca` passed
+[hosted run 38318752405](https://github.com/Jeffaaay/insertion-vv/actions/runs/38318752405):
+Ubuntu 24.04 **130/130**, Windows 2022 **130/130**, zero failures/errors/skips,
+both contact calibrations, six internally bitwise-repeatable seed-42 cases, and
+all **six cross-platform comparisons PASS**. A clean local Windows run used the
+same CI commands; all six trace/truth hashes match hosted Windows. Downloaded
+artifacts were independently compared and all eight historical baseline traces
+(two controllers × two profiles × two OSes) exactly match the prior checkpoint.
+
+| Canonical Linux metric, seed 42 | `primary` | `paper_effective` |
+| --- | ---: | ---: |
+| Free RMS | 19.30085205372127 µm | 19.30085205372127 µm |
+| Contact RMS | 20.63083237812307 µm | 33.618596790679305 µm |
+| Contact peak absolute error velocity | 0.3619168846643375 mm/s | 0.8803398605529429 mm/s |
+| Contact peak normal force | 5.5923491123020606 mN | 1.979979481464928 mN |
+| Task verdict | FAIL: contact RMS >=20 µm | FAIL: contact RMS >=20 µm |
+| Step 1 reproduction acceptance | PASS | PASS |
+
+```text
+Linux offset-free primary:
+0704d13b0dc35e8961678ddc65bcdd355de9651f94eb84283f00ffeae0537af1
+Linux offset-free paper_effective:
+37929c6efac5a6dea75ef9b408e8f1e182687c2a9ad3ba64c4de46e9aa10e1d5
+Windows offset-free primary:
+796631e190e63e7c824cadc56078e246d961fe11f289e3653e81282102a7684a
+Windows offset-free paper_effective:
+2550246cae894b2da973825d39553b0ca31340c6bb76b189d7715ca7d0d5c0c6
+```
+
+Across all six comparisons the largest differences are 2.710505431213761e-19 m,
+1.7780915628762273e-17 m/s and 2.7755575615628914e-17 N; the largest physical-metric
+relative difference is 3.514711358389029e-15. All discrete states and verdicts agree.
+Same-platform hashes remain exact; the registered cross-platform tolerances are unchanged.
+
+For interpretation only, the first Windows contact records have mean error
+0.851/0.777 µm and standard deviation 20.613/33.610 µm. Thus the RMS is dominated
+by time-varying residual, not a large DC offset. The diagnostic has stronger
+oscillatory error with these same observer gains. This is an observation from
+saved traces, not a fitted frequency model or a claim that preview has been tested.
+
+### Optional Step 1 plots and videos
+
+Source: `phase-a-ubuntu-24.04-ca364c71f19dfccf388f1c2a207a8a9571cdf3ca` from
+the hosted run above, downloaded under `artifacts/hosted-offsetfree-38318752405/linux/`.
+In the separate visualization environment, for each profile:
+
+```text
+python tools/plot_run.py --run artifacts/hosted-offsetfree-38318752405/linux/primary/delayed_feedback_offsetfree
+python tools/render_video.py --run artifacts/hosted-offsetfree-38318752405/linux/primary/delayed_feedback_offsetfree
+python tools/plot_run.py --run artifacts/hosted-offsetfree-38318752405/linux/paper_effective/delayed_feedback_offsetfree
+python tools/render_video.py --run artifacts/hosted-offsetfree-38318752405/linux/paper_effective/delayed_feedback_offsetfree
+```
+
+Outputs are `artifacts/viz/delayed_feedback_offsetfree_{primary,paper_effective}_seed42.png`
+and `.mp4`, plus provenance sidecars; the combined
+`artifacts/viz/delayed_feedback_offsetfree_metrics.json` contains both full Linux
+metrics and the six-case cross-platform report. Both PNGs were visually inspected.
+Both MP4s were decoded to verify 1280×720, 20 fps, 160 frames / 8 s, and frames
+at 0, 3.2, 5.1 and 7.95 s were inspected for clear HUD, contrasting geometry and
+the moving 300 µm marker. Rendering replays saved states without physics integration.
+No visualization dependency or execution is added to CI/tests.
+
+**Step 1 complete; stop here.** `preview`/harmonic estimation, QP/shear constraints,
+Phase B and firmware are not implemented by this checkpoint.

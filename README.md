@@ -8,9 +8,10 @@ implements the Phase A plant, `lab_frame_pd`, `delayed_feedback`, its optional
 Reported numbers use the **Linux x86_64 runner** (Ubuntu 24.04, Python 3.12.10,
 MuJoCo 3.8.0, NumPy 2.2.6) as the canonical platform. Windows is independently
 verified and compared with Linux using the two-tier determinism contract below.
-The [two-tier checkpoint](https://github.com/Jeffaaay/insertion-vv/actions/runs/38316499846)
-passed **96 tests on each OS**, both calibrations, four deterministic experiments
-per OS, and all four cross-platform comparisons. Tables below use that Linux run.
+The [offset-free checkpoint](https://github.com/Jeffaaay/insertion-vv/actions/runs/38318752405)
+passed **130 tests on each OS**, both calibrations, six deterministic experiments
+per OS, and all six cross-platform comparisons. Tables below use that Linux run;
+the original baseline traces are bitwise unchanged on their respective platforms.
 
 | Lab-frame PD, seed 42 | `primary` | `paper_effective` |
 | --- | ---: | ---: |
@@ -53,6 +54,20 @@ PD gains, reference, sensors and both plants are unchanged. Step 1's contact-RMS
 reproduction band is 20–40 µm for both profiles, distinct from task PASS <20 µm.
 The paper's 30.3 µm ablation is a 30-seed QP result, not this seed-42 PD experiment.
 See the [Step 1 record](docs/REPLICATION_NOTES.md#optional-step-1-delayed-feedback-plus-acceleration-bias-observer).
+
+| Delayed feedback + offset-free, seed 42 | `primary` | `paper_effective` |
+| --- | ---: | ---: |
+| Free-window RMS error | 19.301 µm | 19.301 µm |
+| Contact-window RMS error | 20.631 µm | 33.619 µm |
+| Contact peak absolute error velocity | 0.362 mm/s | 0.880 mm/s |
+| Contact peak normal force | 5.592 mN | 1.980 mN |
+| Step 1 reproduction acceptance (20–40 µm) | **PASS** | **PASS** |
+| Task verdict (<20 µm contact RMS) | **FAIL** | **FAIL** |
+
+The first experiment met Step 1 acceptance with the paper's observer gains; no
+tuning was performed. Contact mean error is below 1 µm on both profiles, while
+time-varying error remains. Removing under-penetration raises contact force from
+2.132/1.013 mN to 5.592/1.980 mN; there is no force constraint in this ablation.
 
 ## Run
 
@@ -158,5 +173,9 @@ The delayed-feedback checkpoint produced both `.png` and `.mp4` outputs under
 `artifacts/viz/delayed_feedback_{primary,paper_effective}_seed42.*`; each video is
 1280×720, 20 fps, 160 frames / 8 seconds. See the replication notes for provenance
 and commands to regenerate them from the canonical Linux artifacts.
+Step 1 also produces
+`artifacts/viz/delayed_feedback_offsetfree_{primary,paper_effective}_seed42.{png,mp4}`
+and `artifacts/viz/delayed_feedback_offsetfree_metrics.json` with the same isolation
+from CI. The optional visuals are local deliverables, not Git-tracked binaries.
 
 Directory layout follows [PROJECT_BRIEF.md §8](PROJECT_BRIEF.md).
