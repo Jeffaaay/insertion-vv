@@ -591,3 +591,93 @@ acceleration-bias observer remain unchanged. No tolerance, sin implementation,
 trace serialization or historical baseline is changed. No further adjustment is
 permitted if this version fails acceptance. The first failed CI artifacts remain
 available for comparison; no claim of cross-platform bitwise equality is made.
+
+### Final Step 2 nominal result (canonical Linux, seed 42)
+
+Source commit `02ef8e46bf20a46be2b1f76f3b12c4f408cf82ef`, Linux artifact from
+[run 38321451277](https://github.com/Jeffaaay/insertion-vv/actions/runs/38321451277).
+
+| Metric | `primary` | `paper_effective` |
+| --- | ---: | ---: |
+| Free-window RMS, 1–2 s | 2.708607249637172 µm | 2.708607249637172 µm |
+| Contact RMS, 3–8 s | 1.1225636065319848 µm | 7.350292930654037 µm |
+| Contact peak absolute error velocity | 0.07268500727112626 mm/s | 0.48111553978090826 mm/s |
+| Contact peak normal force | 4.853382017220471 mN | 1.3531202578035904 mN |
+| Task verdict | PASS | PASS (not required) |
+| Step 2 preregistered primary acceptance | PASS | Report only |
+
+Primary contact RMS drops from 20.63083237812307 µm (offset-free only) to
+1.1225636065319848 µm. The acceleration-bias observer and PD are exactly unchanged.
+No parameter tuning was used; the one allowed adjustment was consumed by the
+square-root arithmetic correction. No LQR/MPC, force constraints, Phase B or
+frequency adaptation was implemented. Nominal sensing here is 1 kHz and noiseless,
+with 15 ms delay; noisy/sparse cases exercise determinism and estimator tests,
+not a claim of nominal performance under all faults.
+
+The plot shows remaining insertion transients outside the contact window.
+`paper_effective` also has a transient exceeding the instantaneous +/-20 µm
+band shortly after 3 s; its window RMS still passes the unchanged task contract.
+Force is an output, not a constrained acceptance metric in this simplified PD
+experiment. Thus these results do not reproduce the paper's QP/shear constraints.
+
+### Step 2 plots and videos (outside CI)
+
+For each profile, the separate visualization environment ran:
+
+```text
+python tools/plot_run.py --run artifacts/hosted-preview-38321451277/linux/primary/preview
+python tools/render_video.py --run artifacts/hosted-preview-38321451277/linux/primary/preview
+python tools/plot_run.py --run artifacts/hosted-preview-38321451277/linux/paper_effective/preview
+python tools/render_video.py --run artifacts/hosted-preview-38321451277/linux/paper_effective/preview
+```
+
+Outputs: `artifacts/viz/preview_{primary,paper_effective}_seed42.png` and `.mp4`,
+with trace/source provenance in `.plot.json` / `.video.json`. Both plots were
+visually inspected. Both videos decode as 1280x720, 20 fps, 160 frames / 8 s;
+frames at 0, 3.2, 5.1 and 7.95 s were checked for readable t/e/F overlays,
+contrasting colors and the moving 300 µm target marker. Replay never steps physics.
+No visualization package is required by CI or tests.
+
+### Step 2 verification and unresolved platform fingerprint limit
+
+Local Windows executed the workflow's pinned install command and full
+`python -m sim.ci --output artifacts/preview-sqrt-verified` with the same three
+thread/hash environment settings. Lint, formatting, **162 tests**, two stiffness
+calibrations, all eight same-runner bitwise repeats and reproduction gates passed.
+Hosted [run 38321451277](https://github.com/Jeffaaay/insertion-vv/actions/runs/38321451277)
+is green: 162 tests on Windows and Linux, plus all eight cross-platform cases.
+Maximum Linux/Windows differences are 3.729655473350135e-17 m,
+1.831651150197011e-15 m/s and 2.5299857694949246e-16 N; maximum metric relative
+difference is 6.597541894182072e-13. Every verdict and discrete field agrees.
+
+All **12 historical trace hashes and 12 truth hashes** (three prior controllers,
+two profiles, two OS artifacts) are unchanged from accepted Step 1 run
+38319069038. All six local Windows historical traces/truth also match hosted
+Windows. Existing `controllers.py`, plant/MJCF, sensors, reference and verdict
+contract have no changes from the accepted Step 1 commit.
+
+| Preview SHA-256 | `primary` | `paper_effective` |
+| --- | --- | --- |
+| Linux runner | `4b66ee849052f7549e72f768c2a32d288a8c7c57d81c7cf6bb37faeb11fa9029` | `417be91b79640f11290f8219770edbf2616f5cdbcf04473ac0d6a224db3e0ab0` |
+| Windows runner | `2b37e3aeca5661d6c829134132e2361ba13717390ac1040dbf0880c43ddd5970` | `9e8323a415b9059e5603931368be729c8b38b5fd19dc1dadd4c855c68d9adb5c` |
+| Local Windows | `3231bcd4944bda669441f6c2908e32fda8ef662d28b636dd88a52a96f23a30c4` | `5081e553dab20f37cae0127ad3e7a385f7e0f2c9b90f61865dbe7283fb23c1f2` |
+
+**Unresolved contract issue, not a PASS claim:** the final additional local vs
+hosted Windows comparison fails `intra_platform.trace_sha256` and
+`intra_platform.truth_sha256` for both preview cases. Both record the same coarse
+OS/arch/Python/MuJoCo/NumPy fingerprint, source/config SHA and seed, despite local
+Windows 10 versus hosted Windows Server 2022. Each environment is independently
+bitwise repeatable, all numeric tolerances pass and verdicts match. The largest
+metric relative difference is 3.023326852106384e-13. OS release, CPU and BLAS/LAPACK
+implementation/dispatch are not captured by the current fingerprint; platform
+linear-algebra differences are suspected, not proved. The square-root filter
+fixed tolerance amplification, but does not guarantee bitwise equality between
+machines grouped by this fingerprint. Hosted green alone does not settle this.
+
+Evidence: `artifacts/hosted-preview-38321451277/local-vs-hosted-windows.json`;
+the unmodified comparison tool returns FAIL as required. The aggregate
+`artifacts/viz/preview_metrics.json` records nominal acceptance true, hosted CI
+PASS, and `verification_acceptance: false`, with both comparison reports and
+per-case local/hosted SHA matches. No gate was relaxed or fingerprint altered.
+The single adjustment allowance is exhausted, so controller changes stop here;
+the fingerprint/bitwise scope needs a separate decision. No Phase B work started.

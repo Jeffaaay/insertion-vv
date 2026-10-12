@@ -313,7 +313,10 @@ at zero; do not initialize from plant amplitudes/phases. Initial covariance is
 noise `Qc=(0.2e-6 m/sqrt(s))^2 * I`. These are engineering choices, selected before
 any preview experiment, not recovered author tuning. Capture-time prediction uses
 exact oscillator rotations; covariance prediction adds `Qc * elapsed_seconds`.
-Correction uses the Joseph covariance form. Ignore held/duplicate/old/nonfinite or
+The first preregistered implementation used Joseph covariance form. The single
+post-run numerical adjustment uses QR square-root Kalman arithmetic with the
+same P0/Q/R and state equations; see REPLICATION_NOTES for the failed cross-platform
+metric gate and diagnosis. No further adjustment is authorized. Ignore held/duplicate/old/nonfinite or
 not-yet-deliverable frames. Predict the last corrected capture to current time:
 nominally 15 ms; sparse/missing frames add their elapsed age. Never inject a
 synthetic fresh measurement or change the saved filter state during output preview.

@@ -9,10 +9,16 @@ measurements, and CI.
 Reported numbers use the **Linux x86_64 runner** (Ubuntu 24.04, Python 3.12.10,
 MuJoCo 3.8.0, NumPy 2.2.6) as the canonical platform. Windows is independently
 verified and compared with Linux using the two-tier determinism contract below.
-The [offset-free checkpoint](https://github.com/Jeffaaay/insertion-vv/actions/runs/38318752405)
-passed **130 tests on each OS**, both calibrations, six deterministic experiments
-per OS, and all six cross-platform comparisons. Tables below use that Linux run;
-the original baseline traces are bitwise unchanged on their respective platforms.
+The [preview checkpoint](https://github.com/Jeffaaay/insertion-vv/actions/runs/38321451277)
+passed **162 tests on each OS**, both calibrations, eight deterministic experiments
+per OS, and all eight Linux/Windows comparisons. Tables below use canonical Linux
+results; all six previous controller/profile trace and truth hashes remain unchanged
+on each OS. **One additional verification issue remains:** local Windows and hosted
+Windows `preview` hashes differ despite identical coarse fingerprints. Numeric
+tolerances and verdicts pass, but the existing same-fingerprint bitwise comparison
+correctly fails. CI repeats within each runner and does not cover that machine pair.
+This limitation is recorded without weakening the contract; see the
+[Step 2 verification record](docs/REPLICATION_NOTES.md#step-2-verification-and-unresolved-platform-fingerprint-limit).
 
 | Lab-frame PD, seed 42 | `primary` | `paper_effective` |
 | --- | ---: | ---: |
@@ -69,6 +75,30 @@ The first experiment met Step 1 acceptance with the paper's observer gains; no
 tuning was performed. Contact mean error is below 1 µm on both profiles, while
 time-varying error remains. Removing under-penetration raises contact force from
 2.132/1.013 mN to 5.592/1.980 mN; there is no force constraint in this ablation.
+
+The `preview` controller adds a seven-state harmonic Kalman estimator with known
+1.2/2.4/0.25 Hz frequencies and unknown amplitudes/phases, corrected only from
+received surface frames. It advances the captured state by 15 ms and uses its
+position and analytic velocity in the same PD + unchanged acceleration-bias
+observer. No force readback, truth access, LQR/MPC or QP is added.
+
+| Preview, seed 42 (Linux) | `primary` | `paper_effective` |
+| --- | ---: | ---: |
+| Free-window RMS error | 2.709 µm | 2.709 µm |
+| Contact-window RMS error | 1.123 µm | 7.350 µm |
+| Contact peak absolute error velocity | 0.073 mm/s | 0.481 mm/s |
+| Contact peak normal force | 4.853 mN | 1.353 mN |
+| Task verdict | **PASS** | **PASS** |
+
+The preregistered primary target was <=10 µm contact RMS **and** task PASS; the
+diagnostic was not required to pass. The first implementation met nominal targets.
+One subsequent numerical adjustment changed covariance arithmetic to square-root
+Kalman QR after the cross-platform metric gate exposed amplified roundoff.
+No gains, frequencies, P0/Q/R, plant parameters or tolerances were tuned.
+See the [full Step 2 history](docs/REPLICATION_NOTES.md#step-2-fixed-frequency-kalman-preview-preregistered-before-first-run).
+This is a nominal known-frequency result, not evidence of robustness to frequency
+drift or firmware precision. Startup/insertion transients outside the scored
+windows still exceed the plotted instantaneous bands; no force constraint exists.
 
 ## Run
 
