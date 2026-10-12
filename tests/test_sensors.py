@@ -41,7 +41,7 @@ def test_seed_controls_noise_and_drops():
 @pytest.mark.parametrize(
     "changes",
     [
-        {"controller": "preview"},
+        {"controller": "unimplemented_controller"},
         {"delayed_kp_n_per_m": 0},
         {"delayed_kd_ns_per_m": -1},
         {"surface_velocity_filter_tau_us": 0},

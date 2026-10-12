@@ -542,3 +542,25 @@ windows, at most **one tuning pass**. Stop with a plot if primary cannot PASS;
 do not relax thresholds or fit more parameters. Tests and CI include both
 determinism tiers, all eight cases, and the six historical trace hashes on each
 registered platform. Visualizations remain separate from CI dependencies.
+
+### Step 2 first-run history (Windows, no tuning)
+
+Preregistration and implementation were committed as `fb379005d099227233e07ab03db12e7d050cc3d9`
+**before** the first preview experiment. Both profiles passed on the first attempt;
+**zero tuning passes** were used, with no change to observer, PD or Kalman settings.
+Initial evidence is preserved in `artifacts/preview-first/{primary,paper_effective}`.
+
+| First Windows run, seed 42 | `primary` | `paper_effective` |
+| --- | ---: | ---: |
+| Free RMS | 2.708607306049583 µm | 2.708607306049583 µm |
+| Contact RMS | 1.1225636057740722 µm | 7.3502929294236665 µm |
+| Contact peak absolute error velocity | 0.07268500727125723 mm/s | 0.4811155397405547 mm/s |
+| Contact peak normal force | 4.8533820169486885 mN | 1.3531202577617105 mN |
+| Task verdict | PASS | PASS (not required) |
+
+The first full local CI encountered one obsolete scope test: it still listed
+`preview` as an invalid controller name. It was changed to a genuinely unknown
+name, preserving invalid-name validation. The other 160 tests passed, including
+both nominal preview cases. This was a test-scope correction, not a tuning pass.
+The reproduction-contract text was also normalized to the repository's LF policy
+before CI; no numeric setting or experiment trace was altered.
