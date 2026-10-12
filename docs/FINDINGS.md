@@ -146,3 +146,15 @@ Windows preview hashes differ from this new runner, while local and Linux hashes
 are unchanged. The prior v1 artifact lacks CPU/dispatch metadata, so we cannot
 assert which specific historical feature caused the old mismatch. This observation
 supports retaining runtime provenance and explicitly limits the causal claim.
+## Follow-up evidence after the B0 tag
+
+The final tag CI [38322919394](https://github.com/Jeffaaay/insertion-vv/actions/runs/38322919394)
+ran Windows on AMD EPYC 7763 (AVX512F absent; OpenBLAS Haswell), whereas the preceding
+code CI used Xeon 8573C (AVX512F present; SkylakeX). With unchanged numerical source,
+the tag runner reproduces the older Windows preview SHA `2b37e3ae...`. Both profiles
+remain within the unchanged tolerances, with maximum differences 1.95156e-17 m,
+8.77336e-16 m/s and 1.09775e-16 N. The full v2 fingerprint correctly chooses the
+cross-platform tier. All three older controllers remain exact, and both jobs pass
+170 tests. This is a measured association between dispatch/platform and rounding;
+it is not an experiment isolating dispatch as the only cause. The earlier v1 run
+still has no recoverable CPU metadata.

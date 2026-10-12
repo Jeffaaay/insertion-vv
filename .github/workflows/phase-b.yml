@@ -1,0 +1,61 @@
+name: Phase B portable core
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  host-core:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, windows-2022]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12.10"
+      - name: Build portable core and run numerical/API checks
+        run: python tools/build_controller.py --output artifacts/controller-build
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: phase-b-core-${{ matrix.os }}-${{ github.sha }}
+          path: artifacts/controller-build/
+          if-no-files-found: error
+
+  arm-core:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12.10"
+      - uses: actions/cache@v4
+        id: arm
+        with:
+          path: .toolchains/arm-gnu-toolchain-14.2.rel1-x86_64-arm-none-eabi
+          key: arm-gnu-14.2.rel1-linux-x64-62a63b98
+      - name: Download pinned official Arm compiler
+        if: steps.arm.outputs.cache-hit != 'true'
+        shell: bash
+        run: |
+          mkdir -p .toolchains
+          curl --fail --location --retry 3 https://developer.arm.com/-/media/Files/downloads/gnu/14.2.rel1/binrel/arm-gnu-toolchain-14.2.rel1-x86_64-arm-none-eabi.tar.xz -o .toolchains/arm.tar.xz
+          echo '62a63b981fe391a9cbad7ef51b17e49aeaa3e7b0d029b36ca1e9c3b2a9b78823  .toolchains/arm.tar.xz' | sha256sum --check
+          tar -xJf .toolchains/arm.tar.xz -C .toolchains
+      - name: Cross-compile Cortex-M7 core with Arm GNU 14.2
+        run: python tools/build_controller.py --output artifacts/arm-build --arm-cc .toolchains/arm-gnu-toolchain-14.2.rel1-x86_64-arm-none-eabi/bin/arm-none-eabi-gcc
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: phase-b-arm-${{ github.sha }}
+          path: artifacts/arm-build/
+          if-no-files-found: error

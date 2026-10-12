@@ -82,12 +82,17 @@
               复现→补模型→关闭 案例
 ```
 
-**Plant interface（Rust trait，所有 backend 实现同一接口）：**
+**Phase B interface correction:** plant 始终是 Python MuJoCo；换到 STM32 的是
+controller backend，而不是 plant。Rust harness 分别持有两个能力：
 ```rust
 trait Plant {
-    fn reset(&mut self, seed: u64);
-    fn step(&mut self, cmd: Command, dt_us: u32) -> Sensors; // sim: mj_step; hil: 通过串口和板子交换
-    fn truth(&self) -> Truth;                                 // 仅评估用，控制器永远拿不到
+    fn reset(&mut self, seed: u64) -> Result<Sensors, RunError>;
+    fn step(&mut self, cmd: Command, dt_us: u32) -> Result<Sensors, RunError>;
+    fn truth(&self) -> &Truth; // 仅评估用，控制器永远拿不到
+}
+trait Controller {
+    fn reset(&mut self) -> Result<(), RunError>;
+    fn command(&mut self, sensors: &Sensors) -> Result<Command, RunError>;
 }
 ```
 控制器只看 `Sensors`（带延迟、降采样、噪声、可能缺帧），评估只看 `Truth`。两者在代码上硬隔离（参考 AIC 的 GT-blind 做法）。
@@ -356,3 +361,17 @@ tolerance and timing criterion before experiments. The one-pass preview tuning
 limit remains exhausted; B0 is a metadata/contract correction, not further tuning.
 Claude's statements are review input, not independent evidence: distinguish measured
 dispatch differences from a suspected numerical root cause and retain failed runs.
+
+## 20. Phase B software-first checkpoints (2026-10-12)
+
+Apply the reviewed six-step sequence in `docs/PHASE_B_PLAN.md`, with separate commits
+and green local/hosted CI before progressing. Portable C32 core → Python C32
+closed-loop comparison → complete framed protocol → Rust FFI harness → virtual
+board transport → H723 firmware build. Retain Phase A numeric code and its existing
+four-controller comparison contract unchanged. C32 is a fifth controller under a
+separate explicit comparison budget. Every controller-facing frame must include
+needle velocity, capture time, sequence and freshness; do not replace missing fields
+with truth or a changed observer. Primary C32 nominal PASS, contact RMS within 5% of
+1.1225636065319848 µm and max needle-position deviation <1e-7 m are registered before
+the first experiment. B2 timing budgets and hardware evidence requirements are
+registered in that plan. The user authorizes continuation after each review checkpoint.

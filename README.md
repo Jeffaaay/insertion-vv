@@ -168,8 +168,9 @@ Server 2022. This released the original controller gate. That checkpoint had 65 
 see [Actions](https://github.com/Jeffaaay/insertion-vv/actions) for commit-specific status.
 The later Linux verification exposed harmless last-ulp differences; it did not
 establish cross-platform bitwise equality. Step 2 adds fixed-frequency preview;
-frequency adaptation, Rust harness, firmware, HIL and Phase C fault campaigns
-are now authorized as Phase B work; hardware results are not yet claimed.
+Rust harness, firmware and HIL are now authorized as Phase B work; hardware results
+are not yet claimed. Frequency adaptation and Phase C fault campaigns remain future
+work. See [Phase B plan and preregistration](docs/PHASE_B_PLAN.md).
 
 ## Two-tier determinism
 
