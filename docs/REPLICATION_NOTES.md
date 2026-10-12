@@ -4,7 +4,8 @@
 
 Phase A targets **paper-magnitude baseline with documented deviations**, not bit-exact
 paper replication. `lab_frame_pd`, `delayed_feedback`, and the separately authorized
-`delayed_feedback_offsetfree` ablation are implemented. The primary plant remains
+`delayed_feedback_offsetfree` ablation and fixed-frequency `preview` are implemented.
+The primary plant remains
 16 N/m, as specified in PROJECT_BRIEF.md. `paper_effective` is a diagnostic plant,
 not a claim to possess the author's MJCF. During the contact-profile experiment,
 no controller gains, contact damping, trajectory, sensor settings or verdict thresholds
@@ -194,8 +195,8 @@ We do not infer missing values from output tables.
 | Wall-time scope | Paper includes MPC solver-core timing | Controller + evaluation + plant + sensors; no file I/O | Choice; SIL purpose | deliberate deviation |
 
 Implicit MuJoCo defaults not overridden above are tied to version 3.8.0. They are
-not claimed to reproduce unknown author settings. Preview/MPC, 3-DOF, HIL and fault
-campaign parameters are outside this checkpoint's implemented scope.
+not claimed to reproduce unknown author settings. The simplified preview is
+documented below; MPC/QP, 3-DOF, HIL and fault campaigns remain outside scope.
 
 ## Author code / MJCF search
 
@@ -564,3 +565,29 @@ name, preserving invalid-name validation. The other 160 tests passed, including
 both nominal preview cases. This was a test-scope correction, not a tuning pass.
 The reproduction-contract text was also normalized to the repository's LF policy
 before CI; no numeric setting or experiment trace was altered.
+
+### Single permitted adjustment: square-root covariance arithmetic
+
+First hosted preview run [38320779592](https://github.com/Jeffaaay/insertion-vv/actions/runs/38320779592)
+passed 161 tests on each OS and both nominal task verdicts, but failed the
+cross-platform **metric** gate: free RMS relative difference 1.535098882688112e-8
+and free peak velocity relative difference 2.986235263498985e-9 exceeded 1e-9.
+All position, velocity and force absolute differences passed; the largest preview
+position difference was 1.1108106622026437e-13 m. All six historical cases passed.
+
+Diagnostic replay found initial covariance condition numbers about 1.9e7.
+Replaying Linux and Windows measurements through the same Windows estimator gave
+at most 3.58e-17 m / 1.57e-16 m/s output differences, supporting covariance
+arithmetic as the dominant source rather than measurement libm differences.
+This is a numerical diagnosis, not proof of a specific BLAS instruction.
+
+Before the next run, consume the **one permitted adjustment** by replacing
+Joseph covariance propagation with a QR square-root Kalman implementation of the
+same equations. Predict from `[F*S, sqrt(Q)*I]`; triangularize the joint
+innovation/state root for scalar correction. Do not reconstruct P during filtering.
+An independent covariance-equation test checks prediction and correction.
+All frequencies, P0/Q/R values, amplitudes/phase initialization, latency, PD and
+acceleration-bias observer remain unchanged. No tolerance, sin implementation,
+trace serialization or historical baseline is changed. No further adjustment is
+permitted if this version fails acceptance. The first failed CI artifacts remain
+available for comparison; no claim of cross-platform bitwise equality is made.

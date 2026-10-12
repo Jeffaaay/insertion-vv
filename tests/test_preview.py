@@ -103,6 +103,30 @@ def test_first_measurement_at_late_capture_is_not_assumed_to_be_at_zero():
     assert early.estimate(frame(0, 100e-6)) == late.estimate(frame(5_000_000, 100e-6))
 
 
+def test_square_root_filter_matches_covariance_kalman_equations():
+    # Independent, well-conditioned covariance calculation checks both prediction
+    # and measurement correction, including process noise and nonzero prior state.
+    e = estimator()
+    rng = np.random.default_rng(74)
+    matrix = rng.normal(size=(7, 7)) * 1e-6
+    covariance = matrix @ matrix.T + np.eye(7) * 1e-12
+    state = rng.normal(size=7) * 50e-6
+    e._covariance_root = np.linalg.cholesky(covariance)
+    e._state = state.copy()
+    e._sample_time_us, e._sequence = 0, 0
+    transition = e.transition(40000)
+    predicted = transition @ state
+    covariance = transition @ covariance @ transition.T + np.eye(7) * e.process_std_m_sqrt_s**2 * 0.04
+    h, variance = e._position_row, e.measurement_std_m**2
+    gain = covariance @ h / (h @ covariance @ h + variance)
+    expected_state = predicted + gain * (83e-6 - h @ predicted)
+    residual = np.eye(7) - np.outer(gain, h)
+    expected_covariance = residual @ covariance @ residual.T + np.outer(gain, gain) * variance
+    e.estimate(frame(40000, 83e-6))
+    np.testing.assert_allclose(e._state, expected_state, rtol=1e-13, atol=1e-19)
+    np.testing.assert_allclose(e._covariance, expected_covariance, rtol=1e-13, atol=1e-26)
+
+
 def test_preview_keeps_pd_arithmetic_and_does_not_refilter_estimated_velocity():
     class FixedEstimate:
         def estimate(self, sensors):

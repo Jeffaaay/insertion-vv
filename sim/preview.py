@@ -18,7 +18,7 @@ class HarmonicSurfaceEstimator:
     measurement_std_m: float
     process_std_m_sqrt_s: float
     _state: np.ndarray = field(init=False)
-    _covariance: np.ndarray = field(init=False)
+    _covariance_root: np.ndarray = field(init=False)
     _identity: np.ndarray = field(init=False)
     _position_row: np.ndarray = field(init=False)
     _velocity_row: np.ndarray = field(init=False)
@@ -30,12 +30,23 @@ class HarmonicSurfaceEstimator:
         size = 1 + 2 * len(self.frequencies_hz)
         self._identity = np.eye(size)
         self._state = np.zeros(size)
-        self._covariance = self._identity * self.initial_std_m**2
+        self._covariance_root = self._identity * self.initial_std_m
         self._position_row = np.zeros(size)
         self._position_row[0] = 1.0
         self._position_row[1::2] = 1.0
         self._velocity_row = np.zeros(size)
         self._velocity_row[2::2] = [2 * math.pi * f for f in self.frequencies_hz]
+
+    @property
+    def _covariance(self) -> np.ndarray:
+        # Diagnostic view only; filtering never reconstructs or subtracts P.
+        return self._covariance_root @ self._covariance_root.T
+
+    @staticmethod
+    def _lower_root(array: np.ndarray) -> np.ndarray:
+        # QR(A.T) gives L=R.T with L L.T = A A.T, without squaring
+        # the condition number. Signs of the triangular diagonal are immaterial.
+        return np.linalg.qr(array.T, mode="r").T
 
     def transition(self, elapsed_us: int) -> np.ndarray:
         matrix = self._identity.copy()
@@ -64,19 +75,22 @@ class HarmonicSurfaceEstimator:
                 elapsed = sampled - self._sample_time_us
                 transition = self.transition(elapsed)
                 self._state = transition @ self._state
-                self._covariance = (
-                    transition @ self._covariance @ transition.T
-                    + self._identity * self.process_std_m_sqrt_s** 2 * (elapsed * 1e-6)
+                process_root = self.process_std_m_sqrt_s * math.sqrt(elapsed * 1e-6)
+                self._covariance_root = self._lower_root(
+                    np.hstack((transition @ self._covariance_root, self._identity * process_root))
                 )
             h = self._position_row
-            variance = self.measurement_std_m**2
-            gain = (self._covariance @ h) / (h @ self._covariance @ h + variance)
+            # Triangularize the joint innovation/state covariance root. Its lower
+            # right block is the posterior root and its first column gives K.
+            size = self._state.size
+            joint = np.zeros((size + 1, size + 1))
+            joint[0, 0] = self.measurement_std_m
+            joint[0, 1:] = h @ self._covariance_root
+            joint[1:, 1:] = self._covariance_root
+            posterior = self._lower_root(joint)
+            gain = posterior[1:, 0] / posterior[0, 0]
             self._state += gain * (sensors.surface_z_m - h @ self._state)
-            residual = self._identity - np.outer(gain, h)
-            # Joseph form retains covariance positivity at low measurement noise.
-            self._covariance = (
-                residual @ self._covariance @ residual.T + np.outer(gain, gain) * variance
-            )
+            self._covariance_root = posterior[1:, 1:]
             self._sample_time_us, self._sequence = sampled, sequence
 
         if self._sample_time_us is None:

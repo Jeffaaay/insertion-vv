@@ -3,7 +3,8 @@
 Headless, deterministic MuJoCo SIL for a 1-axis needle and pulsating tissue.
 The project asks when simulation can predict firmware PASS/FAIL; this checkpoint
 implements the Phase A plant, `lab_frame_pd`, `delayed_feedback`, its optional
-`delayed_feedback_offsetfree` ablation, sensors, measurements, and CI.
+`delayed_feedback_offsetfree` ablation, fixed-frequency `preview`, sensors,
+measurements, and CI.
 
 Reported numbers use the **Linux x86_64 runner** (Ubuntu 24.04, Python 3.12.10,
 MuJoCo 3.8.0, NumPy 2.2.6) as the canonical platform. Windows is independently
@@ -98,6 +99,8 @@ python -m sim.run --controller delayed_feedback --seed 42 --output artifacts/del
 python -m sim.run --controller delayed_feedback --contact-profile paper_effective --seed 42 --output artifacts/delayed-diagnostic
 python -m sim.run --controller delayed_feedback_offsetfree --seed 42 --output artifacts/offsetfree
 python -m sim.run --controller delayed_feedback_offsetfree --contact-profile paper_effective --seed 42 --output artifacts/offsetfree-diagnostic
+python -m sim.run --controller preview --seed 42 --output artifacts/preview
+python -m sim.run --controller preview --contact-profile paper_effective --seed 42 --output artifacts/preview-diagnostic
 python -m sim.run --seed 42 --sample-hz 25 --noise-std-m 0.000002 --dropout-probability 0.1 --output artifacts/sparse
 ```
 
@@ -111,16 +114,18 @@ non-reproducible runs are INVALID and return a nonzero exit code.
 
 ## Scope and CI gate
 
-Both required Phase A baselines and the optional offset-free ablation are implemented.
+Both required Phase A baselines, the optional offset-free ablation and harmonic
+Kalman preview are implemented.
 Tests cover independent-process
 SHA-256 determinism, enabled/disabled truth-file equivalence, sensor timing,
 contract boundaries, early termination, stiffness, baseline regression, filtered
 velocity, missing/old frames, absence of position extrapolation, hidden-bias
-identification, previous-command causality and the zero-bias ablation.
-The CI entry point runs three controllers × two contact profiles, producing
+identification, previous-command causality, the zero-bias ablation, learning
+unknown harmonic amplitudes/phases, and capture-time preview under sparse/lost frames.
+The CI entry point runs four controllers × two contact profiles, producing
 `artifacts/{primary,paper_effective}/contact_calibration.json` and
-`artifacts/{primary,paper_effective}/{lab_frame_pd,delayed_feedback,delayed_feedback_offsetfree}/metrics.json`
-plus traces/timings. Reproduction ranges and platform-scoped lab-frame reference hashes
+`artifacts/{primary,paper_effective}/{lab_frame_pd,delayed_feedback,delayed_feedback_offsetfree,preview}/metrics.json`
+plus traces/timings. Reproduction ranges and all six previous platform-scoped trace hashes
 are enforced by [the reproduction contract](sim/reproduction_contract.json).
 It reports separate SHA-256 values and the diagnostic expectation in `ci_report.json`.
 GitHub Actions runs on every push and PR and uploads all measurement evidence,
@@ -132,9 +137,9 @@ passed all 43 original tests and reproduced both full local trace hashes on Wind
 Server 2022. This released the original controller gate. That checkpoint had 65 tests;
 see [Actions](https://github.com/Jeffaaay/insertion-vv/actions) for commit-specific status.
 The later Linux verification exposed harmless last-ulp differences; it did not
-establish cross-platform bitwise equality. Step 1 stops after verification and
-reporting; harmonic preview (Step 2), Rust harness, firmware, HIL and Phase C
-fault campaigns are deferred.
+establish cross-platform bitwise equality. Step 2 adds fixed-frequency preview;
+frequency adaptation, Rust harness, firmware, HIL and Phase C fault campaigns
+remain deferred.
 
 ## Two-tier determinism
 
@@ -142,7 +147,7 @@ fault campaigns are deferred.
    produce bitwise-identical trace and evaluator-truth SHA-256 values. Every run
    replays twice; tests also compare independent processes with truth output on/off.
    Historical hashes are checked only for their registered platform fingerprint.
-2. **Cross-platform:** compare complete Linux/Windows artifacts for all six cases.
+2. **Cross-platform:** compare complete Linux/Windows artifacts for all eight cases.
    Every position difference must be **<1e-12 m**, velocity **<1e-9 m/s**, force
    **<1e-12 N**. Tick times, frame flags/counts and verdicts must match exactly.
    Physical metrics (free/contact RMS and peaks, whole-run peaks) require
@@ -177,5 +182,7 @@ Step 1 also produces
 `artifacts/viz/delayed_feedback_offsetfree_{primary,paper_effective}_seed42.{png,mp4}`
 and `artifacts/viz/delayed_feedback_offsetfree_metrics.json` with the same isolation
 from CI. The optional visuals are local deliverables, not Git-tracked binaries.
+Step 2 uses `artifacts/viz/preview_{primary,paper_effective}_seed42.{png,mp4}` and
+`artifacts/viz/preview_metrics.json`, also rendered outside CI from saved Linux states.
 
 Directory layout follows [PROJECT_BRIEF.md §8](PROJECT_BRIEF.md).
