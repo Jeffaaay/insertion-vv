@@ -8,6 +8,7 @@ from pathlib import Path
 import pytest
 
 from sim.config import CONTACT_TARGETS_N_PER_M, CONTROLLERS
+from sim.run import platform_fingerprint
 
 REPO = Path(__file__).resolve().parents[1]
 
@@ -54,6 +55,8 @@ def test_independent_process_trace_sha_and_optional_truth(tmp_path, profile, con
         )
         metrics = json.loads((output / "metrics.json").read_text())
         assert metrics["complete"]
+        assert metrics["platform_fingerprint"] == platform_fingerprint()
+        assert set(metrics["platform_fingerprint"]) == {"os", "arch", "python", "mujoco", "numpy"}
         assert metrics["contact_profile"] == profile
         assert metrics["controller"] == controller
         assert metrics["determinism"]["verified"]

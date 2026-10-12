@@ -33,6 +33,18 @@ def sha256(value: bytes) -> str:
     return hashlib.sha256(value).hexdigest()
 
 
+def platform_fingerprint() -> dict[str, str]:
+    machine = platform.machine().lower()
+    architecture = {"amd64": "x86_64", "arm64": "aarch64"}.get(machine, machine)
+    return {
+        "os": platform.system(),
+        "arch": architecture,
+        "python": platform.python_version(),
+        "mujoco": mujoco.__version__,
+        "numpy": np.__version__,
+    }
+
+
 @dataclass
 class Execution:
     trace: bytes
@@ -189,6 +201,7 @@ def run(cfg: Config, output: Path, *, write_truth: bool = True) -> dict:
         **git_provenance(),
         "source_sha256": source_hash(),
         "config_sha256": sha256(canonical(effective_config)),
+        "platform_fingerprint": platform_fingerprint(),
         "environment": {
             "python": platform.python_version(),
             "mujoco": mujoco.__version__,
@@ -225,7 +238,8 @@ def run(cfg: Config, output: Path, *, write_truth: bool = True) -> dict:
             "repeat_trace_sha256": repeat_hash,
             "truth_sha256": truth_hash,
             "repeat_truth_sha256": repeat_truth_hash,
-            "scope": "same environment/config/seed; wall-time and run metadata excluded",
+            "tier": "intra-platform-bitwise",
+            "scope": "same platform fingerprint/source/config/seed; timing and metadata excluded",
         },
         "verdict_contract": CONTRACT,
         "verdict": verdict(

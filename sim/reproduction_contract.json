@@ -1,12 +1,30 @@
 {
-  "version": "phase-a-two-baselines-v1",
+  "version": "phase-a-two-tier-determinism-v2",
   "seed": 42,
   "lab_frame_pd": {
     "contact_rms_e_um_range": [250.0, 300.0],
-    "trace_sha256": {
-      "primary": "66422ccb08f67fe12d37936578bae832bf5b9a3d8fd73b357e82b1861ff118a2",
-      "paper_effective": "cc7e3e7e556c7719c6ff37ac3f2b1581179f286d8ccf452838acac02e5a8998d"
-    }
+    "platform_baselines": [
+      {
+        "platform_fingerprint": {
+          "os": "Windows", "arch": "x86_64", "python": "3.12.10",
+          "mujoco": "3.8.0", "numpy": "2.2.6"
+        },
+        "trace_sha256": {
+          "primary": "66422ccb08f67fe12d37936578bae832bf5b9a3d8fd73b357e82b1861ff118a2",
+          "paper_effective": "cc7e3e7e556c7719c6ff37ac3f2b1581179f286d8ccf452838acac02e5a8998d"
+        }
+      },
+      {
+        "platform_fingerprint": {
+          "os": "Linux", "arch": "x86_64", "python": "3.12.10",
+          "mujoco": "3.8.0", "numpy": "2.2.6"
+        },
+        "trace_sha256": {
+          "primary": "8554b8902cfa3f231659f2c94b0ab51591dbd0ae60cd3b6b5e91acaab4d03b7f",
+          "paper_effective": "9faa9e781f2bf0146906f88246f2e1e76b781fc23813291b14be4abc1a04ca7d"
+        }
+      }
+    ]
   },
   "delayed_feedback": {
     "free_rms_e_um_range": [15.0, 25.0],

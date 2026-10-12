@@ -9,10 +9,18 @@ import sys
 from pathlib import Path
 
 from .config import CONTACT_TARGETS_N_PER_M, CONTROLLERS
-from .run import REPO, git_provenance
+from .run import REPO, git_provenance, platform_fingerprint
 
 REPRODUCTION_PATH = Path(__file__).with_name("reproduction_contract.json")
 REPRODUCTION = json.loads(REPRODUCTION_PATH.read_text(encoding="utf-8"))
+
+
+def reference_trace_hashes(fingerprint: dict | None = None) -> dict | None:
+    fingerprint = platform_fingerprint() if fingerprint is None else fingerprint
+    for baseline in REPRODUCTION["lab_frame_pd"]["platform_baselines"]:
+        if baseline["platform_fingerprint"] == fingerprint:
+            return baseline["trace_sha256"]
+    return None
 
 
 def reproduction_checks(metrics: dict, trace_hash: str) -> dict[str, bool]:
@@ -21,9 +29,12 @@ def reproduction_checks(metrics: dict, trace_hash: str) -> dict[str, bool]:
     limits = REPRODUCTION[controller]
     if controller == "lab_frame_pd":
         low, high = limits["contact_rms_e_um_range"]
+        hashes = reference_trace_hashes(metrics.get("platform_fingerprint"))
         return {
             "lab_frame_contact_rms_in_250_to_300_um": low <= metrics["contact"]["rms_e_um"] <= high,
-            "hosted_baseline_trace_unchanged": trace_hash == limits["trace_sha256"][profile],
+            "platform_baseline_trace_matches_when_registered": (
+                hashes is None or trace_hash == hashes[profile]
+            ),
         }
     low, high = limits["free_rms_e_um_range"]
     checks = {"delayed_free_rms_near_20_um": low <= metrics["free"]["rms_e_um"] <= high}
@@ -77,6 +88,8 @@ def main() -> int:
     report = {
         "status": "RUNNING",
         **git_provenance(),
+        "platform_fingerprint": platform_fingerprint(),
+        "historical_trace_baseline_registered": reference_trace_hashes() is not None,
         "commands": [],
         "contact_profile_matrix": list(profiles),
         "controller_matrix": list(CONTROLLERS),

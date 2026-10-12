@@ -73,7 +73,7 @@
 ```
 改一行控制/固件代码
   │
-  ├─ Phase A  SIL：控制器 + MuJoCo 同一进程，lockstep，每 commit 跑，bitwise 确定
+  ├─ Phase A  SIL：控制器 + MuJoCo 同一进程，lockstep，同平台 bitwise；跨平台容差比较
   │
   ├─ Phase B  HIL：控制器在 STM32（Nucleo-H723ZG），MuJoCo 在 PC 当 plant，
   │           UART/CAN lockstep；真实 jitter/延迟/量化，plant 真值仍免费
@@ -120,9 +120,11 @@ trait Plant {
 
 **Acceptance criteria（Phase A 结束的硬门槛）：**
 - [ ] `lab_frame_pd` 复现到论文量级（contact RMS ≈ 250–300 µm）
-- [ ] `delayed_feedback` free-space RMS 在 20 µm 附近
-- [ ] 确定性：同 seed 两次运行，trace 文件 SHA-256 完全一致（CI 里强制）
-- [ ] GitHub Actions：每 push 跑全部 run，上传 metrics JSON 和 trace
+- [ ] `delayed_feedback` free-space RMS 在 20 µm 附近（15–25 µm），primary contact RMS 150–200 µm
+- [ ] 同平台确定性：同 source/config/seed、OS/arch/Python/MuJoCo/NumPy 版本，trace 与 truth SHA-256 完全一致（CI 强制）；每个 run 记录平台指纹
+- [ ] 跨平台确定性：Linux/Windows 的位置 |Δ| <1e-12 m、速度 <1e-9 m/s、力 <1e-12 N；时间/离散状态及 verdict 完全一致；物理指标相对差 <1e-9（CI 独立 job）
+- [ ] 相对差定义为 |a-b|/max(|a|,|b|)，两者均零取零；不比较 wall-time/UUID。损坏、缺失、不完整的产物不能通过比较
+- [ ] GitHub Actions：每 push 在 Linux 和 Windows 跑两个 controller × 两种 contact config，上传 metrics JSON、trace 及跨平台比较报告；报告数值以 Linux runner 为准
 - [ ] 无 GUI 依赖，headless 可跑
 
 ---
@@ -179,7 +181,11 @@ insertion-vv/
 
 - 一次只改一个变量；不改代码跑最多 3 次；3 次失败做一次整体对比，不逐次打补丁
 - 控制器 **永远** 拿不到 `Truth`；用自动化测试证明有/无 truth 文件输出 bitwise 相同
-- 每个 run 有 run id、seed、git SHA、config hash；结果不可复现 = INVALID，不算 FAIL
+- 每个 run 有 run id、seed、git SHA、source/config hash，以及 OS、arch、Python、MuJoCo、NumPy 版本的平台指纹
+- 同平台同 source/config/seed 必须 bitwise 可复现；否则 run = INVALID，不算任务 FAIL。历史 SHA 只约束相同平台指纹
+- 跨平台按 §5 预注册的 SI 容差和相同 verdict 比较，不要求 SHA 相同；不可比或损坏的产物 = INVALID，超容差/verdict 不同则跨平台 CI 失败，保留原 run 的任务判定
+- 不修改 sin()、不舍入 trace 来掩盖最后一位差异；Linux runner 是报告数值的标准平台
+- Phase B 单精度约 1e-7 是相对精度量级而非固定米数或已测 HIL 误差；复用容差层，但 HIL 容差需按单位和误差预算预注册，不能直接放宽当前 SIL contract
 - 不用 magic constant 修 PASS/FAIL；阈值在 verdict contract 里注册后才能用
 - 先定 verdict，再跑实验
 
@@ -200,7 +206,7 @@ insertion-vv/
 
 ## 11. 决策日志
 
-- 2026-10-12：选 MuJoCo 而非 Gazebo —— 需要"时钟在我手里"（mj_step 手动步进，bitwise 确定性，pip 可装进 CI）。Gazebo 经验保留为对比 backend 的候选。
+- 2026-10-12：选 MuJoCo 而非 Gazebo —— 需要"时钟在我手里"（mj_step 手动步进，同平台 bitwise 确定性，pip 可装进 CI）。Gazebo 经验保留为对比 backend 的候选。
 - 2026-10-12：先不做真实机械轴；Phase 1–3 用 sim plant 当真值，重点是时序。
 - 2026-10-12：不重做 AIC；AIC 只贡献方法论和简历故事。
 
@@ -262,4 +268,17 @@ Define "near 20 um" as 15–25 um free-window RMS; primary contact RMS must be
 150–200 um. Register these reproduction checks before running. They are distinct
 from the unchanged task PASS contract (<20 um contact RMS and <2 mm/s velocity).
 Run seed 42 for both controllers and contact profiles in local and hosted CI;
-preserve the known lab-frame trace hashes as regression gates. Stop after reporting.
+preserve the known lab-frame trace hashes as platform-scoped regression gates.
+
+## 16. Two-tier determinism decision (2026-10-12; supersedes cross-OS SHA gate)
+
+Linux run 38315698883 passed the original 43 tests and both same-seed repeats, but
+its trace hashes differed from Windows by last-ulp floating-point differences.
+The first received surface difference was at 0.351 s: 2.710505431213761e-20 m.
+The user accepts this platform libm behavior; do not patch sin() or require cross-OS
+bitwise equivalence. Apply the two-tier contract in §5 and §9, document both
+findings, and use Linux as the canonical reporting platform. Run full CI on Linux
+and Windows plus the cross-platform comparison. Commit/push are authorized.
+After this gate, verify the existing delayed_feedback implementation on both contact
+profiles with seed 42 and regenerate its optional plot/video from Linux artifacts.
+Preview, firmware and Phase B implementation remain outside this authorization.

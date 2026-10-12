@@ -10,7 +10,11 @@ permissions:
 
 jobs:
   phase-a-baselines:
-    runs-on: windows-2022
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, windows-2022]
+    runs-on: ${{ matrix.os }}
     timeout-minutes: 15
     env:
       PYTHONHASHSEED: "0"
@@ -31,7 +35,35 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: phase-a-baselines-${{ github.sha }}
+          name: phase-a-${{ matrix.os }}-${{ github.sha }}
           path: artifacts/
+          if-no-files-found: error
+          retention-days: 30
+
+  cross-platform:
+    needs: phase-a-baselines
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12.10"
+      - uses: actions/download-artifact@v4
+        with:
+          name: phase-a-ubuntu-24.04-${{ github.sha }}
+          path: artifacts/linux
+      - uses: actions/download-artifact@v4
+        with:
+          name: phase-a-windows-2022-${{ github.sha }}
+          path: artifacts/windows
+      - name: Compare all four runs with SI tolerances and identical verdicts
+        run: python tools/compare_traces.py artifacts/linux artifacts/windows --matrix --output artifacts/cross-platform/comparison.json
+      - name: Upload cross-platform comparison
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cross-platform-${{ github.sha }}
+          path: artifacts/cross-platform/
           if-no-files-found: error
           retention-days: 30

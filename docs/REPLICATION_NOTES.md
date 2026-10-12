@@ -13,8 +13,12 @@ a separately documented controller while preserving both plants and lab-frame PD
 Unless stated otherwise, paper comparisons mean **arXiv:2608.08860v1, HTML Table IV**:
 [fixed-version HTML](https://arxiv.org/html/2608.08860v1).
 Avoid unversioned PDF URLs when quoting values. Sources were checked on 2026-10-12.
-The application-level same-seed trace hash is required to match within one runtime;
+The application-level same-seed trace hash is required to match within one platform fingerprint;
 there is no claim of bitwise equivalence to the author's implementation.
+Linux x86_64 (Ubuntu 24.04 runner, Python 3.12.10, MuJoCo 3.8.0, NumPy 2.2.6)
+is now the canonical platform for reported numbers. Earlier explicitly marked
+Windows checkpoints remain historical evidence. Cross-platform comparisons use
+the two-tier contract documented below and in [FINDINGS.md](FINDINGS.md).
 
 ## Paper-internal inconsistency: contact stiffness
 
@@ -211,8 +215,9 @@ primary:         66422ccb08f67fe12d37936578bae832bf5b9a3d8fd73b357e82b1861ff118a
 paper_effective: cc7e3e7e556c7719c6ff37ac3f2b1581179f286d8ccf452838acac02e5a8998d
 ```
 
-That evidence satisfied the gate. No delayed-feedback code was implemented before
-it passed. Both hashes remain strict CI regression checks.
+That evidence satisfied the original Windows hosted gate. No delayed-feedback code
+was implemented before it passed. Both hashes remain strict regression checks only
+for their registered Windows fingerprint; Linux has its own measured references.
 
 ### Controller choices fixed before the experiment
 
@@ -241,7 +246,7 @@ Before running, `sim/reproduction_contract.json` registered 15–25 µm free RMS
 These are CI reproduction checks, separate from the unchanged task PASS contract.
 No gain, filter, plant parameter or acceptance threshold changed after the first run.
 
-### Measured delayed-feedback result, seed 42
+### Measured delayed-feedback result, seed 42 (original Windows checkpoint)
 
 | Metric | `primary` | `paper_effective` |
 | --- | ---: | ---: |
@@ -266,8 +271,40 @@ delayed_feedback paper_effective:
 b4b787c827bfa8e55732d99466dada3af682690cce091077e93d476f1cc2ef9d
 ```
 
-The expanded CI entry point runs **65 tests**, calibrates both profiles, and runs
+At that checkpoint the expanded CI entry point ran **65 tests**, calibrated both profiles, and ran
 all four controller/profile combinations with deterministic replay. It enforces the
-original lab-frame hashes and the pre-registered delayed-feedback reproduction bands.
+platform-scoped lab-frame hashes and the pre-registered delayed-feedback reproduction bands.
 Latest commit-specific hosted status and downloadable metrics/traces are available
 on [Actions](https://github.com/Jeffaaay/insertion-vv/actions).
+
+## Two-tier determinism and canonical Linux reporting
+
+The historical Linux diagnostic [run 38315698883](https://github.com/Jeffaaay/insertion-vv/actions/runs/38315698883)
+passed all 43 original tests, both calibrations, and both same-seed trace repeats.
+Its final cross-OS SHA comparison failed as expected from the observed last-ulp
+difference: at trace t=0.351 s, surface_z_m differed by 2.710505431213761e-20 m.
+Source/config hashes were equal. [Finding #2](FINDINGS.md#finding-2--cross-platform-last-ulp-divergence)
+records complete hashes, capture-versus-arrival timing and interpretation limits.
+
+The user accepted this libm-scale difference and replaced the universal SHA gate:
+
+| Tier | Comparison | Required result |
+| --- | --- | --- |
+| Intra-platform | Same OS/arch/Python/MuJoCo/NumPy fingerprint, source/config/seed | Exact trace and truth SHA-256 |
+| Cross-platform signals | Every trace/truth position, velocity, force sample | Strict absolute differences <1e-12 m, <1e-9 m/s, <1e-12 N |
+| Cross-platform task metrics | Free/contact RMS and peaks; whole-run peaks | Strict symmetric relative difference <1e-9 |
+| Cross-platform discrete state | Ticks, timestamps, freshness, sequence IDs, counts, verdict and safety state | Exact equality |
+
+Relative difference is `abs(a-b)/max(abs(a),abs(b))`; both zero maps to zero and
+one zero to one. Wall-time and UUIDs are excluded. Missing/corrupt/nonfinite or
+incompatible evidence is INVALID, never accepted as agreement. The standard-library
+`tools/compare_traces.py` validates saved hashes, source/config and run identity before
+comparing. The obsolete fixed cross-OS hash workflow is replaced by Linux/Windows
+matrix jobs and a third artifact-comparison job. No plant, controller, sine, trace
+rounding, reproduction band or task-verdict threshold changes accompany this fix.
+
+Every new run records a platform fingerprint; a historical hash from a different
+fingerprint is not applied. Same-platform replay remains mandatory on new/unregistered
+platforms. Linux runner results are canonical; Windows results are supporting
+cross-platform evidence. Visualization tools replay the Linux run's recorded truth
+locally and remain outside CI and test dependencies.
