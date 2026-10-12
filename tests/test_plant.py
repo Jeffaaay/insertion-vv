@@ -46,7 +46,9 @@ def test_quasistatic_contact_stiffness(profile):
 def test_diagnostic_changes_only_contact_stiffness():
     primary = build_model(Config())
     diagnostic = build_model(Config(contact_profile="paper_effective"))
-    assert diagnostic.pair_solref[0, 0] / primary.pair_solref[0, 0] == 3.5 / 16
+    assert diagnostic.pair_solref[0, 0] / primary.pair_solref[0, 0] == pytest.approx(
+        3.5 / 16, rel=0, abs=1e-15
+    )
     for name in dir(primary):
         if name.startswith("__") or name == "pair_solref":
             continue
