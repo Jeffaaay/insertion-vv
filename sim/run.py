@@ -23,6 +23,7 @@ from .controllers import (
 )
 from .metrics import CONTRACT, CONTRACT_PATH, verdict, window_metrics
 from .plant import MODEL_PATH, MujocoPlant, build_model, contact_parameters
+from .preview import HarmonicSurfaceEstimator, PreviewFeedback
 from .reference import reference
 
 REPO = Path(__file__).resolve().parents[1]
@@ -82,7 +83,23 @@ def simulate(cfg: Config, *, write_truth: bool = True) -> Execution:
             cfg.insertion_depth_m,
             cfg.surface_velocity_filter_tau_us,
         )
-        if cfg.controller == "delayed_feedback_offsetfree":
+        if cfg.controller == "preview":
+            controller = PreviewFeedback(
+                cfg.delayed_kp_n_per_m,
+                cfg.delayed_kd_ns_per_m,
+                cfg.initial_height_m,
+                cfg.hover_height_m,
+                cfg.insertion_depth_m,
+                cfg.surface_velocity_filter_tau_us,
+                HarmonicSurfaceEstimator(
+                    cfg.preview_frequencies_hz,
+                    cfg.preview_delay_us,
+                    cfg.preview_initial_std_m,
+                    cfg.preview_measurement_std_m,
+                    cfg.preview_process_std_m_sqrt_s,
+                ),
+            )
+        if cfg.controller in ("delayed_feedback_offsetfree", "preview"):
             controller = DelayedFeedbackOffsetFree(
                 controller,
                 AccelerationBiasObserver(

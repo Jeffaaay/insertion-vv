@@ -1,13 +1,19 @@
 {
-  "version": "phase-a-offsetfree-ablation-v3",
+  "version": "phase-a-preview-v4",
   "seed": 42,
   "lab_frame_pd": {
-    "contact_rms_e_um_range": [250.0, 300.0],
+    "contact_rms_e_um_range": [
+      250.0,
+      300.0
+    ],
     "platform_baselines": [
       {
         "platform_fingerprint": {
-          "os": "Windows", "arch": "x86_64", "python": "3.12.10",
-          "mujoco": "3.8.0", "numpy": "2.2.6"
+          "os": "Windows",
+          "arch": "x86_64",
+          "python": "3.12.10",
+          "mujoco": "3.8.0",
+          "numpy": "2.2.6"
         },
         "trace_sha256": {
           "primary": "66422ccb08f67fe12d37936578bae832bf5b9a3d8fd73b357e82b1861ff118a2",
@@ -16,8 +22,11 @@
       },
       {
         "platform_fingerprint": {
-          "os": "Linux", "arch": "x86_64", "python": "3.12.10",
-          "mujoco": "3.8.0", "numpy": "2.2.6"
+          "os": "Linux",
+          "arch": "x86_64",
+          "python": "3.12.10",
+          "mujoco": "3.8.0",
+          "numpy": "2.2.6"
         },
         "trace_sha256": {
           "primary": "8554b8902cfa3f231659f2c94b0ab51591dbd0ae60cd3b6b5e91acaab4d03b7f",
@@ -27,10 +36,81 @@
     ]
   },
   "delayed_feedback": {
-    "free_rms_e_um_range": [15.0, 25.0],
-    "primary_contact_rms_e_um_range": [150.0, 200.0]
+    "free_rms_e_um_range": [
+      15.0,
+      25.0
+    ],
+    "primary_contact_rms_e_um_range": [
+      150.0,
+      200.0
+    ],
+    "platform_baselines": [
+      {
+        "platform_fingerprint": {
+          "os": "Windows",
+          "arch": "x86_64",
+          "python": "3.12.10",
+          "mujoco": "3.8.0",
+          "numpy": "2.2.6"
+        },
+        "trace_sha256": {
+          "primary": "13af5a38301ee4c34561f9b4fbe5c64e1d42c877cd9959e3ffec302bacecd71e",
+          "paper_effective": "b4b787c827bfa8e55732d99466dada3af682690cce091077e93d476f1cc2ef9d"
+        }
+      },
+      {
+        "platform_fingerprint": {
+          "os": "Linux",
+          "arch": "x86_64",
+          "python": "3.12.10",
+          "mujoco": "3.8.0",
+          "numpy": "2.2.6"
+        },
+        "trace_sha256": {
+          "primary": "74b760f84911f8c12e1de7eb9aa638c97db56119eb0618e6565b8cce17cdbf60",
+          "paper_effective": "cbd213fe4a0848c196688ef1f5c4f9b17fdc3309fd0c2cd91866df2d6fffe3a7"
+        }
+      }
+    ]
   },
   "delayed_feedback_offsetfree": {
-    "contact_rms_e_um_range": [20.0, 40.0]
+    "contact_rms_e_um_range": [
+      20.0,
+      40.0
+    ],
+    "platform_baselines": [
+      {
+        "platform_fingerprint": {
+          "os": "Windows",
+          "arch": "x86_64",
+          "python": "3.12.10",
+          "mujoco": "3.8.0",
+          "numpy": "2.2.6"
+        },
+        "trace_sha256": {
+          "primary": "796631e190e63e7c824cadc56078e246d961fe11f289e3653e81282102a7684a",
+          "paper_effective": "2550246cae894b2da973825d39553b0ca31340c6bb76b189d7715ca7d0d5c0c6"
+        }
+      },
+      {
+        "platform_fingerprint": {
+          "os": "Linux",
+          "arch": "x86_64",
+          "python": "3.12.10",
+          "mujoco": "3.8.0",
+          "numpy": "2.2.6"
+        },
+        "trace_sha256": {
+          "primary": "0704d13b0dc35e8961678ddc65bcdd355de9651f94eb84283f00ffeae0537af1",
+          "paper_effective": "37929c6efac5a6dea75ef9b408e8f1e182687c2a9ad3ba64c4de46e9aa10e1d5"
+        }
+      }
+    ]
+  },
+  "preview": {
+    "primary_contact_rms_e_um_max_inclusive": 10.0,
+    "primary_task_verdict": "PASS",
+    "paper_effective_required_to_pass": false,
+    "maximum_tuning_passes": 1
   }
 }

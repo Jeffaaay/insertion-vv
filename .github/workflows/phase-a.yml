@@ -29,7 +29,7 @@ jobs:
           cache-dependency-path: requirements-lock.txt
       - name: Install pinned dependencies
         run: python -m pip install -r requirements-lock.txt
-      - name: Run baselines and offset-free ablation on both contact profiles
+      - name: Run baselines and preview on both contact profiles
         run: python -m sim.ci --output artifacts
       - name: Upload metrics, traces, calibration, timings, and test report
         if: always()
@@ -57,7 +57,7 @@ jobs:
         with:
           name: phase-a-windows-2022-${{ github.sha }}
           path: artifacts/windows
-      - name: Compare all six runs with SI tolerances and identical verdicts
+      - name: Compare all eight runs with SI tolerances and identical verdicts
         run: python tools/compare_traces.py artifacts/linux artifacts/windows --matrix --output artifacts/cross-platform/comparison.json
       - name: Upload cross-platform comparison
         if: always()

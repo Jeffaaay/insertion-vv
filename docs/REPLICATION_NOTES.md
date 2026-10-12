@@ -128,6 +128,13 @@ We do not infer missing values from output tables.
 | Observer initialization | Not established | First measured p, v=0, a=0; no fabricated pre-start step | Choice | unknown-in-paper |
 | Bias compensation in controller | Bias enters QP horizon | Subtract m*a from unchanged delayed PD command | User single-variable Step 1; Choice | deliberate deviation |
 | Offset-free-only ablation | 30.3±0.2 µm contact, fixed QP, 30 seeds | PD + observer, seed 42, pre-registered 20–40 µm for both profiles | Table XII; user acceptance | deliberate deviation |
+| Preview exosystem | DC + cardiac/second harmonic/respiration | Seven states, frequencies 1.2/2.4/0.25 Hz fixed | III-B Eq. (3); user Step 2 | aligned |
+| Preview amplitudes / phases | Estimated from delayed surface | Zero initial state; estimated only from received measurements | III-B, V | aligned |
+| Kalman initial covariance | Not established for this implementation | (500 µm)^2 I | Choice, pre-registered | unknown-in-paper |
+| Kalman measurement variance | Not established for this implementation | (2 µm)^2 | Choice, design variance even in noiseless nominal run | unknown-in-paper |
+| Kalman continuous process covariance | Not established for this implementation | (0.2 µm/sqrt(s))^2 I | Choice, multiplied by capture interval in seconds | unknown-in-paper |
+| Preview correction / delay handling | Kalman filter, forward propagation by latency | Joseph correction at capture time; propagate to now (15 ms nominal) | V; Choice for gaps | aligned |
+| Preview control law | Offset-free QP | Same PD + unchanged bias observer as Step 1 | User Step 2 | deliberate deviation |
 | Duplicate / old / future captures | Not established | Ignore; require increasing sequence and capture time not after current time | Choice | unknown-in-paper |
 | Reproduction acceptance | Table IV: feedback 18.3 / 176.8 µm free/contact | Free 15–25 µm; primary contact 150–200 µm | User range; Choice definition of near 20 | deliberate deviation |
 | Force saturation | Baseline bound not established | No saturation | Choice | unknown-in-paper |
@@ -502,3 +509,36 @@ No visualization dependency or execution is added to CI/tests.
 
 **Step 1 complete; stop here.** `preview`/harmonic estimation, QP/shear constraints,
 Phase B and firmware are not implemented by this checkpoint.
+
+## Step 2: fixed-frequency Kalman preview (preregistered before first run)
+
+User accepted Step 1. Add only the surface estimator/reference preview; retain
+the exact `DelayedFeedbackOffsetFree` wrapper, `AccelerationBiasObserver` and
+existing baseline code, PD gains, both plants and task verdict. No LQR/MPC/QP,
+acceleration feedforward or force constraints are added.
+
+Model `w=[DC,s1,c1,s2,c2,s3,c3]` in metres, with each pair rotating by
+`[[cos(w*dt),sin(w*dt)],[-sin(w*dt),cos(w*dt)]]`. Position is DC+sum(s), velocity
+is sum(omega*c). Frequencies (1.2/2.4/0.25 Hz) are independent estimator settings;
+plant amplitudes, phases, contact parameters and truth are never passed in.
+Initialize state to zero and P=(500e-6)^2 I. Select R=(2e-6)^2 m² and isotropic
+Qc=(0.2e-6)^2 m²/s; propagate P with exact rotations plus Qc*dt, then use a scalar
+measurement correction and Joseph covariance update. These declared choices
+precede the experiment; they do not claim to recover unpublished author settings.
+The seven-state structure and latency propagation follow
+[paper III-B / V](https://arxiv.org/html/2608.08860v1#S3.SS2).
+
+Correct only new valid received frames at their capture timestamps. Reject
+premature, old, duplicate or nonfinite measurements. Output propagation advances
+from last accepted capture to current time (15 ms nominal; plus age between
+sparse/dropped frames) without mutating the filter. Before the first arrival,
+use nominal zero position/velocity. Feed the resulting position and analytic
+velocity directly into the original PD expression, replacing both delayed
+position and filtered-difference velocity. The old controllers are unchanged.
+
+Before running, register **primary contact RMS <=10 µm AND task verdict PASS**;
+`paper_effective` is reported with no task-PASS requirement. Both seed 42, same
+windows, at most **one tuning pass**. Stop with a plot if primary cannot PASS;
+do not relax thresholds or fit more parameters. Tests and CI include both
+determinism tiers, all eight cases, and the six historical trace hashes on each
+registered platform. Visualizations remain separate from CI dependencies.

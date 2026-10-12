@@ -57,3 +57,47 @@ def test_historical_hash_is_never_applied_to_a_different_fingerprint(field):
     )
     fingerprint[field] = "unregistered"
     assert reference_trace_hashes(fingerprint) is None
+
+
+@pytest.mark.parametrize(
+    "rms,status,passes",
+    [
+        (10.0, "PASS", True),
+        (10.00001, "PASS", False),
+        (9.0, "FAIL", False),
+        (9.0, "INVALID", False),
+    ],
+)
+def test_preview_primary_requires_both_preregistered_rms_and_task_pass(rms, status, passes):
+    metrics = {
+        "controller": "preview",
+        "contact_profile": "primary",
+        "contact": {"rms_e_um": rms},
+        "verdict": {"status": status},
+    }
+    assert all(reproduction_checks(metrics, "unused").values()) == passes
+
+
+@pytest.mark.parametrize("status,passes", [("PASS", True), ("FAIL", True), ("INVALID", False)])
+def test_preview_diagnostic_is_reported_without_primary_acceptance(status, passes):
+    metrics = {
+        "controller": "preview",
+        "contact_profile": "paper_effective",
+        "contact": {"rms_e_um": 100},
+        "verdict": {"status": status},
+    }
+    assert all(reproduction_checks(metrics, "unused").values()) == passes
+
+
+@pytest.mark.parametrize(
+    "controller", ["lab_frame_pd", "delayed_feedback", "delayed_feedback_offsetfree"]
+)
+def test_all_previous_controller_hashes_are_registered_for_both_platforms(controller):
+    for baseline in REPRODUCTION[controller]["platform_baselines"]:
+        assert (
+            reference_trace_hashes(baseline["platform_fingerprint"], controller)
+            == baseline["trace_sha256"]
+        )
+        assert set(baseline["trace_sha256"]) == {"primary", "paper_effective"}
+        unknown = dict(baseline["platform_fingerprint"], python="unregistered")
+        assert reference_trace_hashes(unknown, controller) is None

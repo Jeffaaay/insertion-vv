@@ -15,9 +15,11 @@ REPRODUCTION_PATH = Path(__file__).with_name("reproduction_contract.json")
 REPRODUCTION = json.loads(REPRODUCTION_PATH.read_text(encoding="utf-8"))
 
 
-def reference_trace_hashes(fingerprint: dict | None = None) -> dict | None:
+def reference_trace_hashes(
+    fingerprint: dict | None = None, controller: str = "lab_frame_pd"
+) -> dict | None:
     fingerprint = platform_fingerprint() if fingerprint is None else fingerprint
-    for baseline in REPRODUCTION["lab_frame_pd"]["platform_baselines"]:
+    for baseline in REPRODUCTION[controller].get("platform_baselines", []):
         if baseline["platform_fingerprint"] == fingerprint:
             return baseline["trace_sha256"]
     return None
@@ -27,6 +29,20 @@ def reproduction_checks(metrics: dict, trace_hash: str) -> dict[str, bool]:
     controller = metrics["controller"]
     profile = metrics["contact_profile"]
     limits = REPRODUCTION[controller]
+    if controller == "preview":
+        if profile == "primary":
+            return {
+                "preview_primary_contact_rms_at_most_10_um": (
+                    metrics["contact"]["rms_e_um"]
+                    <= limits["primary_contact_rms_e_um_max_inclusive"]
+                ),
+                "preview_primary_task_pass": (
+                    metrics["verdict"]["status"] == limits["primary_task_verdict"]
+                ),
+            }
+        return {
+            "preview_diagnostic_valid_verdict": metrics["verdict"]["status"] in ("PASS", "FAIL")
+        }
     if controller == "delayed_feedback_offsetfree":
         low, high = limits["contact_rms_e_um_range"]
         return {
@@ -135,6 +151,7 @@ def main() -> int:
             repeated_hash = hashlib.sha256(
                 (experiment / "repeat_trace.jsonl").read_bytes()
             ).hexdigest()
+            historical_hashes = reference_trace_hashes(metrics["platform_fingerprint"], controller)
             checks = {
                 "same_seed_identical_trace_sha256": (
                     trace_hash == repeated_hash == metrics["determinism"]["trace_sha256"]
@@ -147,7 +164,12 @@ def main() -> int:
                 ),
                 "complete_8000_ticks": metrics["complete"] and metrics["completed_ticks"] == 8000,
                 "no_safety_stop": not metrics["safety_stop"],
-                "expected_baseline_task_fail": metrics["verdict"]["status"] == "FAIL",
+                "baseline_task_fail_or_preview": (
+                    controller == "preview" or metrics["verdict"]["status"] == "FAIL"
+                ),
+                "previous_controller_trace_unchanged_when_registered": (
+                    historical_hashes is None or trace_hash == historical_hashes[profile]
+                ),
                 **reproduction_checks(metrics, trace_hash),
             }
             report["profiles"][profile]["controllers"][controller] = {
@@ -178,7 +200,7 @@ def main() -> int:
     report_path.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
     print(
         f"CI job commands: {report['status']}; "
-        f"all {len(profiles) * len(CONTROLLERS)} task verdicts: FAIL"
+        f"{len(profiles) * len(CONTROLLERS)} experiments; task verdicts recorded separately"
     )
     print(f"Diagnostic 2-4 mN expectation met: {report['diagnostic_expectation']['met']}")
     return 0 if report["status"] == "PASS" else 1

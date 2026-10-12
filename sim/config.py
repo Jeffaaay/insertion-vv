@@ -4,7 +4,7 @@ import math
 from dataclasses import asdict, dataclass
 
 CONTACT_TARGETS_N_PER_M = {"primary": 16.0, "paper_effective": 3.5}
-CONTROLLERS = ("lab_frame_pd", "delayed_feedback", "delayed_feedback_offsetfree")
+CONTROLLERS = ("lab_frame_pd", "delayed_feedback", "delayed_feedback_offsetfree", "preview")
 
 
 @dataclass(frozen=True)
@@ -37,12 +37,21 @@ class Config:
     observer_gain_position: float = 0.6
     observer_gain_velocity: float = 12.0
     observer_gain_acceleration: float = 400.0
+    preview_frequencies_hz: tuple[float, ...] = (1.2, 2.4, 0.25)
+    preview_delay_us: int = 15_000
+    preview_initial_std_m: float = 500e-6
+    preview_measurement_std_m: float = 2e-6
+    preview_process_std_m_sqrt_s: float = 0.2e-6
 
     def validate(self) -> None:
         if self.contact_profile not in CONTACT_TARGETS_N_PER_M:
             raise ValueError("contact_profile must be primary or paper_effective")
         if self.controller not in CONTROLLERS:
             raise ValueError(f"controller must be one of {CONTROLLERS}")
+        if self.preview_frequencies_hz != (1.2, 2.4, 0.25) or self.preview_delay_us != 15_000:
+            raise ValueError(
+                "Step 2 preview fixes frequencies at 1.2/2.4/0.25 Hz and delay at 15 ms"
+            )
         if not 0 <= self.seed < 2**64:
             raise ValueError("seed must fit u64")
         if self.control_dt_us != 1000:
@@ -62,6 +71,13 @@ class Config:
         for key, value in asdict(self).items():
             if isinstance(value, float) and not math.isfinite(value):
                 raise ValueError(f"{key} must be finite")
+        if (
+            min(self.preview_initial_std_m, self.preview_measurement_std_m) <= 0
+            or self.preview_process_std_m_sqrt_s < 0
+        ):
+            raise ValueError(
+                "Kalman initial/measurement variance must be positive; process nonnegative"
+            )
         if (
             min(
                 self.observer_mass_kg,

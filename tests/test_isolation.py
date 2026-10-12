@@ -9,13 +9,16 @@ from sim.controllers import LabFramePD
 def test_controller_modules_have_no_truth_or_plant_dependencies():
     root = Path(__file__).resolve().parents[1] / "sim"
     allowed = {"dataclasses", "contracts", "reference"}
-    for name in ("controllers.py", "contracts.py", "reference.py"):
+    for name in ("controllers.py", "contracts.py", "reference.py", "preview.py"):
+        module_allowed = (
+            allowed | {"math", "numpy", "controllers"} if name == "preview.py" else allowed
+        )
         tree = ast.parse((root / name).read_text(encoding="utf-8"))
         for node in ast.walk(tree):
             if isinstance(node, ast.ImportFrom):
-                assert node.module in allowed
+                assert node.module in module_allowed
             if isinstance(node, ast.Import):
-                assert all(alias.name in allowed for alias in node.names)
+                assert all(alias.name in module_allowed for alias in node.names)
             if isinstance(node, ast.Name):
                 assert node.id not in {"Truth", "MujocoPlant", "eval", "exec", "__import__"}
     assert {f.name for f in fields(Sensors)} == {

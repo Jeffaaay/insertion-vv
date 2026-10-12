@@ -4,7 +4,7 @@ import pytest
 
 from sim.ci import reproduction_checks
 from sim.config import CONTACT_TARGETS_N_PER_M, CONTROLLERS, Config
-from sim.metrics import CONTRACT, window_metrics
+from sim.metrics import CONTRACT, verdict, window_metrics
 from sim.plant import MujocoPlant
 from sim.run import run, sha256, simulate
 
@@ -24,6 +24,7 @@ def test_baseline_regression_and_true_velocity(profile, controller):
                 "contact_profile": profile,
                 "contact": contact,
                 "free": window_metrics(execution.rows, *CONTRACT["free_window_us"]),
+                "verdict": verdict(contact, complete=True, reproducible=True, safety_stop=False),
             },
             sha256(execution.trace),
         ).values()

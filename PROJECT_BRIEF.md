@@ -1,7 +1,7 @@
 # Insertion Verification Stack — Project Brief
 
 **Owner:** Jeff Young  
-**Status:** Required Phase A complete; optional offset-free ablation authorized (Step 1). This brief is the single source of truth for scope; update it before changing scope.  
+**Status:** Required Phase A and Step 1 accepted; optional harmonic preview authorized (Step 2). This brief is the single source of truth for scope; update it before changing scope.  
 **Audience:** 给人读，也给执行 agent（Codex 等）读。Agent 只做本文件明确授权的事。
 
 ---
@@ -108,7 +108,7 @@ trait Plant {
 1. `lab_frame_pd`：固定 lab-frame setpoint，忽略 d(t)
 2. `delayed_feedback`：跟踪延迟 15 ms 的测量表面，无预测
 3. `delayed_feedback_offsetfree`（本轮 Step 1）：保留 delayed-feedback，只增加 §V 加速度偏置观测器；无力读回、无真值、无预测。两配置 seed 42 的 contact RMS 验收 20–40 µm；提交、推送、报告后停止。
-4. `preview`（后续 Step 2）：只增加已知频率 exosystem（1.2/2.4/0.25 Hz），前推 15 ms；简单 MPC/LQR 可用，不做 QP/shear 约束。primary nominal verdict PASS；最多一轮调参，不达标则停止报告。**本轮不开始 Step 2。**
+4. `preview`（本轮 Step 2）：增加已知频率 exosystem Kalman filter（1.2/2.4/0.25 Hz），前推 15 ms；保留 PD + 原偏置观测器。预注册 primary contact RMS ≤10 µm 且 nominal verdict PASS；paper_effective 只报告，不要求 PASS。最多一轮调参，不达标则停止并报告图，不做 QP/shear 约束。
 
 **Sensors 模型（控制器能看到的）：** 延迟 τ=15 ms，可配置采样率（1 kHz / 25 Hz），可配置高斯噪声，可配置缺帧。
 
@@ -301,3 +301,29 @@ uses a fixed QP and 30 seeds, so this PD/seed-42 ablation is a magnitude compari
 Extend both platform CI matrices and cross-platform comparison to six cases;
 render optional plots/videos from the canonical Linux results, outside CI.
 Step 2 is deferred until after this checkpoint's requested stop.
+
+## 18. Step 2 preview authorization and preregistration (2026-10-12)
+
+Step 1 is accepted. Implement only the measured-surface harmonic Kalman estimator
+and delay forward propagation, retaining the existing PD and acceleration-bias
+observer. Known estimator frequencies are fixed at 1.2, 2.4 and 0.25 Hz, independent
+of plant configuration. Estimate DC plus three quadrature pairs (metres), starting
+at zero; do not initialize from plant amplitudes/phases. Initial covariance is
+`(500e-6 m)^2 * I`, measurement variance `R=(2e-6 m)^2`, isotropic continuous process
+noise `Qc=(0.2e-6 m/sqrt(s))^2 * I`. These are engineering choices, selected before
+any preview experiment, not recovered author tuning. Capture-time prediction uses
+exact oscillator rotations; covariance prediction adds `Qc * elapsed_seconds`.
+Correction uses the Joseph covariance form. Ignore held/duplicate/old/nonfinite or
+not-yet-deliverable frames. Predict the last corrected capture to current time:
+nominally 15 ms; sparse/missing frames add their elapsed age. Never inject a
+synthetic fresh measurement or change the saved filter state during output preview.
+
+Pre-register primary contact RMS <=10 µm and unchanged nominal task verdict PASS
+(contact RMS <20 µm, peak |edot| <2 mm/s, no safety stop). The diagnostic profile
+must be valid and reproducible but may PASS or FAIL. Both use seed 42. Permit at
+most one tuning pass; if primary cannot PASS, stop with a plot, do not iterate.
+Record every attempt and any adjustment. Extend CI to four controllers × two
+profiles on Linux/Windows, compare across platforms, and verify all six prior
+controller/profile trace hashes per OS remain unchanged. Generate both plots and
+videos outside CI, update notes, commit/push/report, then send results to the
+existing Claude conversation. No Phase B or firmware implementation is authorized.
