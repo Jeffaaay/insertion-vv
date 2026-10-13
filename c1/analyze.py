@@ -57,6 +57,22 @@ def assess(matrix, digest):
     rows = matrix["runs"]
     base = subset(rows, controller="preview", ablation="baseline")
     nominal = subset(base, fault="none")[0]
+    margins = {}
+    for fault in specs():
+        group = subset(base, fault=fault)
+        rms = [r["contact"]["rms_e_um"] for r in group]
+        velocity = max(r["contact"]["peak_abs_edot_mm_s"] for r in group)
+        margins[fault] = {
+            "min_rms_um": min(rms),
+            "max_rms_um": max(rms),
+            "max_peak_abs_edot_mm_s": velocity,
+            "rms_margin_um": 20 - max(rms),
+            "edot_margin_mm_s": 2 - velocity,
+            "max_abs_rms_difference_from_nominal_nm": max(
+                abs(v - nominal["contact"]["rms_e_um"]) for v in rms
+            )
+            * 1000,
+        }
     boundaries, video = {}, {}
     for fault, spec in specs().items():
         series = [
@@ -165,7 +181,7 @@ def assess(matrix, digest):
             )
         }
     )
-    disagreements, invalid = [], []
+    disagreements, invalid, differences = [], [], []
     for p in py:
         q = c32[tuple(sorted({**p["scenario"], "controller": "preview_c32"}.items()))]
         a, b = p["verdict"]["status"], q["verdict"]["status"]
@@ -182,6 +198,19 @@ def assess(matrix, digest):
             )
         else:
             counts["valid_pairs"] += 1
+            rms_delta = abs(p["contact"]["rms_e_um"] - q["contact"]["rms_e_um"])
+            differences.append(
+                {
+                    "python_run_id": p["run_id"],
+                    "c32_run_id": q["run_id"],
+                    "scenario": p["scenario"],
+                    "rms_absolute_difference_um": rms_delta,
+                    "rms_relative_difference_percent": 100 * rms_delta / p["contact"]["rms_e_um"],
+                    "peak_edot_absolute_difference_mm_s": abs(
+                        p["contact"]["peak_abs_edot_mm_s"] - q["contact"]["peak_abs_edot_mm_s"]
+                    ),
+                }
+            )
             counts["matching_pairs" if a == b else "disagreeing_pairs"] += 1
             if a != b:
                 disagreements.append(
@@ -207,12 +236,21 @@ def assess(matrix, digest):
         "identity_failures": sum(not r.get("identity_check", {}).get("passed", True) for r in rows),
         "nominal": {"status": nominal["verdict"]["status"], "contact": nominal["contact"]},
         "boundaries": boundaries,
+        "baseline_margins": margins,
         "predictions": predictions,
         "video_selection": video,
         "c32_comparison": {
             **dict(counts),
             "disagreements": disagreements,
             "invalid_pairs_detail": invalid,
+            "metric_difference_maxima": {
+                key: max(differences, key=lambda r: r[key])
+                for key in (
+                    "rms_absolute_difference_um",
+                    "rms_relative_difference_percent",
+                    "peak_edot_absolute_difference_mm_s",
+                )
+            },
         },
     }
 
@@ -254,7 +292,11 @@ def figures(matrix, summary, root):
             label = f"{item['level']:g} {UNITS[fault]}\n{item['status']}"
             if item["level"] == b["first_fail"]:
                 label += " *"
-            ax.text(x, y, label, ha="center", va="center", color="white", fontsize=10)
+            rms = max(
+                r["contact"]["rms_e_um"] for r in subset(base, fault=fault, level=item["level"])
+            )
+            label += f"\nRMS {rms:.3f} µm"
+            ax.text(x, y, label, ha="center", va="center", color="white", fontsize=9)
     ax.set(
         xlim=(-0.6, 5.6),
         ylim=(7.6, -0.7),
@@ -296,6 +338,20 @@ def figures(matrix, summary, root):
     ax.set(xlabel="Injection onset (s)", ylabel="Maximum contact RMS over seeds (µm)", yscale="log")
     ax.grid(alpha=0.15)
     ax.legend(loc="upper left", bbox_to_anchor=(1.02, 1), frameon=False)
+    changes = [
+        summary["baseline_margins"][f]["max_abs_rms_difference_from_nominal_nm"]
+        for f in ("F2", "F3", "F8")
+    ]
+    ax.text(
+        1.03,
+        0.40,
+        "F2 / F3 / F8 overlap.\nAcross their full grids,\nmax absolute RMS change\n"
+        f"from nominal: {changes[0]:.2f} / {changes[1]:.2f} /\n{changes[2]:.2f} nm, respectively.",
+        transform=ax.transAxes,
+        fontsize=9,
+        va="top",
+        color="#526169",
+    )
     fig.suptitle("02 / Timing changes the result", x=0.03, ha="left", fontsize=20)
     fig.text(
         0.03,

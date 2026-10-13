@@ -1,0 +1,8 @@
+{
+  "transport": "user-authorized existing Claude browser conversation",
+  "conversation_url": "https://claude.ai/chat/88a45c0b-4051-4fea-8c12-bdfa77bd4de1",
+  "archive_manifest_created_utc": "2026-10-13T04:29:29.476097+00:00",
+  "records": {
+    "claude-round-1.md": "77f6424e3c086a044bfa7c763259dce9bc556ca0e5703750b4087587aba3757b"
+  }
+}
