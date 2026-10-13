@@ -7,20 +7,23 @@
     "c1/analyze.py": "49295523c487ead28fa147e19f2be771f7b00b0111d580a133b48c3e484a527f",
     "c1/visualize.py": "591bf7aae4e7ae190e0ada3fa16e21a34fcd660c437dbb1be8cdbde7e81248ac",
     "c1/heatmap-template.html": "ce52af0fb54051afe1236bf436e8948102b8e527fcecceed7aea7320ac2163d6",
-    "c1/seal_derived.py": "e3389037da1e64b0ccb2b41bf5393975f29ccbfaf15b4e0be40da266c10cc566",
+    "c1/seal_derived.py": "8a7319bda540949299dc471cd771acf89a4be99d49e145ee41d4b473dfe97dcc",
     "c1/build_report.py": "43f4c0b3646cd8c35eb54b94bdfd8c02f3ce60004e58b0219fe99a10fa221485",
-    "c1/hub-template.html": "edd08d8b66a8e2a6a05a474171771dc36ff7a15af1c92f18d8e9a0a80b3d57a2",
+    "c1/hub-template.html": "be29def02f67f04289bffda708028f420a7413e8db3bb610d1e5b7b90ba912b7",
     "c1/build_journal.py": "bf76479feca46d7bf5c0389d0608544483750026ae71a8cc55786ba26162fd80",
     "c1/render_insertion_3d.py": "9885e2b55b8654958db13ba4bbced7aa44e7e8f6cf7ebcc760e7a8cb86a505a5",
-    "c1/blog-template.html": "23a70561e9ecad0efe7f8a79f54577e2213449233cf7e07ef6f07895d145b829",
-    "docs/PROJECT_JOURNAL.md": "04c5e8831592f5a8da1e42e7f64cc187fdc790d74b0a66344deda61452e37263",
+    "c1/studio_scene.py": "10fe23a5d08b378cd6b053b9fb68f04d02c75178f77a1084b4a64f916f6645d1",
+    "c1/render_studio.py": "c9480fbb774f12acaf17403be97bf5879ce2892b354cdd2b4f74d7a995b1d2c2",
+    "c1/compose_studio.py": "390e2ed0bc35da7ff770f5fd8fc88f49667222dc30885f8f3c184a4fad2b1584",
+    "c1/blog-template.html": "a5d3e3acd2e1d57e40b21f87bf045ac2786ede3239e6668233772e67fd2f1906",
+    "docs/PROJECT_JOURNAL.md": "b381e6f7810d1397245b75e62c082287dfaf8f11b5f43ae73dab55560e926234",
     "docs/PHASE_C_SIL_SUMMARY.md": "edf8f453c88b297914fa4e04a6bf5cc6d27f723d16d792397a59eade77c26fbc",
     "docs/FINDINGS.md": "74e98019cc6c3d0a2d7ce9d11056c4bfe61c463ec595742051282601aa1d7e9e"
   },
   "files": {
     "blog.html": {
-      "sha256": "9d19c350c86bae7bf6e0417fea857520282712398aab8a47974343fd485509a0",
-      "bytes": 26415
+      "sha256": "d2c978c0db72880e3197df7958478a9327cdfb406bc55789d0ee791f060d416d",
+      "bytes": 27426
     },
     "evidence-audit.json": {
       "sha256": "4f23d8c306286c0783ce459eecefce3377a047f16d845092b64d3a5d6a27e30d",
@@ -79,12 +82,12 @@
       "bytes": 2708436
     },
     "index.html": {
-      "sha256": "4fdef44087d899f8bf892613327eb5e591bf0439d28368ca8d30da29084cb088",
-      "bytes": 8790
+      "sha256": "6ec64520fdff501814a9ebbf826712f2d52a14888033e4ba534f132e593a5d90",
+      "bytes": 8907
     },
     "insertion-3d-manifest.json": {
-      "sha256": "f5246fed96cebc23fbfcd81fcb235421919f20df2eb94d08f91006922f5d9fe1",
-      "bytes": 1456
+      "sha256": "0cc95219477e800b66a4bf50ccb57c7702367ac596ee202b488f94df3a76fee6",
+      "bytes": 1851
     },
     "matrix.json": {
       "sha256": "cc833c35864f0f8cfa4d67671bf605a129c2b18a5f59710be41ee11e2eb98aa9",
@@ -99,8 +102,8 @@
       "bytes": 4813
     },
     "reviews.html": {
-      "sha256": "5ab691bb07992e6cfb23f660be872880fc402874b2813dd10972bfe7bc42ee46",
-      "bytes": 266039
+      "sha256": "961c740c1fa618d8f63883d275b142df2b4190628f70bf3f6d86a63bb3b19986",
+      "bytes": 268960
     },
     "selected-traces.zip": {
       "sha256": "8ba5d81c618037113a51480bed930558bae084ca5f857c0e4321c4d0683ea1ae",
@@ -174,13 +177,17 @@
       "sha256": "ae8e0811b1e22e40a31911a5bfc768ae7275fe4cb96cf6dac33f8ac467cd8104",
       "bytes": 403429
     },
+    "videos/insertion-3d-overview.png": {
+      "sha256": "631a24e9e655fb2a3133ec3665d5af941dd88b68768186b0df539eabd4197514",
+      "bytes": 1304855
+    },
     "videos/insertion-3d-preview.png": {
-      "sha256": "34a17a2ce8aef8543db63f704842846d1bbafb304c0ff3fda30380b955364ad8",
-      "bytes": 62312
+      "sha256": "e85078b39fe57bd8f0e85b402fa793539396f9556cff7a779d764c5115ea8dfc",
+      "bytes": 1500922
     },
     "videos/insertion-3d.mp4": {
-      "sha256": "ec52cea8969122eaacdd435f9a9d16c17001f8f26390ee33fa71be19ba2d677a",
-      "bytes": 1239151
+      "sha256": "9ca3cfc59b0b26c91bedd5a253be9f67a0f616de266b1530777b7f27ad15d3a7",
+      "bytes": 17972275
     },
     "visualization-manifest.json": {
       "sha256": "a0c03c554b68942a4663e5cecfbb9c5babf963c86df37fe3db57a1052bbcb3fd",

@@ -1,0 +1,28 @@
+{
+  "decoded_frames": 300,
+  "fps": 25,
+  "duration_s": 12,
+  "size": [
+    1920,
+    1080
+  ],
+  "unchanged_original_matrix_and_media": 17,
+  "html_local_links_checked": 118,
+  "video_players_per_page": 9,
+  "sampled_frames": [
+    0,
+    25,
+    47,
+    48,
+    60,
+    90,
+    199,
+    200,
+    255,
+    299
+  ],
+  "source_tick_mappings_verified": 300,
+  "target_axis_projection_verified": 300,
+  "renderer": "Blender 4.5.3 Cycles / OptiX",
+  "scene_scope": "illustrative apparatus and sharp needle; sealed physics remains capsule/block soft contact"
+}

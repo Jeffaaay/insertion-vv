@@ -57,14 +57,27 @@ normalizes text artifacts to UTF-8/LF and pins their bytes in derived-artifacts.
 `python -m c1.verify_public` checks the public matrix, render sources, all artifact
 hashes and nine original selected traces. Hosted CI repeats this from a fresh checkout.
 
-`python -m c1.render_insertion_3d` adds the introductory MuJoCo scene replay, using
-the existing visualization environment. It checks the sealed nominal truth and
-the original MJCF hash, then updates display geometry from measured poses via
-`mj_kinematics` and `mj_camlight`; it never integrates physics or runs control.
-The original capsule needle is retained. The transparent tissue cutaway, camera,
-colors and annotations are display-only, not a fluid/fracture simulation.
-The 12-second video contains 8 seconds at real time, followed by a 0.25x replay of
-source time 2–3 s. `insertion-3d-manifest.json` records exact sampled tick ranges.
+The current introductory scene is an offline Blender 4.5.3 Cycles/OptiX render.
+`c1/studio_scene.py` builds the conceptual apparatus, and `c1/render_studio.py`
+checks sealed nominal truth and original MJCF hashes before placing the needle
+and sample at recorded poses (uniform meters-to-millimeters scale of 1000).
+No simulation integration or control is executed. The apparatus, slender needle
+silhouette and sample crop are display-only; the original physics is still a
+0.25 mm radius capsule against a soft-contact block. No puncture/deformation
+is simulated. The front sample half is hidden from frame 48 to expose depth.
+
+```text
+blender -b --python c1/render_studio.py -- --output work/studio-frames
+python -m c1.compose_studio --frames work/studio-frames
+```
+
+The compositor needs Pillow, imageio, imageio-ffmpeg and numpy. It verifies each
+frame-to-tick mapping, overlays the source metrics and writes 1920x1080 MP4 and
+two stills. The 12-second video is 8 seconds at real time, then a 0.25x replay of
+source time 2–3 s; no state interpolation occurs. Camera motion is display-only.
+`insertion-3d-manifest.json` records provenance and exact sampled tick ranges.
+The earlier `render_insertion_3d.py` remains as a diagnostic renderer; running
+its full render command would replace the current presentation with the old view.
 
 Full lossless evidence remains local under artifacts/c1/runs. Matrix, summaries,
 scientific figures, selected curves and videos are the compact published artifacts.

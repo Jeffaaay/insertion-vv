@@ -3,20 +3,20 @@
   "source_run_id": "a3aab64245c595654c78dfbb",
   "truth_sha256": "95fb57aaeb56ecd3cbb648430bc7033efda184a18aedfde79fe35f65bb3e7e76",
   "plant_sha256": "aef8a51e84742568b0db6271e3ca946dcd345db3f4d426a60a906a75db587fe0",
-  "renderer": "mujoco.Renderer",
-  "mujoco_version": "3.8.0",
+  "renderer": "Blender Cycles / OptiX + Pillow metric overlay",
+  "blender_version": "4.5.3 LTS",
   "physics_integration": false,
   "controller_execution": false,
-  "state_updates": "mj_kinematics + mj_camlight from measured qpos/qvel",
-  "display_only": "tissue cutaway dimensions/alpha, capsule color, skybox, camera, annotations",
-  "needle_geometry": "unchanged original capsule; not a sharp-tip puncture model",
+  "state_updates": "measured needle_z and tissue_z; meters to millimeters with uniform factor 1000",
+  "display_only": "conceptual stage, collet, carrier, needle silhouette, sample crop, materials, lights, cutaway and camera",
+  "needle_geometry": "illustrative sharp silhouette; original sealed physics uses a 0.25 mm radius capsule, not puncture physics",
   "target_depth_um": 300,
-  "target_marker": "through needle axis; horizontal in camera view at constant depth",
+  "target_marker": "3D line passes through needle axis at tissue_z - 300 um; overlay anchor projected from that same point",
   "fps": 25,
   "frames": 300,
-  "duration_s": 12.0,
-  "width": 1280,
-  "height": 720,
+  "duration_s": 12,
+  "width": 1920,
+  "height": 1080,
   "segments": [
     {
       "playback_s": [
@@ -44,6 +44,8 @@
     }
   ],
   "interpolation": false,
-  "limitations": "Soft-contact block; no fluid, material tearing, puncture or real hardware video",
-  "video_sha256": "ec52cea8969122eaacdd435f9a9d16c17001f8f26390ee33fa71be19ba2d677a"
+  "camera_animation": "smoothstep apparatus-to-macro transition during frames 25-48; fixed macro thereafter",
+  "cutaway": "front sample half hidden from frame 48 onward; surface z is unchanged",
+  "limitations": "No measured hardware design, material deformation, fluid, tearing, puncture or new simulation results",
+  "video_sha256": "9ca3cfc59b0b26c91bedd5a253be9f67a0f616de266b1530777b7f27ad15d3a7"
 }
