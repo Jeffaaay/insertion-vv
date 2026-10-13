@@ -16,7 +16,7 @@ def render(root: Path, output: Path) -> None:
         if not directory.is_dir():
             continue
         cards = []
-        for path in sorted(directory.iterdir()):
+        for path in sorted(directory.iterdir(), key=lambda p: p.name):
             if path.suffix not in (".md", ".txt", ".json", ".jsonl"):
                 continue
             text = path.read_text(encoding="utf-8-sig")
