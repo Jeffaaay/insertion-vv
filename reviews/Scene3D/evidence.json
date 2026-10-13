@@ -1,0 +1,36 @@
+{
+  "reviewed_commit": "2f20f353d8dc53374781e75c15a6750e7348930e",
+  "all_required_ci_pass": true,
+  "runs": [
+    {
+      "conclusion": "success",
+      "headSha": "2f20f353d8dc53374781e75c15a6750e7348930e",
+      "name": "Phase C integrity",
+      "status": "completed",
+      "url": "https://github.com/Jeffaaay/insertion-vv/actions/runs/38354221998"
+    },
+    {
+      "conclusion": "success",
+      "headSha": "2f20f353d8dc53374781e75c15a6750e7348930e",
+      "name": "Phase A SIL",
+      "status": "completed",
+      "url": "https://github.com/Jeffaaay/insertion-vv/actions/runs/38354221963"
+    },
+    {
+      "conclusion": "success",
+      "headSha": "2f20f353d8dc53374781e75c15a6750e7348930e",
+      "name": "Phase B C32",
+      "status": "completed",
+      "url": "https://github.com/Jeffaaay/insertion-vv/actions/runs/38354221944"
+    }
+  ],
+  "browser_video": {
+    "duration_s": 12,
+    "width": 1280,
+    "height": 720,
+    "readyState": 4,
+    "currentTime_after_play": 0.317784,
+    "error": null
+  },
+  "full_matrix_changed": false
+}

@@ -11,7 +11,7 @@
     "c1/build_report.py": "43f4c0b3646cd8c35eb54b94bdfd8c02f3ce60004e58b0219fe99a10fa221485",
     "c1/hub-template.html": "edd08d8b66a8e2a6a05a474171771dc36ff7a15af1c92f18d8e9a0a80b3d57a2",
     "c1/build_journal.py": "bf76479feca46d7bf5c0389d0608544483750026ae71a8cc55786ba26162fd80",
-    "c1/render_insertion_3d.py": "21b35aa3ff17d61dcd440231e83a73074c12766b5bfa6484663ce45f4525a313",
+    "c1/render_insertion_3d.py": "9885e2b55b8654958db13ba4bbced7aa44e7e8f6cf7ebcc760e7a8cb86a505a5",
     "c1/blog-template.html": "23a70561e9ecad0efe7f8a79f54577e2213449233cf7e07ef6f07895d145b829",
     "docs/PROJECT_JOURNAL.md": "04c5e8831592f5a8da1e42e7f64cc187fdc790d74b0a66344deda61452e37263",
     "docs/PHASE_C_SIL_SUMMARY.md": "edf8f453c88b297914fa4e04a6bf5cc6d27f723d16d792397a59eade77c26fbc",
@@ -83,8 +83,8 @@
       "bytes": 8790
     },
     "insertion-3d-manifest.json": {
-      "sha256": "bc7f0115b9fe6a261a0c82d589a5bef71bb71e3ee3cf57e35f178289480bebb1",
-      "bytes": 1369
+      "sha256": "f5246fed96cebc23fbfcd81fcb235421919f20df2eb94d08f91006922f5d9fe1",
+      "bytes": 1456
     },
     "matrix.json": {
       "sha256": "cc833c35864f0f8cfa4d67671bf605a129c2b18a5f59710be41ee11e2eb98aa9",
@@ -99,8 +99,8 @@
       "bytes": 4813
     },
     "reviews.html": {
-      "sha256": "545b911e6cfa0d980fc8bf0775cf1a6700c7bd9d25c41f257b18d39ba3340bb6",
-      "bytes": 258661
+      "sha256": "33516e7f9e3b457cef6af72d24c600bcb9c677605a877bbbd64a4ab1cb1e0384",
+      "bytes": 264853
     },
     "selected-traces.zip": {
       "sha256": "8ba5d81c618037113a51480bed930558bae084ca5f857c0e4321c4d0683ea1ae",
@@ -175,12 +175,12 @@
       "bytes": 403429
     },
     "videos/insertion-3d-preview.png": {
-      "sha256": "59d0fb0bdaa3c46b8863a423b4f0fb246a0a3b6b54f2573bc9280d31fa8abc2c",
-      "bytes": 62703
+      "sha256": "34a17a2ce8aef8543db63f704842846d1bbafb304c0ff3fda30380b955364ad8",
+      "bytes": 62312
     },
     "videos/insertion-3d.mp4": {
-      "sha256": "1b254ab0c15253fc44a7831bfd84413e6a228b19f6ff429c01e60fcf62b92b27",
-      "bytes": 1311354
+      "sha256": "ec52cea8969122eaacdd435f9a9d16c17001f8f26390ee33fa71be19ba2d677a",
+      "bytes": 1239151
     },
     "visualization-manifest.json": {
       "sha256": "a0c03c554b68942a4663e5cecfbb9c5babf963c86df37fe3db57a1052bbcb3fd",

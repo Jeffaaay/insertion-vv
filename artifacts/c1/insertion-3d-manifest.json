@@ -11,6 +11,7 @@
   "display_only": "tissue cutaway dimensions/alpha, capsule color, skybox, camera, annotations",
   "needle_geometry": "unchanged original capsule; not a sharp-tip puncture model",
   "target_depth_um": 300,
+  "target_marker": "through needle axis; horizontal in camera view at constant depth",
   "fps": 25,
   "frames": 300,
   "duration_s": 12.0,
@@ -44,5 +45,5 @@
   ],
   "interpolation": false,
   "limitations": "Soft-contact block; no fluid, material tearing, puncture or real hardware video",
-  "video_sha256": "1b254ab0c15253fc44a7831bfd84413e6a228b19f6ff429c01e60fcf62b92b27"
+  "video_sha256": "ec52cea8969122eaacdd435f9a9d16c17001f8f26390ee33fa71be19ba2d677a"
 }

@@ -5012,7 +5012,65 @@ are unchanged. A negative check confirms altered historical README text is rejec
 Hardware photographs, timing metrics and comparative outcomes are clearly pending.
 MCU HIL is distinguished from physical-actuator or clinical validation. The complete
 SIL evidence stays pinned to 8f5dacad; this is a subsequent editorial revision.
-</pre></details></section><section><h2>Scene3D</h2><details class="record"><summary>local-checks.json</summary><pre>{
+</pre></details></section><section><h2>Scene3D</h2><details class="block" open><summary>claude-round-1.md</summary><pre># 三维回放审阅（Claude）
+
+**核验范围：** 我读了 `render_insertion_3d.py`、manifest 和原 `plant.xml`，解码了视频（1280×720、25 fps、300 帧、12.000 s），视频 SHA 与 manifest 一致，matrix 仍为 `cc833c35…`。
+
+**来源和时序都没问题：**
+- 渲染前先校验 truth 和 MJCF 的哈希；只调用 `mj_kinematics` 和 `mj_camlight`，没有 step/forward，也没有运行控制器。
+- 前 8 秒 = 200 帧，每帧间隔 40 tick，正好 1 倍速；后 4 秒 = 100 帧，每帧间隔 10 tick，覆盖源时间 2.0–2.99 s，正好 0.25 倍速。画面上有 `0.25x` 和 SOURCE TIME 标注，没有插值。
+- &quot;TIP DEPTH = tissue_z − needle_z&quot; 是对的：MJCF 里写明 needle 的 qpos 就是胶囊底端，tissue 的 qpos 就是盒子顶面。显示用的剖视盒顶面也正好对齐 qpos，阶段标签与参考轨迹一致。
+- 画面和 blog 都写清楚了&quot;软接触、不是液体或组织撕裂、不是实拍&quot;。
+
+**一处会误导、需要修：橙色虚线（目标深度）画错了位置，看起来像针只插进去一半。**
+
+虚线画在盒子的前表面上（y = −0.68 mm），而针在盒子中心（y = 0）。相机是俯视 18°，所以离相机更近的前表面在屏幕上会显得更低。按 azimuth 130° 计算，在针的屏幕位置上，虚线比针轴处真正的 300 µm 深度低了约 290 µm（换算成等效竖直距离）。
+
+结果是：右栏写着 TIP DEPTH +299 到 +304 µm，画面上的针尖却离虚线还有一大截，像是只插进去一半。我抽了 3.5 s 和 10.2 s 两帧，都能看到这个错位。
+
+修法：把目标标记画在通过针轴、与屏幕水平方向平行的线上。也就是以点 (0, 0, top−0.0003) 为中心，沿方向 (0.766, 0.643, 0) 往两边各延伸约 ±0.9 mm 画虚线；或者在针周围画一个目标深度的虚线圆环。然后只需要重新渲染视频和 poster，不涉及仿真。改完后抽一帧确认针尖压在虚线上就行，不需要完整复审。
+
+```json
+{&quot;verdict&quot;:&quot;BLOCK&quot;,&quot;issues&quot;:[
+{&quot;severity&quot;:&quot;major&quot;,&quot;where&quot;:&quot;c1/render_insertion_3d.py 目标深度虚线; artifacts/c1/videos/insertion-3d.mp4 与 preview&quot;,&quot;what&quot;:&quot;虚线画在前表面 y=-0.68 mm，俯视 18° 投影下在针的屏幕位置比针轴处真实目标深度低约 290 µm（等效竖直距离），针在 300 µm 时看起来只插进一半，与右栏数值矛盾；改为过针轴、沿屏幕水平方向 (0.766,0.643,0) 的虚线或绕针的圆环，然后重新渲染视频和 poster&quot;,&quot;touches_frozen_or_registered&quot;:false}]}
+```
+</pre></details><details class="record"><summary>evidence.json</summary><pre>{
+  &quot;reviewed_commit&quot;: &quot;2f20f353d8dc53374781e75c15a6750e7348930e&quot;,
+  &quot;all_required_ci_pass&quot;: true,
+  &quot;runs&quot;: [
+    {
+      &quot;conclusion&quot;: &quot;success&quot;,
+      &quot;headSha&quot;: &quot;2f20f353d8dc53374781e75c15a6750e7348930e&quot;,
+      &quot;name&quot;: &quot;Phase C integrity&quot;,
+      &quot;status&quot;: &quot;completed&quot;,
+      &quot;url&quot;: &quot;https://github.com/Jeffaaay/insertion-vv/actions/runs/38354221998&quot;
+    },
+    {
+      &quot;conclusion&quot;: &quot;success&quot;,
+      &quot;headSha&quot;: &quot;2f20f353d8dc53374781e75c15a6750e7348930e&quot;,
+      &quot;name&quot;: &quot;Phase A SIL&quot;,
+      &quot;status&quot;: &quot;completed&quot;,
+      &quot;url&quot;: &quot;https://github.com/Jeffaaay/insertion-vv/actions/runs/38354221963&quot;
+    },
+    {
+      &quot;conclusion&quot;: &quot;success&quot;,
+      &quot;headSha&quot;: &quot;2f20f353d8dc53374781e75c15a6750e7348930e&quot;,
+      &quot;name&quot;: &quot;Phase B C32&quot;,
+      &quot;status&quot;: &quot;completed&quot;,
+      &quot;url&quot;: &quot;https://github.com/Jeffaaay/insertion-vv/actions/runs/38354221944&quot;
+    }
+  ],
+  &quot;browser_video&quot;: {
+    &quot;duration_s&quot;: 12,
+    &quot;width&quot;: 1280,
+    &quot;height&quot;: 720,
+    &quot;readyState&quot;: 4,
+    &quot;currentTime_after_play&quot;: 0.317784,
+    &quot;error&quot;: null
+  },
+  &quot;full_matrix_changed&quot;: false
+}
+</pre></details><details class="record"><summary>local-checks.json</summary><pre>{
   &quot;decoded_frames&quot;: 300,
   &quot;fps&quot;: 25,
   &quot;duration_s&quot;: 12,
@@ -5028,9 +5086,23 @@ SIL evidence stays pinned to 8f5dacad; this is a subsequent editorial revision.
     60,
     199,
     200,
+    255,
     299
   ]
 }
+</pre></details><details class="record"><summary>reply-integrity.json</summary><pre>{
+  &quot;conversation_url&quot;: &quot;https://claude.ai/chat/88a45c0b-4051-4fea-8c12-bdfa77bd4de1&quot;,
+  &quot;reviewed_commit&quot;: &quot;2f20f353d8dc53374781e75c15a6750e7348930e&quot;,
+  &quot;response_sha256&quot;: &quot;470e824f4551608623cab70c43b4f341e030dd1299927160fdeebdefdecc78c9&quot;,
+  &quot;transport&quot;: &quot;browser Copy response, copied verbatim; LF with final newline&quot;
+}
+</pre></details><details class="record" open><summary>response-actions.md</summary><pre># Scene3D review correction
+
+Claude reviewed commit `2f20f353d8dc53374781e75c15a6750e7348930e` and blocked one display issue: the target-depth marker was drawn on the front face, producing a perspective mismatch with the needle axis. The full reply is preserved in `claude-round-1.md`; its hash and the reviewed commit&#x27;s CI are recorded separately.
+
+The marker now passes through `(0, 0, tissue_z - 0.0003)` along `(sin(azimuth), -cos(azimuth), 0)`, horizontally across the camera view at constant camera depth. The video and poster were rendered again from the same sealed poses. No simulation, controller, registered threshold, original MJCF, matrix or original fault video was changed.
+
+Local visual verification: at source 3.50 s (poster), the 299.0 µm needle tip aligns with the 300 µm marker; at playback 10.20 s / source 2.55 s (decoded frame 255), the 303.9 µm tip is also aligned within the expected subpixel projected error. Both the main and slow views were inspected. The 300 frames decode at 1280×720, 25 fps, 12 seconds; all 16 original fault media files are byte-identical and 116 local HTML links resolve. This records the local correction, not a fabricated external PASS. Claude&#x27;s reply asks for this frame check and does not require a full re-review.
 </pre></details><details class="record" open><summary>round-1.md</summary><pre># A physical scene as the visual entry point
 
 The user clarified that the missing video is a three-dimensional simulation view

@@ -128,11 +128,16 @@ def main():
                 line(renderer.scene, (x, y, z), (nx, ny, z), outline)
             line(renderer.scene, (x, y, bottom), (x, y, top), outline)
         target = top - 0.0003
-        for x in np.arange(-0.00095, 0.00095, 0.00018):
+        # Pass through the needle axis at constant camera depth. A front-face
+        # marker projects below the actual target under this elevated camera.
+        azimuth = np.deg2rad(camera.azimuth)
+        screen_right = np.array([np.sin(azimuth), -np.cos(azimuth), 0])
+        target_center = np.array([0, 0, target])
+        for offset in np.arange(-0.0009, 0.00091, 0.00018):
             line(
                 renderer.scene,
-                (x, -0.00068, target),
-                (x + 0.0001, -0.00068, target),
+                target_center + (offset - 0.00005) * screen_right,
+                target_center + (offset + 0.00005) * screen_right,
                 (0.83, 0.55, 0.12, 1.0),
                 3,
             )
@@ -239,6 +244,7 @@ def main():
         ),
         "needle_geometry": "unchanged original capsule; not a sharp-tip puncture model",
         "target_depth_um": 300,
+        "target_marker": "through needle axis; horizontal in camera view at constant depth",
         "fps": 25,
         "frames": len(frames),
         "duration_s": len(frames) / 25,
