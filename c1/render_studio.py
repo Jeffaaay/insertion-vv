@@ -57,7 +57,14 @@ def main():
         }.items():
             p = world_to_camera_view(scene, camera, Vector(point))
             projected[name] = [p.x, 1 - p.y]
-        meta.append({"frame": index, "tick": tick, "projected": projected})
+        meta.append(
+            {
+                "frame": index,
+                "tick": tick,
+                "projected": projected,
+                "pixels_per_mm_horizontal": 1920 / camera.data.ortho_scale,
+            }
+        )
         print(f"STUDIO_FRAME {index + 1}/300", flush=True)
     manifest = {
         "matrix_sha256": matrix_sha,

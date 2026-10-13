@@ -96,6 +96,11 @@ def main():
             )
             draw.text((69, 404), "A one-axis control experiment.", font=font(25), fill=muted)
             draw.text((69, 444), "Approach. Insert. Follow.", font=font(25), fill=muted)
+            bar = 5 * info["pixels_per_mm_horizontal"]
+            draw.line((70, 550, 70 + bar, 550), fill=white, width=3)
+            for x in (70, 70 + bar):
+                draw.line((x, 542, x, 558), fill=white, width=3)
+            draw.text((70, 573), "5 mm  /  scene scale", font=font(21), fill=muted)
         elif index >= 48:
             draw.text(
                 (66, 170),
@@ -104,7 +109,11 @@ def main():
                 fill=teal,
             )
             draw.text(
-                (64, 210), "Stay with\nthe surface.", font=font(52, True), fill=white, spacing=0
+                (64, 210),
+                "Into the\nsample." if slow else "Stay with\nthe surface.",
+                font=font(52, True),
+                fill=white,
+                spacing=0,
             )
             draw.text((66, 350), "CUTAWAY VIEW", font=font(18, True), fill=muted)
             draw.text(
@@ -122,6 +131,19 @@ def main():
                 (x + 105, y - 55, x + 366, y - 13), radius=6, fill=(9, 24, 29, 230)
             )
             draw.text((x + 118, y - 49), "TARGET DEPTH  300 µm", font=font(20, True), fill=amber)
+            sx, sy = info["projected"]["surface"]
+            sx, sy = sx * 1920, sy * 1080
+            draw.ellipse((sx - 4, sy - 4, sx + 4, sy + 4), fill=teal)
+            draw.line((sx - 12, sy, sx - 200, sy), fill=teal, width=2)
+            draw.rounded_rectangle(
+                (sx - 405, sy - 22, sx - 200, sy + 21), radius=6, fill=(9, 24, 29, 235)
+            )
+            draw.text((sx - 392, sy - 16), "SURFACE  ·  0 µm", font=font(20, True), fill=teal)
+            tx, ty = info["projected"]["tip"]
+            tx, ty = tx * 1920, ty * 1080
+            draw.ellipse((tx - 3, ty - 3, tx + 3, ty + 3), fill=white)
+            draw.rounded_rectangle((1482, 750, 1845, 794), radius=6, fill=(9, 24, 29, 230))
+            draw.text((1500, 758), "SAMPLE RULE  ·  0.2 mm / tick", font=font(19), fill=muted)
         draw.rounded_rectangle((48, 810, 423, 858), radius=9, fill=(7, 20, 27, 210))
         draw.rounded_rectangle((1473, 810, 1854, 858), radius=9, fill=(7, 20, 27, 210))
         draw.rectangle((0, 1021, 1920, 1080), fill=(7, 20, 27, 230))
@@ -220,6 +242,10 @@ def main():
             "smoothstep apparatus-to-macro transition during frames 25-48; fixed macro thereafter"
         ),
         "cutaway": "front sample half hidden from frame 48 onward; surface z is unchanged",
+        "section_readability": (
+            "darker hatched cut face, bright surface edge and projected surface/tip points"
+        ),
+        "scale_reference": "overview: 5 mm in camera plane; sample rule: 0.2 mm per tick",
         "limitations": (
             "No measured hardware design, material deformation, fluid, tearing, "
             "puncture or new simulation results"

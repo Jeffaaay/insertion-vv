@@ -46,6 +46,8 @@
   "interpolation": false,
   "camera_animation": "smoothstep apparatus-to-macro transition during frames 25-48; fixed macro thereafter",
   "cutaway": "front sample half hidden from frame 48 onward; surface z is unchanged",
+  "section_readability": "darker hatched cut face, bright surface edge and projected surface/tip points",
+  "scale_reference": "overview: 5 mm in camera plane; sample rule: 0.2 mm per tick",
   "limitations": "No measured hardware design, material deformation, fluid, tearing, puncture or new simulation results",
-  "video_sha256": "9ca3cfc59b0b26c91bedd5a253be9f67a0f616de266b1530777b7f27ad15d3a7"
+  "video_sha256": "3c3dc3e1245089dd7c67b05800135b1928a7c061bc05f371e195cfc7f64c1095"
 }

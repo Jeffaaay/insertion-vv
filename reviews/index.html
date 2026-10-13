@@ -5134,7 +5134,71 @@ feature it before results; GitHub README and journal link the MP4 and poster.
   &quot;issues&quot;: [],
   &quot;transport&quot;: &quot;browser Copy response, copied verbatim; LF with final newline&quot;
 }
-</pre></details></section><section><h2>Studio</h2><details class="record"><summary>local-checks.json</summary><pre>{
+</pre></details></section><section><h2>Studio</h2><details class="block" open><summary>claude-round-1.md</summary><pre># Studio 版审阅（Claude）
+
+**核验范围：** 我看了 overview、preview，并从视频里抽了 1.4 / 2.24 / 7.96 / 8.0 / 10.0 s 共 5 帧；读了 `studio_scene.py` 的几何和 `set_pose`。另外用公开的 nominal truth（`selected-traces.zip`）核对了画面底部的数值。
+
+## 数据与时序：通过
+
+- **几何对齐正确。** 针尖圆锥的顶点就是记录的 qpos，样本顶面等于 tissue_z，300 µm 标记画在过针轴的 y=0 剖面上。
+- **两段时序正确。** 前 200 帧每帧间隔 40 tick（1 倍速）；后 100 帧覆盖源时间 2.0–2.99 s（0.25 倍速）。8.0 s 处正确切到 `0.25× / SLOW REPLAY`，源时间显示 2.00 s。
+- **镜头切换没有干扰插入段。** 镜头在源时间 1.0–1.92 s 之间推进，插入从 2.0 s 才开始。
+- **底部指标与 truth 逐点一致。** 我抽查了 0 / 1.4 / 2.0 / 2.24 / 2.5 / 3.6 s 六个时刻，深度、接触力、误差全部吻合（例如 2.24 s 为 −125.1 µm，2.5 s 为 +249.3 µm / 5.37 mN / −50.74 µm）。
+- **免责说明到位。** 每帧页脚都注明了&quot;示意装置、软接触、不声称穿刺或硬件&quot;。
+
+## 画面：比上一版好懂得多，但核心镜头还没达到&quot;看到针进入材料&quot;
+
+**1.【主要】剖切面看不出是剖切面。**
+剖面和外表面用的是同一种不透明青色，所以：
+- 2.24 s 时针还在表面上方 125 µm，但在俯视角度下，针尖投影落在顶面区域里，看起来像已经扎进去了；
+- 真正插入以后，针看起来像是贴着一个实心块的正面往下滑。
+
+几何本身没错，但&quot;进入材料&quot;这个信息没有传达出来。修法（只需重新渲染）：
+- 剖面换成截面材质：颜色更深或更饱和，加剖面线或轻微半透明，让它一眼看出是&quot;切开的&quot;；
+- 在剖面顶边（也就是材料表面）加一条细亮线，让针尖在表面上方还是下方一目了然；
+- 可选：把特写镜头的俯角从约 21° 降到 10° 左右，减少表面上方的针尖投影到顶面上的错觉。
+
+**2.【次要】立柱上的 &quot;Z / 01&quot; 文字是镜像的，还被滑块挡住了一部分。** 把文字绕 z 轴转 180°，或者换个位置。
+
+**3.【次要】缺少尺度参照。** 全景图里没有任何比例尺。这套装置按真实毫米尺寸建模，整体只有约 1 cm 高，但看起来像一台台式仪器，观众会误判运动幅度。在全景加一个&quot;5 mm&quot;比例尺，并给特写里样本右侧的刻度尺标上&quot;0.2 mm / tick&quot;。
+
+**4.【次要，文案】慢放段仍沿用 &quot;Stay with the surface.&quot; 这个标题。** 和&quot;02 / INSERTION DETAIL&quot;不太对应，可以换成描述插入的标题。
+
+```json
+{&quot;verdict&quot;:&quot;BLOCK&quot;,&quot;issues&quot;:[
+{&quot;severity&quot;:&quot;major&quot;,&quot;where&quot;:&quot;c1/studio_scene.py 剖面材质与特写机位; insertion-3d.mp4/preview&quot;,&quot;what&quot;:&quot;剖切面与外表面同色且不透明，表面上方的针尖（如 2.24 s 时 −125 µm）投影在顶面上像已插入，插入后又像贴着实心块正面下滑；改为截面材质（深色/剖面线/半透明）、在表面边缘加细亮线，可选把俯角降到约 10°，然后只重新渲染&quot;,&quot;touches_frozen_or_registered&quot;:false},
+{&quot;severity&quot;:&quot;minor&quot;,&quot;where&quot;:&quot;c1/studio_scene.py label(&#x27;Z / 01&#x27;)&quot;,&quot;what&quot;:&quot;立柱文字镜像且被滑块遮挡；绕 z 轴旋转 180° 或换位置&quot;,&quot;touches_frozen_or_registered&quot;:false},
+{&quot;severity&quot;:&quot;minor&quot;,&quot;where&quot;:&quot;overview 与 macro 叠加层&quot;,&quot;what&quot;:&quot;缺少尺度参照，约 1 cm 高的装置会被看成台式仪器；全景加 5 mm 比例尺，特写刻度尺标 0.2 mm/tick&quot;,&quot;touches_frozen_or_registered&quot;:false},
+{&quot;severity&quot;:&quot;minor&quot;,&quot;where&quot;:&quot;c1/compose_studio.py 慢放段文案&quot;,&quot;what&quot;:&quot;慢放段标题仍为 &#x27;Stay with the surface.&#x27;，与 &#x27;02 / INSERTION DETAIL&#x27; 不对应&quot;,&quot;touches_frozen_or_registered&quot;:false}]}
+```
+</pre></details><details class="record"><summary>evidence.json</summary><pre>{
+  &quot;reviewed_commit&quot;: &quot;bf5105d762e609c58dfa2de0c8f9a62f175743da&quot;,
+  &quot;all_required_ci_pass&quot;: true,
+  &quot;runs&quot;: {
+    &quot;Phase C integrity&quot;: {
+      &quot;conclusion&quot;: &quot;success&quot;,
+      &quot;headSha&quot;: &quot;bf5105d762e609c58dfa2de0c8f9a62f175743da&quot;,
+      &quot;name&quot;: &quot;Phase C integrity&quot;,
+      &quot;status&quot;: &quot;completed&quot;,
+      &quot;url&quot;: &quot;https://github.com/Jeffaaay/insertion-vv/actions/runs/38359251651&quot;
+    },
+    &quot;Phase A SIL&quot;: {
+      &quot;conclusion&quot;: &quot;success&quot;,
+      &quot;headSha&quot;: &quot;bf5105d762e609c58dfa2de0c8f9a62f175743da&quot;,
+      &quot;name&quot;: &quot;Phase A SIL&quot;,
+      &quot;status&quot;: &quot;completed&quot;,
+      &quot;url&quot;: &quot;https://github.com/Jeffaaay/insertion-vv/actions/runs/38359251662&quot;
+    },
+    &quot;Phase B C32&quot;: {
+      &quot;conclusion&quot;: &quot;success&quot;,
+      &quot;headSha&quot;: &quot;bf5105d762e609c58dfa2de0c8f9a62f175743da&quot;,
+      &quot;name&quot;: &quot;Phase B C32&quot;,
+      &quot;status&quot;: &quot;completed&quot;,
+      &quot;url&quot;: &quot;https://github.com/Jeffaaay/insertion-vv/actions/runs/38359251641&quot;
+    }
+  }
+}
+</pre></details><details class="record"><summary>local-checks.json</summary><pre>{
   &quot;decoded_frames&quot;: 300,
   &quot;fps&quot;: 25,
   &quot;duration_s&quot;: 12,
@@ -5150,18 +5214,39 @@ feature it before results; GitHub README and journal link the MP4 and poster.
     25,
     47,
     48,
+    56,
     60,
     90,
     199,
     200,
+    250,
     255,
     299
   ],
   &quot;source_tick_mappings_verified&quot;: 300,
   &quot;target_axis_projection_verified&quot;: 300,
+  &quot;overview_scale_mm&quot;: 5,
+  &quot;overview_scale_pixels&quot;: 384,
+  &quot;sample_rule_mm_per_tick&quot;: 0.2,
   &quot;renderer&quot;: &quot;Blender 4.5.3 Cycles / OptiX&quot;,
   &quot;scene_scope&quot;: &quot;illustrative apparatus and sharp needle; sealed physics remains capsule/block soft contact&quot;
 }
+</pre></details><details class="record"><summary>reply-integrity.json</summary><pre>{
+  &quot;conversation_url&quot;: &quot;https://claude.ai/chat/88a45c0b-4051-4fea-8c12-bdfa77bd4de1&quot;,
+  &quot;reviewed_commit&quot;: &quot;bf5105d762e609c58dfa2de0c8f9a62f175743da&quot;,
+  &quot;response_sha256&quot;: &quot;6ea204f02e2aa0369acb25374e68207ab276db09d428176401de9e7aa51df42b&quot;,
+  &quot;transport&quot;: &quot;browser Copy response, copied verbatim; LF with final newline&quot;
+}
+</pre></details><details class="record" open><summary>response-actions.md</summary><pre># Studio round 1 response
+
+The source-data review passed, while visual clarity was blocked. The full reply is preserved separately; the original BLOCK is not replaced by a claimed PASS.
+
+- Assign a darker dedicated material to the cut face and add diagonal section hatching. Highlight the true surface edge and label its projected needle-axis point `SURFACE · 0 µm`. A small white point identifies the recorded tip. Lower the macro elevation to about 10° so above-surface and inserted states are easier to distinguish.
+- Remove the occluded `Z / 01` text from the tower. The unambiguous overlay already explains the single-axis apparatus.
+- Add a 5 mm horizontal, camera-plane scale to the overview, computed from the orthographic camera width (1920 / ortho_scale pixels per millimeter). Label the existing sample rule `0.2 mm / tick`. The scale refers to this illustrative scene, not a claim that the conceptual hardware was built or dimensionally validated.
+- Change the slow-replay title to `Into the sample.`
+
+These are visual-only corrections. Source poses, timing, physics geometry, registered criteria and numerical conclusions remain unchanged. Re-render the 300 frames and regenerate the video, stills, manifest and public artifact seal. At source 2.24 s the −125.1 µm tip must be visibly above the marked surface; at 2.5 s and 3.6 s it must be below the surface. Inspect both cases before requesting closure.
 </pre></details><details class="record" open><summary>round-1.md</summary><pre># Studio presentation review request
 
 ## User request

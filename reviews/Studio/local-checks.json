@@ -14,15 +14,20 @@
     25,
     47,
     48,
+    56,
     60,
     90,
     199,
     200,
+    250,
     255,
     299
   ],
   "source_tick_mappings_verified": 300,
   "target_axis_projection_verified": 300,
+  "overview_scale_mm": 5,
+  "overview_scale_pixels": 384,
+  "sample_rule_mm_per_tick": 0.2,
   "renderer": "Blender 4.5.3 Cycles / OptiX",
   "scene_scope": "illustrative apparatus and sharp needle; sealed physics remains capsule/block soft contact"
 }
