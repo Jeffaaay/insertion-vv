@@ -794,3 +794,40 @@ B1.3 registers [the full-input protocol](PROTOCOL.md) with a session ID to rejec
 previous-run responses, exact tick echoes and CRC. Its 41 B / 29 B request/reply
 requires at least 1.5191 ms at 460800 baud. Firmware timing will use separate board
 replay; no hardware has been detected or measured at this checkpoint.
+
+## B1.4 Rust orchestration and FFI equivalence
+
+Rust 1.99.0 / edition 2024 adds separate Plant/Controller traits, a bounded Python
+plant subprocess, a checked C-library FFI backend and the framed serial/TCP client.
+The Python subprocess uses the frozen MuJoCo implementation; no physics, sensor,
+controller or evaluator equation is reimplemented in Rust. Binary64 Sensors stay
+unrounded through local IPC and are cast once at the C32 boundary. Python returns
+canonical record bytes, avoiding differences between JSON float formatters.
+
+Local `cargo fmt`, `clippy -D warnings`, ten Rust tests, release build, twenty
+Phase B Python tests, full two-profile `harness.ci`, and the Arm GNU 14.2 Cortex-M7
+compile pass. `sim.ci` still passes all 170 Phase A tests and eight experiments.
+Both C32 trace/truth pairs equal B1.2 byte-for-byte; all eight local Phase A
+trace/truth pairs are unchanged. These local results precede hosted confirmation.
+
+| Local Windows seed 42 | primary | paper_effective |
+|---|---:|---:|
+| ctypes vs Rust FFI trace/truth | exact / exact | exact / exact |
+| Contact RMS (µm) | 1.121992453479 | 7.349675690702 |
+| Nominal verdict | PASS | PASS |
+
+Local trace SHA-256: primary
+`0a572dbc4985c969883c0a3d4e0eba94ea784b29e891cd0c6faaa77cfa003466`, diagnostic
+`b867cb2ac0af7ab4ebde29fecc8df2f293aeaf334143481891f40d3038018e87`.
+These are local provenance, not replacements for canonical Linux numbers.
+Evidence: `artifacts/b1-rust-local/ci_report.json` and
+`artifacts/b1-rust-phase-a/ci_summary.json` (plus individual metrics/traces).
+
+Rust compiler/target/executable hash and C numerical-build hash are explicit.
+Local Windows Rust uses gnullvm with llvm-mingw; hosted Windows uses MSVC Rust.
+Both adapters on each host load the same checksum-verified C library. The C flags,
+source and arithmetic remain unchanged. Tests reject CRC/bit corruption, truncated
+or oversized packets, incorrect sessions/ticks, nonfinite commands, timeouts,
+missing FINISH acknowledgements and malformed metric/sample metadata. Failed
+transport yields INVALID with partial evidence. The serial backend is not yet
+hardware-validated; protocol loopback unit tests do not measure UART timing.

@@ -14,6 +14,7 @@ from tools.build_controller import build
 
 from .compare import compare
 from .run import run
+from .rust_run import run as run_rust
 
 
 def main():
@@ -25,6 +26,11 @@ def main():
         raise ValueError("CI output must be empty; preserve prior runs")
     root.mkdir(parents=True, exist_ok=True)
     build(root / "controller-build")
+    executable = Path("harness/target/release") / (
+        "insertion-harness.exe" if os.name == "nt" else "insertion-harness"
+    )
+    if not executable.is_file():
+        raise ValueError("build the Rust release harness before running CI")
     env = {**os.environ, "C32_BUILD": str(root / "controller-build")}
     subprocess.run(
         [sys.executable, "-m", "pytest", "-q", "harness/tests", f"--junitxml={root / 'tests.xml'}"],
@@ -40,6 +46,14 @@ def main():
             root / profile / "preview", root / profile / "preview_c32", reference=True
         )
         report["profiles"][profile] = {"reference": reference, "c32": c32, "comparison": comparison}
+        rust = run_rust(cfg, root / profile / "rust_ffi", root / "controller-build", executable)
+        ffi_comparison = compare(root / profile / "preview_c32", root / profile / "rust_ffi")
+        report["profiles"][profile].update(rust_ffi=rust, ffi_comparison=ffi_comparison)
+        if (
+            ffi_comparison["comparison"] != "same-build-bitwise"
+            or ffi_comparison["status"] != "PASS"
+        ):
+            report["status"] = "FAIL"
         if comparison["status"] != "PASS":
             report["status"] = "FAIL"
     (root / "ci_report.json").write_text(

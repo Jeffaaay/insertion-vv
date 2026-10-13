@@ -29,6 +29,14 @@ jobs:
           cache-dependency-path: requirements-lock.txt
       - name: Install frozen simulation dependencies
         run: python -m pip install -r requirements-lock.txt
+      - name: Install pinned Rust toolchain
+        run: rustup toolchain install 1.99.0 --profile minimal --component rustfmt --component clippy
+      - name: Check and build Rust harness
+        run: |
+          cargo +1.99.0 fmt --manifest-path harness/Cargo.toml --check
+          cargo +1.99.0 clippy --manifest-path harness/Cargo.toml --locked --all-targets -- -D warnings
+          cargo +1.99.0 test --manifest-path harness/Cargo.toml --locked
+          cargo +1.99.0 build --manifest-path harness/Cargo.toml --locked --release
       - name: Build core, test adapter and compare C32 against Python preview
         run: python -m harness.ci --output artifacts/phase-b
       - uses: actions/upload-artifact@v4
@@ -59,6 +67,10 @@ jobs:
         run: python -m harness.compare artifacts/linux/primary/preview_c32 artifacts/windows/primary/preview_c32 --output artifacts/comparison/primary.json
       - name: Compare diagnostic with registered C32 budget
         run: python -m harness.compare artifacts/linux/paper_effective/preview_c32 artifacts/windows/paper_effective/preview_c32 --output artifacts/comparison/paper_effective.json
+      - name: Compare Rust FFI primary across platforms
+        run: python -m harness.compare artifacts/linux/primary/rust_ffi artifacts/windows/primary/rust_ffi --output artifacts/comparison/rust-primary.json
+      - name: Compare Rust FFI diagnostic across platforms
+        run: python -m harness.compare artifacts/linux/paper_effective/rust_ffi artifacts/windows/paper_effective/rust_ffi --output artifacts/comparison/rust-paper_effective.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:

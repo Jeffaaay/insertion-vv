@@ -5,9 +5,30 @@ import json
 import math
 from pathlib import Path
 
-from tools.compare_traces import TRACE_FIELDS, TRUTH_FIELDS, read_json, read_run
+from tools.compare_traces import (
+    TRACE_FIELDS,
+    TRUTH_FIELDS,
+    WINDOW_FIELDS,
+    finite_number,
+    read_json,
+    read_run,
+)
 
 CONTRACT = read_json(Path(__file__).with_name("contract.json"))
+
+
+def validate_metrics(metrics, rows):
+    for window in ("free", "contact"):
+        values = metrics[window]
+        if values.keys() != WINDOW_FIELDS:
+            raise ValueError(f"incomplete metric schema: {window}")
+        start, end = metrics["verdict_contract"][window + "_window_us"]
+        count = sum(start <= row["time_us"] < end for row in rows["truth"])
+        if type(values["samples"]) is not int or values["samples"] != count or count <= 0:
+            raise ValueError(f"invalid sample count: {window}")
+        for key in WINDOW_FIELDS - {"samples"}:
+            if not finite_number(values[key]) or values[key] < 0:
+                raise ValueError(f"invalid physical metric: {window}.{key}")
 
 
 def stats(values):
@@ -21,6 +42,8 @@ def compare(left, right, reference=False):
     left, right = Path(left), Path(right)
     a, aa = read_run(left)
     b, bb = read_run(right)
+    validate_metrics(a, aa)
+    validate_metrics(b, bb)
     if (a["controller"], b["controller"]) != (
         "preview" if reference else "preview_c32",
         "preview_c32",

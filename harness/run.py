@@ -25,7 +25,11 @@ def phase_b_source_hash():
         REPO / "firmware/ctrl/controller.c",
         REPO / "firmware/ctrl/controller.h",
         REPO / "tools/build_controller.py",
+        REPO / "harness/Cargo.toml",
+        REPO / "harness/Cargo.lock",
+        REPO / "harness/build.rs",
     ]
+    paths += sorted((REPO / "harness/src").glob("*.rs"))
     return sha256(
         source_hash().encode()
         + b"".join(
@@ -86,7 +90,7 @@ def capture(cfg, controller, write_truth=True):
     )
 
 
-def publish(cfg, output, first, second, controller):
+def publish(cfg, output, first, second, controller, runtime_provenance=None, wall_scope=None):
     output = Path(output)
     output.mkdir(parents=True, exist_ok=True)
     if any(output.iterdir()):
@@ -152,7 +156,7 @@ def publish(cfg, output, first, second, controller):
         "wall_time_us": {
             "samples": len(first.wall_ns),
             "per_tick_file": "wall_time.csv",
-            "scope": "C32 adapter + evaluation + MuJoCo/sensors; excludes file I/O",
+            "scope": wall_scope or "C32 adapter + evaluation + MuJoCo/sensors; excludes file I/O",
             "mean": float(times.mean()) if times.size else None,
             "p50": float(np.percentile(times, 50)) if times.size else None,
             "p95": float(np.percentile(times, 95)) if times.size else None,
@@ -172,6 +176,8 @@ def publish(cfg, output, first, second, controller):
             contact, complete=complete, reproducible=reproducible, safety_stop=first.safety_stop
         ),
     }
+    if runtime_provenance is not None:
+        metrics["runtime_provenance"] = runtime_provenance
     output.joinpath("metrics.json").write_text(
         json.dumps(metrics, indent=2, allow_nan=False) + "\n", encoding="utf-8"
     )

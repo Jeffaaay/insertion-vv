@@ -197,7 +197,7 @@ a real-time 1 kHz closed loop. Board replay supplies separate timing evidence.
 Rust owns orchestration, not physics. Python MuJoCo is a child process with bounded
 length-prefixed binary messages over stdin/stdout; stderr is diagnostics only.
 Every packet starts with a little-endian u32 byte count (maximum 1 MiB), then a
-u8 operation. RESET/OBSERVE/STEP/FINISH keep one request outstanding, validate ticks,
+u8 operation. RESET/STEP/FINISH keep one request outstanding, validate ticks,
 and abort on timeout/EOF/exception. This local IPC uses binary64 sensor values;
 only Controller C32/serial boundaries quantize them to binary32.
 
@@ -205,5 +205,26 @@ Python evaluates truth and uses the same canonical JSON encoder as Phase A. It
 returns canonical trace/truth byte records to the Rust logger, so decimal formatting
 differences in JSON libraries cannot masquerade as numerical divergence. Rust passes
 only a typed Sensors capability to Controller; truth/record bytes remain on the
-plant/evaluation side. Metrics use the frozen Python evaluator. The exact IPC
-operation layouts will be documented with the Rust implementation at B1.4.
+plant/evaluation side. Metrics use the frozen Python evaluator.
+
+### B1.4 local pipe layouts
+
+The u32 packet length includes the operation byte, excludes its own four bytes,
+and must be in [1, 1048576]. All numbers are little-endian. `Sensors64` is 41 bytes:
+four u32 tick/time/capture/sequence values, three binary64 needle-position,
+needle-velocity/surface-position values, then the same u8 flags as UART. No
+binary32 rounding occurs on the pipe. Invalid measurements use zero placeholders.
+
+| Request | Payload after operation | Response | Payload after operation |
+|---|---|---|---|
+| 01 RESET | u64 seed, nominal 42 | 81 | Sensors64 |
+| 02 STEP | u32 tick, binary32 command force N | 82 | next Sensors64, u32 trace-byte-count, trace bytes, u32 truth-byte-count, truth bytes |
+| 03 FINISH | u32 completed ticks, exactly 8000 | 83 | same u32 count |
+
+STEP is exactly one 1000 µs plant step; pre-step records retain Phase A semantics.
+FF is a terminal UTF-8 error response, never a control command. Python stdout is
+binary protocol only; stderr is diagnostics. Rust accepts partial pipe reads,
+enforces a 5 s first-response and 2 s subsequent total request deadline, then
+kills and reaps the child on exit. Separate bounded reader/writer channels prevent
+a blocked pipe write from bypassing the request deadline. No skipped ticks or
+automatic retries. Host timestamps/transport logs remain outside canonical SHA.

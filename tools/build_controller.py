@@ -60,6 +60,19 @@ def build(output, cc=None, arm_cc=None):
         },
         "core_tests": "PASS",
     }
+    numerical_build = {
+        "compiler": compiler.splitlines()[0],
+        "flags": FLAGS,
+        "sources": sources,
+        "math_link": "-lm; compiler target runtime (no fast-math, no contraction)",
+    }
+    report["numerical_build"] = numerical_build
+    report["numerical_build_sha256"] = hashlib.sha256(
+        (json.dumps(numerical_build, sort_keys=True, separators=(",", ":")) + "\n").encode()
+    ).hexdigest()
+    report["controller_source_sha256"] = hashlib.sha256(
+        (CTRL / "controller.c").read_bytes() + b"\0" + (CTRL / "controller.h").read_bytes()
+    ).hexdigest()
     if arm_cc:
         obj = output / "controller-cortex-m7.o"
         subprocess.run(
