@@ -6,6 +6,7 @@ remain labeled browser captures, rather than fabricated CLI event streams.
 
 import argparse
 import html
+import re
 from pathlib import Path
 
 
@@ -21,6 +22,9 @@ def render(root: Path, output: Path) -> None:
                 continue
             text = path.read_text(encoding="utf-8-sig")
             tone = "escalate" if path.name == "ESCALATION.md" else "record"
+            explicit = re.findall(r'"verdict"\s*:\s*"(PASS|BLOCK|ESCALATE)"', text)
+            if explicit:
+                tone = explicit[-1].lower()
             # Data/tool records are collapsed; prose remains immediately visible.
             opened = "" if path.suffix in (".json", ".jsonl") else " open"
             cards.append(
@@ -35,7 +39,9 @@ def render(root: Path, output: Path) -> None:
 <style>body{max-width:1050px;margin:40px auto;padding:0 20px;background:#f5f6fa;
 color:#172235;font:16px/1.65 system-ui}h1{font-size:28px}details{background:white;
 padding:16px 20px;margin:16px 0;border-left:4px solid #4879ad;border-radius:8px}
-details.escalate{border-color:#c56c20;background:#fff6e9}summary{cursor:pointer;
+details.escalate{border-color:#c56c20;background:#fff6e9}
+details.pass{border-color:#2d8878;background:#f2faf6}
+details.block{border-color:#c45343;background:#fff4f0}summary{cursor:pointer;
 font-weight:650}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6
 ui-monospace,monospace}header p{color:#556477}</style><header>
 <h1>Phase C SIL · 审阅记录</h1><p>事实、外部反馈和未决项。记录存在不代表里程碑通过。

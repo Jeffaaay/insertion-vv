@@ -1,0 +1,1206 @@
+{
+  "matrix_sha256": "cc833c35864f0f8cfa4d67671bf605a129c2b18a5f59710be41ee11e2eb98aa9",
+  "run_count": 3615,
+  "counts": {
+    "PASS": 2730,
+    "FAIL": 789,
+    "INVALID": 96
+  },
+  "completed_reproducible": 3519,
+  "repeat_hash_pairs_match": 3615,
+  "identity_checks": 1106,
+  "identity_failures": 0,
+  "nominal": {
+    "status": "PASS",
+    "contact": {
+      "peak_abs_edot_mm_s": 0.07268500727113071,
+      "peak_contact_force_mn": 4.853382017220449,
+      "rms_e_um": 1.1225636065318934,
+      "samples": 5000
+    }
+  },
+  "boundaries": {
+    "F1": {
+      "levels": [
+        {
+          "level": 1,
+          "status": "PASS"
+        },
+        {
+          "level": 5,
+          "status": "PASS"
+        },
+        {
+          "level": 15,
+          "status": "PASS"
+        },
+        {
+          "level": 30,
+          "status": "PASS"
+        },
+        {
+          "level": 60,
+          "status": "PASS"
+        },
+        {
+          "level": 120,
+          "status": "PASS"
+        }
+      ],
+      "first_fail": null,
+      "preceding_level_passed": false,
+      "nominal_status": "PASS",
+      "nonmonotonic": false
+    },
+    "F2": {
+      "levels": [
+        {
+          "level": 1,
+          "status": "PASS"
+        },
+        {
+          "level": 5,
+          "status": "PASS"
+        },
+        {
+          "level": 10,
+          "status": "PASS"
+        },
+        {
+          "level": 25,
+          "status": "PASS"
+        },
+        {
+          "level": 50,
+          "status": "PASS"
+        }
+      ],
+      "first_fail": null,
+      "preceding_level_passed": false,
+      "nominal_status": "PASS",
+      "nonmonotonic": false
+    },
+    "F3": {
+      "levels": [
+        {
+          "level": 0.5,
+          "status": "PASS"
+        },
+        {
+          "level": 1,
+          "status": "PASS"
+        },
+        {
+          "level": 2,
+          "status": "PASS"
+        },
+        {
+          "level": 5,
+          "status": "PASS"
+        },
+        {
+          "level": 10,
+          "status": "PASS"
+        }
+      ],
+      "first_fail": null,
+      "preceding_level_passed": false,
+      "nominal_status": "PASS",
+      "nonmonotonic": false
+    },
+    "F4": {
+      "levels": [
+        {
+          "level": 1000,
+          "status": "PASS"
+        },
+        {
+          "level": 200,
+          "status": "PASS"
+        },
+        {
+          "level": 100,
+          "status": "PASS"
+        },
+        {
+          "level": 50,
+          "status": "PASS"
+        },
+        {
+          "level": 25,
+          "status": "PASS"
+        }
+      ],
+      "first_fail": null,
+      "preceding_level_passed": false,
+      "nominal_status": "PASS",
+      "nonmonotonic": false
+    },
+    "F5": {
+      "levels": [
+        {
+          "level": 1.3,
+          "status": "FAIL"
+        },
+        {
+          "level": 1.4,
+          "status": "FAIL"
+        },
+        {
+          "level": 1.6,
+          "status": "FAIL"
+        },
+        {
+          "level": 1.8,
+          "status": "FAIL"
+        }
+      ],
+      "first_fail": 1.3,
+      "preceding_level_passed": false,
+      "nominal_status": "PASS",
+      "nonmonotonic": false
+    },
+    "F6": {
+      "levels": [
+        {
+          "level": 1,
+          "status": "PASS"
+        },
+        {
+          "level": 5,
+          "status": "PASS"
+        },
+        {
+          "level": 15,
+          "status": "PASS"
+        },
+        {
+          "level": 50,
+          "status": "PASS"
+        }
+      ],
+      "first_fail": null,
+      "preceding_level_passed": false,
+      "nominal_status": "PASS",
+      "nonmonotonic": false
+    },
+    "F7": {
+      "levels": [
+        {
+          "level": 100,
+          "status": "PASS"
+        },
+        {
+          "level": 50,
+          "status": "FAIL"
+        },
+        {
+          "level": 25,
+          "status": "FAIL"
+        },
+        {
+          "level": 10,
+          "status": "FAIL"
+        }
+      ],
+      "first_fail": 50,
+      "preceding_level_passed": true,
+      "nominal_status": "PASS",
+      "nonmonotonic": false
+    },
+    "F8": {
+      "levels": [
+        {
+          "level": 24,
+          "status": "PASS"
+        },
+        {
+          "level": 16,
+          "status": "PASS"
+        },
+        {
+          "level": 12,
+          "status": "PASS"
+        },
+        {
+          "level": 10,
+          "status": "PASS"
+        }
+      ],
+      "first_fail": null,
+      "preceding_level_passed": false,
+      "nominal_status": "PASS",
+      "nonmonotonic": false
+    }
+  },
+  "predictions": {
+    "P1": {
+      "supported": false,
+      "counts": {
+        "PASS": 4
+      },
+      "total": 4
+    },
+    "P2": {
+      "supported": true,
+      "counts": {
+        "FAIL": 2
+      },
+      "total": 2
+    },
+    "P3": {
+      "supported": false,
+      "counts": {
+        "PASS": 8
+      },
+      "total": 8
+    },
+    "P4": {
+      "supported": false,
+      "faults": {
+        "F1": {
+          "max_contact_rms_um": {
+            "200": 1.1571334696582425,
+            "1500": 1.1225392235309648,
+            "2400": 4.7631421702845325,
+            "5000": 13.318464877177203
+          },
+          "worst_onsets_ms": [
+            5000
+          ]
+        },
+        "F2": {
+          "max_contact_rms_um": {
+            "200": 1.1225644255030174,
+            "1500": 1.1225636065318934,
+            "2400": 1.1225636065318934,
+            "5000": 1.1230268157393246
+          },
+          "worst_onsets_ms": [
+            5000
+          ]
+        },
+        "F3": {
+          "max_contact_rms_um": {
+            "200": 1.1225609896075475,
+            "1500": 1.1223904605264328,
+            "2400": 1.121065686577755,
+            "5000": 1.1241242778655742
+          },
+          "worst_onsets_ms": [
+            5000
+          ]
+        },
+        "F6": {
+          "max_contact_rms_um": {
+            "200": 1.1227056611310653,
+            "1500": 1.1225627822147473,
+            "2400": 1.2260592027544615,
+            "5000": 1.17083664495732
+          },
+          "worst_onsets_ms": [
+            2400
+          ]
+        }
+      }
+    },
+    "P5": {
+      "supported": true,
+      "leaders": [
+        "no-delay"
+      ],
+      "ablations": {
+        "no-delay": {
+          "total_flips": 280,
+          "faults": {
+            "F1": {
+              "PASS->FAIL": 24
+            },
+            "F2": {
+              "PASS->FAIL": 100
+            },
+            "F3": {
+              "PASS->FAIL": 100
+            },
+            "F4": {
+              "PASS->FAIL": 20
+            },
+            "F5": {
+              "FAIL->FAIL": 4
+            },
+            "F6": {
+              "PASS->FAIL": 16
+            },
+            "F7": {
+              "FAIL->FAIL": 12,
+              "PASS->FAIL": 4
+            },
+            "F8": {
+              "PASS->FAIL": 16
+            }
+          }
+        },
+        "no-jitter-model": {
+          "total_flips": 0,
+          "faults": {
+            "F1": {
+              "PASS->PASS": 24
+            },
+            "F2": {
+              "PASS->PASS": 100
+            },
+            "F3": {
+              "PASS->PASS": 100
+            },
+            "F4": {
+              "PASS->PASS": 20
+            },
+            "F5": {
+              "FAIL->FAIL": 4
+            },
+            "F6": {
+              "PASS->PASS": 16
+            },
+            "F7": {
+              "FAIL->FAIL": 12,
+              "PASS->PASS": 4
+            },
+            "F8": {
+              "PASS->PASS": 16
+            }
+          }
+        },
+        "no-quantization": {
+          "total_flips": 0,
+          "faults": {
+            "F1": {
+              "PASS->PASS": 24
+            },
+            "F2": {
+              "PASS->PASS": 100
+            },
+            "F3": {
+              "PASS->PASS": 100
+            },
+            "F4": {
+              "PASS->PASS": 20
+            },
+            "F5": {
+              "FAIL->FAIL": 4
+            },
+            "F6": {
+              "PASS->PASS": 16
+            },
+            "F7": {
+              "FAIL->FAIL": 12,
+              "PASS->PASS": 4
+            },
+            "F8": {
+              "PASS->PASS": 16
+            }
+          }
+        },
+        "no-noise": {
+          "total_flips": 0,
+          "faults": {
+            "F1": {
+              "PASS->PASS": 24
+            },
+            "F2": {
+              "PASS->PASS": 100
+            },
+            "F3": {
+              "PASS->PASS": 100
+            },
+            "F4": {
+              "PASS->PASS": 20
+            },
+            "F5": {
+              "FAIL->FAIL": 4
+            },
+            "F6": {
+              "PASS->PASS": 16
+            },
+            "F7": {
+              "FAIL->FAIL": 12,
+              "PASS->PASS": 4
+            },
+            "F8": {
+              "PASS->PASS": 16
+            }
+          }
+        },
+        "no-dropped-frame-model": {
+          "total_flips": 0,
+          "faults": {
+            "F1": {
+              "PASS->PASS": 24
+            },
+            "F2": {
+              "PASS->PASS": 100
+            },
+            "F3": {
+              "PASS->PASS": 100
+            },
+            "F4": {
+              "PASS->PASS": 20
+            },
+            "F5": {
+              "FAIL->FAIL": 4
+            },
+            "F6": {
+              "PASS->PASS": 16
+            },
+            "F7": {
+              "PASS->PASS": 4,
+              "FAIL->FAIL": 12
+            },
+            "F8": {
+              "PASS->PASS": 16
+            }
+          }
+        }
+      }
+    }
+  },
+  "video_selection": {
+    "F1": {
+      "run_id": "936fad1f3eb8be94db2669e9",
+      "scenario": {
+        "ablation": "baseline",
+        "contact_profile": "primary",
+        "controller": "preview",
+        "fault": "F1",
+        "level": 120,
+        "onset_ms": 5000,
+        "seed": 42
+      },
+      "boundary_observed": false,
+      "contact": {
+        "peak_abs_edot_mm_s": 0.7698502881236784,
+        "peak_contact_force_mn": 6.265671107391031,
+        "rms_e_um": 13.318464877177203,
+        "samples": 5000
+      }
+    },
+    "F2": {
+      "run_id": "cb371aa6a8b4699c44a67463",
+      "scenario": {
+        "ablation": "baseline",
+        "contact_profile": "primary",
+        "controller": "preview",
+        "fault": "F2",
+        "level": 50,
+        "onset_ms": 5000,
+        "seed": 44
+      },
+      "boundary_observed": false,
+      "contact": {
+        "peak_abs_edot_mm_s": 0.07268500727113071,
+        "peak_contact_force_mn": 4.853382017220449,
+        "rms_e_um": 1.1230268157393246,
+        "samples": 5000
+      }
+    },
+    "F3": {
+      "run_id": "4cc48140796b57154c2914cd",
+      "scenario": {
+        "ablation": "baseline",
+        "contact_profile": "primary",
+        "controller": "preview",
+        "fault": "F3",
+        "level": 10,
+        "onset_ms": 5000,
+        "seed": 45
+      },
+      "boundary_observed": false,
+      "contact": {
+        "peak_abs_edot_mm_s": 0.07268500727113071,
+        "peak_contact_force_mn": 4.853382017220449,
+        "rms_e_um": 1.1241242778655742,
+        "samples": 5000
+      }
+    },
+    "F4": {
+      "run_id": "3e496a24b954adefa053a2e9",
+      "scenario": {
+        "ablation": "baseline",
+        "contact_profile": "primary",
+        "controller": "preview",
+        "fault": "F4",
+        "level": 25,
+        "onset_ms": 200,
+        "seed": 42
+      },
+      "boundary_observed": false,
+      "contact": {
+        "peak_abs_edot_mm_s": 0.09430673362532743,
+        "peak_contact_force_mn": 4.84214216542382,
+        "rms_e_um": 1.440954060609738,
+        "samples": 5000
+      }
+    },
+    "F5": {
+      "run_id": "5cbe77e0ab78b8f2363885a1",
+      "scenario": {
+        "ablation": "baseline",
+        "contact_profile": "primary",
+        "controller": "preview",
+        "fault": "F5",
+        "level": 1.3,
+        "onset_ms": 2000,
+        "seed": 42
+      },
+      "boundary_observed": true,
+      "contact": {
+        "peak_abs_edot_mm_s": 1.1312795360687518,
+        "peak_contact_force_mn": 6.931212520704264,
+        "rms_e_um": 52.68387453365554,
+        "samples": 5000
+      }
+    },
+    "F6": {
+      "run_id": "c70974d5c087ce4ed6d543a9",
+      "scenario": {
+        "ablation": "baseline",
+        "contact_profile": "primary",
+        "controller": "preview",
+        "fault": "F6",
+        "level": 50,
+        "onset_ms": 2400,
+        "seed": 42
+      },
+      "boundary_observed": false,
+      "contact": {
+        "peak_abs_edot_mm_s": 0.06303488776690665,
+        "peak_contact_force_mn": 4.85112511683934,
+        "rms_e_um": 1.2260592027544615,
+        "samples": 5000
+      }
+    },
+    "F7": {
+      "run_id": "d52175ce5d9f564540106f2a",
+      "scenario": {
+        "ablation": "baseline",
+        "contact_profile": "primary",
+        "controller": "preview",
+        "fault": "F7",
+        "level": 50,
+        "onset_ms": 200,
+        "seed": 42
+      },
+      "boundary_observed": true,
+      "contact": {
+        "peak_abs_edot_mm_s": 0.009091717363080964,
+        "peak_contact_force_mn": 2.8934370711500366,
+        "rms_e_um": 120.48480974445947,
+        "samples": 5000
+      }
+    },
+    "F8": {
+      "run_id": "4e5d669d00e7c45816ca858d",
+      "scenario": {
+        "ablation": "baseline",
+        "contact_profile": "primary",
+        "controller": "preview",
+        "fault": "F8",
+        "level": 10,
+        "onset_ms": 5000,
+        "seed": 42
+      },
+      "boundary_observed": false,
+      "contact": {
+        "peak_abs_edot_mm_s": 0.07268500727113071,
+        "peak_contact_force_mn": 4.853382017220449,
+        "rms_e_um": 1.125633844098207,
+        "samples": 5000
+      }
+    }
+  },
+  "c32_comparison": {
+    "total_pairs": 1782,
+    "valid_pairs": 1686,
+    "matching_pairs": 1686,
+    "disagreeing_pairs": 0,
+    "invalid_pairs": 96,
+    "disagreements": [],
+    "invalid_pairs_detail": [
+      {
+        "python": "05212ed16f42ad9aa87d8d66",
+        "c32": "018fbc060900b86e9e067e2a",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 1501"
+      },
+      {
+        "python": "08c968dc09adf544c687b8af",
+        "c32": "031d82178fc88b84b4eb696a",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 2415"
+      },
+      {
+        "python": "0aeff8e9881602460e674cc9",
+        "c32": "ae477d3e085d4571b1e8086d",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 2450"
+      },
+      {
+        "python": "0c0c04bf4a4fec9161c804db",
+        "c32": "c35b5c5eaaaf597deb8df6bf",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 5050"
+      },
+      {
+        "python": "0e7539d38858ad3e443f0992",
+        "c32": "e92d118c9bfff8cfef1219ec",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 2415"
+      },
+      {
+        "python": "13b4084cb64e6061057569b8",
+        "c32": "ff699f8940bfee62046c024e",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 2401"
+      },
+      {
+        "python": "14e1c7e815e9931c8ad2390a",
+        "c32": "facad4a331fa25405abc79d2",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 1550"
+      },
+      {
+        "python": "1604e2e48923c2ca696f4aae",
+        "c32": "08338335d4a2ebf8f3302cdb",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 205"
+      },
+      {
+        "python": "16da8fc22d1ddf4ac24dbeb9",
+        "c32": "af88fdea2272c11b17d18c61",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 1501"
+      },
+      {
+        "python": "1b8f3172c445eb4580d55290",
+        "c32": "1f7e6412326ed02c70973e21",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 201"
+      },
+      {
+        "python": "1be02f9de612f7796cae934f",
+        "c32": "3718bc560b39602458b02371",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 5015"
+      },
+      {
+        "python": "1cd1faa50b3ef9f1153d00a5",
+        "c32": "5c9a03b22ec46f72e8150d5b",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 1550"
+      },
+      {
+        "python": "20b5e1e5c1be415e07cbb0b3",
+        "c32": "e5b8aafd42beceba690f65c7",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 5050"
+      },
+      {
+        "python": "215481f580a682b3da51cc91",
+        "c32": "e8f4f8f97c8172d21ce96f03",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 2450"
+      },
+      {
+        "python": "22d9ad9d247d0207628c6739",
+        "c32": "f68d752c0ba95dff92ca5f01",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 5050"
+      },
+      {
+        "python": "2f257a24e28fad5823d91a8f",
+        "c32": "123bfb22469f4193b1f380db",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 215"
+      },
+      {
+        "python": "307b06a4bd00e79f0c7cbb26",
+        "c32": "a7aa4092f1304ba2806d057e",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 250"
+      },
+      {
+        "python": "314363b66788e02c793d2b6c",
+        "c32": "5f3a9f734918b62855bcdbc5",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 1505"
+      },
+      {
+        "python": "3ddc874bdd2ee015c2c2051a",
+        "c32": "320fb416a4caa9b7541ab933",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 2401"
+      },
+      {
+        "python": "40b6d45f3af677e15aa55b62",
+        "c32": "735c906fe63b9d76aaa5ab58",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 5015"
+      },
+      {
+        "python": "413787ef2f2f5c981ef9b682",
+        "c32": "d78c868305dfdc4c33566bf3",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 1505"
+      },
+      {
+        "python": "4235dc356cc1ff585fdd2b15",
+        "c32": "3faad1f9a3a092091fecb2b6",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 5005"
+      },
+      {
+        "python": "42a9639a13e9c74e505b79fa",
+        "c32": "de1b88dc2625e7f2e6716aca",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 1515"
+      },
+      {
+        "python": "47a64f4dc0aa945851effac3",
+        "c32": "f09ce17587fc34568d948303",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 2405"
+      },
+      {
+        "python": "4deff8e82a0f4dac709fb8a0",
+        "c32": "2fb1a9777382c93f63a00ae7",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 201"
+      },
+      {
+        "python": "547cfc6af5f5595592a618fb",
+        "c32": "4a23c4c6e159059713b04e60",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 5005"
+      },
+      {
+        "python": "56b8022b9e7a670d8ad22f2b",
+        "c32": "051331c47c0ac818ce658530",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 5015"
+      },
+      {
+        "python": "586e7fab127deef56fecbf7e",
+        "c32": "ad0f890248d0b9799f3a90a0",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 5005"
+      },
+      {
+        "python": "5a88c2aaf46db22fe57cd966",
+        "c32": "87fe7ca21500c4339d8faa38",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 215"
+      },
+      {
+        "python": "5bda9212bf5929c55a7292ee",
+        "c32": "0e3b539382f689e389252b9e",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 5001"
+      },
+      {
+        "python": "5bf38b5b0813feaf095c79c1",
+        "c32": "5a2101377985d15471cb83e1",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 1550"
+      },
+      {
+        "python": "5eeee162bdec53bdd8137544",
+        "c32": "45ec9fb7ac984cb2bc056f4b",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 1505"
+      },
+      {
+        "python": "645722dd8ee7e0cd40b050d4",
+        "c32": "c09b95409dcd8351f380841a",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 2450"
+      },
+      {
+        "python": "6a6eea2fcd2d91e94dc06693",
+        "c32": "820f7a45df413c816cae61b4",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 1505"
+      },
+      {
+        "python": "6a9e10e153588add42b64319",
+        "c32": "b6b374d648091353ec7d744c",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 250"
+      },
+      {
+        "python": "6be1069dbc5c6b6507075082",
+        "c32": "c8ec277961eec2ce57bac3a2",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 5015"
+      },
+      {
+        "python": "6f35f040fa7f667a378c368b",
+        "c32": "8e05be545e54799679635708",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 2415"
+      },
+      {
+        "python": "76ee03036cca8df348bd19df",
+        "c32": "d18047f0b895291794db9474",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 2401"
+      },
+      {
+        "python": "7d517080da0e5527212740cc",
+        "c32": "edab3e6d470f90c34cf8490d",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 250"
+      },
+      {
+        "python": "7e48acc3d787707a31650966",
+        "c32": "019c5d6d8c213be25022dd0b",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 215"
+      },
+      {
+        "python": "7ed8dc8fe013325241aa19e8",
+        "c32": "3de786145534d11d95000bf5",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 5001"
+      },
+      {
+        "python": "803d40dff93516b94a0e9ad0",
+        "c32": "8e3666be32c366f8c2b350fb",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 2405"
+      },
+      {
+        "python": "8083446d3e12871d2fdc3a82",
+        "c32": "d71367e911232a19b9e39072",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 2405"
+      },
+      {
+        "python": "8424706028e8d875fe82d25a",
+        "c32": "99fda18f2015592fbb2fe378",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 250"
+      },
+      {
+        "python": "844d3f87942d08d428d2718e",
+        "c32": "c5498a8a763b7e4cbba99557",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 5001"
+      },
+      {
+        "python": "8656f0500c7c57980da41f92",
+        "c32": "780e502d8fa16e0ae6718d40",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 1515"
+      },
+      {
+        "python": "8abeae45be2b1f2177d2f993",
+        "c32": "7589b013ce0cebcf47b58c76",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 2405"
+      },
+      {
+        "python": "8e2014204fe9e112b1caeb56",
+        "c32": "c53442370f6233a7a81a715c",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 215"
+      },
+      {
+        "python": "91b9fdff080772934758a2d9",
+        "c32": "d27af7547498bb47ebcfa608",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 2415"
+      },
+      {
+        "python": "923618270f86e590b672c061",
+        "c32": "363662716ac11a3012eed8ab",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 201"
+      },
+      {
+        "python": "93711e3879a9b76760d5b1f8",
+        "c32": "435243b27dcd334ca0713760",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 1550"
+      },
+      {
+        "python": "93a21c68a33f6382e85f4c6d",
+        "c32": "d179f2229ba6f81e9af856da",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 205"
+      },
+      {
+        "python": "96243e09708355160442db78",
+        "c32": "4463f72c978115e3565cc63b",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 2405"
+      },
+      {
+        "python": "9841b8d2968a7683dc3503fd",
+        "c32": "ecd09677d4992cf89beff4d8",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 2405"
+      },
+      {
+        "python": "9848cee0a47c588c0f5dc460",
+        "c32": "6ef1534fd6860f0303a7e6ce",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 1515"
+      },
+      {
+        "python": "98aa0897a5e84048bd5f6d3f",
+        "c32": "1a2bd0ff6e3cfebf280aec2d",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 1501"
+      },
+      {
+        "python": "a7796a2982323982800f920b",
+        "c32": "98fecdeacf5e715e28add554",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 5001"
+      },
+      {
+        "python": "a798552d7ac8ee750d605a0d",
+        "c32": "74ef75b2e09d42fee111772c",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 2415"
+      },
+      {
+        "python": "ab6cd4474300e898546e5821",
+        "c32": "c6d9e203ad19924421878e72",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 5005"
+      },
+      {
+        "python": "af2c09adf75707f323fadedb",
+        "c32": "56be8bd6eaecbcbc343323d7",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 1515"
+      },
+      {
+        "python": "b6df9905f75f1e230a19a550",
+        "c32": "d992f76a598f60c2af32eafd",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 2401"
+      },
+      {
+        "python": "b916b4840ecd58bd41b01d4b",
+        "c32": "3e0d95664085320ad3986696",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 5001"
+      },
+      {
+        "python": "bbba05e95998819096a445d7",
+        "c32": "9b65d0e19b08d65287919a79",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 5015"
+      },
+      {
+        "python": "bd342142a8df6013346e9842",
+        "c32": "5a5e1e674967c748eaee9a4b",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 201"
+      },
+      {
+        "python": "be4ca70202378cff096da4d9",
+        "c32": "c09bd443baca7557fc8777b9",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 1550"
+      },
+      {
+        "python": "c285d2a79a681d43459cd91f",
+        "c32": "84365d770c8c09e5b6a4fc4f",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 5001"
+      },
+      {
+        "python": "c3eaa922f40dacd30ed35060",
+        "c32": "00f5cbd2411cc8d607699180",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 205"
+      },
+      {
+        "python": "c70974d5c087ce4ed6d543a9",
+        "c32": "6c526d040715a0adeac928b1",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 2450"
+      },
+      {
+        "python": "c74cc7a527876d31eaff2d10",
+        "c32": "f2776722dcdab8989aa46b7f",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 250"
+      },
+      {
+        "python": "cb1032536f8f05c185e51580",
+        "c32": "a67b30790979802eb1a4779b",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 201"
+      },
+      {
+        "python": "ce6c6c3666f07977dbcaee4c",
+        "c32": "6a62d6fefdff5b090484c57b",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 1501"
+      },
+      {
+        "python": "cf669f25f1cd14aaddd13cf6",
+        "c32": "b8c74198a2a798545bbe8525",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 201"
+      },
+      {
+        "python": "cf8958f2a71ca7111ccace00",
+        "c32": "7036ce6fa845e88ce92f022e",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 1515"
+      },
+      {
+        "python": "d00e85c75f2d2b07d54085b1",
+        "c32": "1150ab750870f54ecfa946cd",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 215"
+      },
+      {
+        "python": "d0a8f14a8797a8736a28d235",
+        "c32": "61f888a47d122376c426e534",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 1550"
+      },
+      {
+        "python": "d0aa6ad07da0a1d55c369ef0",
+        "c32": "56da509a8fb4f28003565cb4",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 250"
+      },
+      {
+        "python": "d14afd3c3dad23935fafca2f",
+        "c32": "52627de1197948e708ca8fda",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 5005"
+      },
+      {
+        "python": "d173a218a8b573f8247db5d7",
+        "c32": "179e786bb53c0979f79f72f0",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 5050"
+      },
+      {
+        "python": "d203ca6619acf1ec87406b93",
+        "c32": "7dec67d9f3f3f4b478e79f65",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 2401"
+      },
+      {
+        "python": "d6eaa9a61714ed0130370689",
+        "c32": "efe90ba8a8cae717e0e65108",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 5005"
+      },
+      {
+        "python": "de786ad4f93ca422d68dc0ea",
+        "c32": "803f17de51e22fe3703ab216",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 5050"
+      },
+      {
+        "python": "e152dc1fbfc17d8c90463896",
+        "c32": "204c25db00462a48a2ad7d09",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 1501"
+      },
+      {
+        "python": "e5431ebdd1208c2c3e29e709",
+        "c32": "99936e2723e16a942025786a",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 1515"
+      },
+      {
+        "python": "e6b280058b2a31e77623788e",
+        "c32": "e413e89a702cc5414bc70048",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 205"
+      },
+      {
+        "python": "eaca94754a30c175432c3f9a",
+        "c32": "efc5aef2779d7ddd7a5029ca",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 1501"
+      },
+      {
+        "python": "eb335deeb55a2cbffac9c686",
+        "c32": "05342812b96c653581031a11",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 2450"
+      },
+      {
+        "python": "ece110d83831d2993f468578",
+        "c32": "ea94417f8d5174fb3954a4ac",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 205"
+      },
+      {
+        "python": "edbcbb11a877c2c857c8a4e3",
+        "c32": "e0fc040f897a89db7df4487b",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 1505"
+      },
+      {
+        "python": "ee4cf6f7a09722b4607bd4f3",
+        "c32": "a79fc0a91c5941decf49fc02",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 5050"
+      },
+      {
+        "python": "ef2119e322a65365f50bc173",
+        "c32": "159e3296f432b7401f82d9df",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 205"
+      },
+      {
+        "python": "f92aad017b3e74db00354ea7",
+        "c32": "2affe8b0b78b0c932d36e8a1",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 2450"
+      },
+      {
+        "python": "fc64f11ccd718fa642a71962",
+        "c32": "b841e9ba877c270dbb38b0ec",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 2401"
+      },
+      {
+        "python": "fd93380fd3d70133a5e59095",
+        "c32": "816ac508ed4f5adba5f7f3b4",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 5015"
+      },
+      {
+        "python": "fdfbcc8673fab97b1f32d807",
+        "c32": "2bd9be640debaa94076658ba",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 1505"
+      },
+      {
+        "python": "fe8c4cf35797b265373d8b07",
+        "c32": "6cbefe1a21e70f0e749f1447",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 2415"
+      },
+      {
+        "python": "ff362d9ed15ebdb7e5951297",
+        "c32": "10bf1a07b1e9b6025a3ac5de",
+        "fault": "F6",
+        "error": "ValueError: C controller rejected tick 215"
+      }
+    ]
+  }
+}

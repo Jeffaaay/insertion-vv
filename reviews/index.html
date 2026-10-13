@@ -4,7 +4,9 @@
 <style>body{max-width:1050px;margin:40px auto;padding:0 20px;background:#f5f6fa;
 color:#172235;font:16px/1.65 system-ui}h1{font-size:28px}details{background:white;
 padding:16px 20px;margin:16px 0;border-left:4px solid #4879ad;border-radius:8px}
-details.escalate{border-color:#c56c20;background:#fff6e9}summary{cursor:pointer;
+details.escalate{border-color:#c56c20;background:#fff6e9}
+details.pass{border-color:#2d8878;background:#f2faf6}
+details.block{border-color:#c45343;background:#fff4f0}summary{cursor:pointer;
 font-weight:650}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6
 ui-monospace,monospace}header p{color:#556477}</style><header>
 <h1>Phase C SIL · 审阅记录</h1><p>事实、外部反馈和未决项。记录存在不代表里程碑通过。
@@ -427,7 +429,7 @@ subject to user approval.
     &quot;sha256&quot;: &quot;4175cf6cbd2416b73372f6ff376f8207b6cea95de91d539324eff791ab26aaa3&quot;
   }
 ]
-</pre></details><details class="record" open><summary>claude-round-2.md</summary><pre># G 审阅（Claude，第 2 轮）
+</pre></details><details class="block" open><summary>claude-round-2.md</summary><pre># G 审阅（Claude，第 2 轮）
 
 **核验范围：** 我独立读了 `phase-c-sil @ 250ce20` 的源码和 diff，没有运行任何仿真。CI 结果我看不到实时状态，按你说的视为未确认。
 
@@ -512,7 +514,7 @@ F6 那条理由要小心。如果 mailbox 是 latest-wins，在 1 kHz、零延�
   ]
 }
 ```
-</pre></details><details class="record" open><summary>claude.md</summary><pre>我先自己克隆仓库核对这 5 个问题，再给启动审阅。
+</pre></details><details class="escalate" open><summary>claude.md</summary><pre>我先自己克隆仓库核对这 5 个问题，再给启动审阅。
 
 # G 启动审阅（Claude）
 
@@ -966,7 +968,7 @@ repairs, as the reviewer explicitly recommended; both go back for review.
 
 The browser response must be preserved verbatim when complete; quotations remain
 reviewer claims rather than verification performed by the local agent.
-</pre></details></section><section><h2>M0</h2><details class="record" open><summary>claude-round-1.md</summary><pre># G 复核 + M0 审阅（Claude，第 3 轮）
+</pre></details></section><section><h2>M0</h2><details class="block" open><summary>claude-round-1.md</summary><pre># G 复核 + M0 审阅（Claude，第 3 轮）
 
 **核验范围：** 我独立读了 `dcd86f5` 的 `C1_PREREG.md`、`round-2.md`、`review_gate.py`、`phase-c.yml`，并核对了 `controller.c` 和 `h723/main.c`。我用 `random.Random(1000·fault+seed)` 独立重算了 `faults/random-v1.json`：F2 seed 42 的 300 个 uint32 完全一致，F3 五档 σ 在 base=15 下也完全一致（含 ties-even，σ=10 的范围是 0–47）。没有运行任何仿真。
 
@@ -1021,7 +1023,7 @@ P3 的判定（≥60 tick）正好依赖这个档位定义。
   ]
 }
 ```
-</pre></details><details class="record" open><summary>claude-round-2.md</summary><pre>A1 的五项都已落实，原文保留：F1 改为冻结 onset−1 的捕获值；F6 的旧帧论证已撤回；P5 定为严格最多才成立，并排除 no-fault 行和图 4 的 run；C32 F6 的 96 个 INVALID 单独列出，一致率完整披露分母；新 Rust crate 与冻结的 harness 隔离。按文件名排序在两个平台上一致。
+</pre></details><details class="pass" open><summary>claude-round-2.md</summary><pre>A1 的五项都已落实，原文保留：F1 改为冻结 onset−1 的捕获值；F6 的旧帧论证已撤回；P5 定为严格最多才成立，并排除 no-fault 行和图 4 的 run；C32 F6 的 96 个 INVALID 单独列出，一致率完整披露分母；新 Rust crate 与冻结的 harness 隔离。按文件名排序在两个平台上一致。
 
 可以进入 M1。建议 M1 测试先锁定两条：F1 N=1 只替换 onset 那一帧；Python/Rust 注入后的帧逐字节相同。
 
@@ -1621,7 +1623,7 @@ ranking with nominal rows excluded, explicit 96 anticipated C32 invalid attempts
 and separate agreement denominators, standalone Rust crate. No C1 simulations
 have occurred. G was accepted in the full reviewer reply. Review-page ordering
 was separately corrected for Windows/Posix lexical differences at 9ef7f83.
-</pre></details></section><section><h2>M1</h2><details class="record" open><summary>claude-round-1.md</summary><pre>核验范围：我读了 `faults.py`、`plant.py`、`runner.py`、`rust/src/lib.rs`、测试和 CI，没有运行任何仿真。
+</pre></details></section><section><h2>M1</h2><details class="pass" open><summary>claude-round-1.md</summary><pre>核验范围：我读了 `faults.py`、`plant.py`、`runner.py`、`rust/src/lib.rs`、测试和 CI，没有运行任何仿真。
 
 注入语义和 A1 一致：F1 取 onset−1 的值，F3 按 FIFO 查表，F4 按绝对 tick 降采样，F8 用 ties-even 加饱和，F5 相位连续且 2 s 前走冻结路径，F6 用 latest-wins，C32 跳号会抛 ValueError 并记为 INVALID。**M1 通过。** M2 开跑前补这 4 处：
 
@@ -2265,4 +2267,28 @@ Ruff and Rust 1.99 clippy with -D warnings PASS. 104 frozen checks PASS.
 Acceptance: shared YAML + random tables, isolated Python/Rust extensions, legacy
 hashes preserved, deterministic boundary behavior. Full scientific matrix not run
 in M1; validation runs only. CI now exercises these tests on Linux and Windows.
+</pre></details></section><section><h2>M2</h2><details class="record" open><summary>round-1.md</summary><pre># M2 acceptance and evidence
+
+Acceptance: registered full matrix and ablations, C32 coverage accounting, five
+PNG-300dpi/SVG figures, sealed matrix SHA and generating commit. M1 feedback was
+implemented before this matrix: atomic run directories, validated F7 calibration,
+registered onset/seed rejection, all-severity/all-seed Python/Rust equivalence.
+Local acceptance: 13 tests passed; generating commit has all three hosted workflows
+green. Milestone commit CI and frozen-source evidence are recorded in packet.md.
+
+Outputs: artifacts/c1/{matrix.json,matrix.sha256,execution-manifest.json,summary.json,
+evidence-audit.json,figs/*}. Seal and result interpretation: docs/C1_SIL_PREDICTIONS.md.
+All 7,230 compressed evidence files were decompressed and their hashes/line counts
+verified. Identity checks: 1,106/1,106. Five figures were visually inspected.
+
+3,615 rows; 2,730 PASS, 789 FAIL, 96 INVALID. Repeat hashes match for every row;
+96 incomplete rows remain INVALID, not reproducible successes. All are expected
+C32 F6 ABI rejections. Valid pairs 1,686/1,782; 1,686 agree and none disagree.
+P1/P3/P4 unsupported; P2/P5 supported under unchanged registered operational rules.
+
+No Phase A/controller/firmware/verdict changes. All baseline files remain frozen.
+Large lossless traces stay local (3.78 GB compressed), while matrix and scientific
+figures are committed. M3 visualization source is drafted but its artifacts have
+not been generated and it has not run any simulation. External reply will be
+copied verbatim from the user-selected Claude conversation.
 </pre></details></section></html>

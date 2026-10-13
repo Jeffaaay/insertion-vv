@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="792pt" height="453.6pt" viewBox="0 0 792 453.6" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-10-12T21:23:52.266970</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.10.7, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 453.6 
+L 792 453.6 
+L 792 0 
+L 0 0 
+z
+" style="fill: #fbfbf8"/>
+  </g>
+  <g id="axes_1">
+   <g id="text_1">
+    <text style="font-weight: 700; font-size: 14px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #233c52" x="39.6" y="101.96928" transform="rotate(-0 39.6 101.96928)">F9 / Serial CRC corruption</text>
+   </g>
+   <g id="text_2">
+    <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: start" x="39.6" y="130.025078" transform="rotate(-0 39.6 130.025078)">HIL-only. Inject damaged packets; observe rejection, recovery and safe command handling.</text>
+   </g>
+   <g id="text_3">
+    <text style="font-weight: 700; font-size: 14px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #233c52" x="39.6" y="183.79872" transform="rotate(-0 39.6 183.79872)">F10 / Board–PC clock drift</text>
+   </g>
+   <g id="text_4">
+    <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: start" x="39.6" y="211.854517" transform="rotate(-0 39.6 211.854517)">HIL-only. Measure timestamp alignment, drift accumulation and stale-frame handling.</text>
+   </g>
+   <g id="text_5">
+    <text style="font-weight: 700; font-size: 14px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #233c52" x="39.6" y="265.62816" transform="rotate(-0 39.6 265.62816)">F6 / Actual missed deadlines</text>
+   </g>
+   <g id="text_6">
+    <text style="font-size: 10px; font-family: 'DejaVu Sans'" transform="translate(39.6 293.683958)">SIL skips controller calls and holds force. Real ISR timing must be measured on hardware.</text>
+    <text style="font-size: 10px; font-family: 'DejaVu Sans'" transform="translate(39.6 308.680989)">Frozen C32 rejects tick gaps: 96 attempted cases are INVALID, not task FAIL.</text>
+   </g>
+   <g id="text_7">
+    <text style="font-weight: 700; font-size: 14px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #233c52" x="39.6" y="347.4576" transform="rotate(-0 39.6 347.4576)">Scope of equivalence</text>
+   </g>
+   <g id="text_8">
+    <text style="font-size: 10px; font-family: 'DejaVu Sans'" transform="translate(39.6 375.513397)">Both full-matrix controllers use the Python injector. Rust is separately byte-checked.</text>
+    <text style="font-size: 10px; font-family: 'DejaVu Sans'" transform="translate(39.6 390.510429)">No Rust closed-loop, hardware, clinical or cross-platform full-matrix claim.</text>
+   </g>
+  </g>
+  <g id="text_9">
+   <text style="font-size: 21px; font-family: 'DejaVu Sans'; text-anchor: start" x="31.68" y="25.028719" transform="rotate(-0 31.68 25.028719)">05 / What SIL cannot establish</text>
+  </g>
+  <g id="text_10">
+   <text style="font-size: 8px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #59616a" x="15.84" y="446.796" transform="rotate(-0 15.84 446.796)">Windows SIL • frozen controller &amp; verdict • matrix cc833c35864f</text>
+  </g>
+ </g>
+</svg>
