@@ -1,0 +1,338 @@
+[
+  {
+    "path": "docs/FINDINGS.md",
+    "sha256": "7fd5f25acc7d2cb77412061e12be59622dce119995cd109c697b8ac37f1c21d0"
+  },
+  {
+    "path": "docs/HARDWARE_RUNBOOK.md",
+    "sha256": "39b2a5ca7c39d67c0a3b41b3a4c809e75fcf4af2daac8dd0902fcba2335fbbe2"
+  },
+  {
+    "path": "docs/PHASE_A_SUMMARY.md",
+    "sha256": "df9cababb1eb4ece642268580299a34f3341efc465c19259ecea114bd1a0200c"
+  },
+  {
+    "path": "docs/PHASE_B_HARDWARE_PLAN.md",
+    "sha256": "d441860404a63d06146f249f3b565576878c675db8c74dc26239363522f59ea0"
+  },
+  {
+    "path": "docs/PHASE_B_PLAN.md",
+    "sha256": "601880144b62bbc48d8cdc5f22dd7793fc7c48958ecc8e73bee301f3d720aed2"
+  },
+  {
+    "path": "docs/PROTOCOL.md",
+    "sha256": "4f8bdce14371a99b5df2326556d6963c66f3ed552f01d519f2f88411f1de52b8"
+  },
+  {
+    "path": "docs/REPLICATION_NOTES.md",
+    "sha256": "271a1b1412913c8c8c686a6a5624691e76474aacc10327b63191ee0571856a31"
+  },
+  {
+    "path": "docs/model-and-evaluation.md",
+    "sha256": "82c209213e5c20c01611b10c8fe1eccb74c730646896d1f6ded933348d2570ab"
+  },
+  {
+    "path": "firmware/README.md",
+    "sha256": "ba0e7ecc0212ad71077af1ad739e1f109a3dc669c170158239a6336d3562f117"
+  },
+  {
+    "path": "firmware/ctrl/README.md",
+    "sha256": "8806e298f34a0901ac104766870e7836e97a65f407bbe40dcacb87d11088a381"
+  },
+  {
+    "path": "firmware/ctrl/controller.c",
+    "sha256": "2f05b0fe65f763f9dec75a0d9bd366364b361b3d3710b61991d632b1f4347747"
+  },
+  {
+    "path": "firmware/ctrl/controller.h",
+    "sha256": "f515f64ab8f5ff47030186f01e6b361aa6bce20a86f887ccba130f137b27551a"
+  },
+  {
+    "path": "firmware/ctrl/test_controller.c",
+    "sha256": "e840fc879f60762249a46a76d5d98ce06c9fca365ca3d3dcfbb0876d9d2b2902"
+  },
+  {
+    "path": "firmware/deps.lock.json",
+    "sha256": "073b61b0a9c1abdec0bfb7492d0a239d276b5cea7e75c472bbc89325197fd515"
+  },
+  {
+    "path": "firmware/h723/README.md",
+    "sha256": "879a40328e0133304026c77a4ee54f0d569ed30e6997bb04dea47f9a810e37c6"
+  },
+  {
+    "path": "firmware/h723/linker.ld",
+    "sha256": "984e7ca21a51fe1800eeb085e07ab2277c8d5288467c028bb2f2171e9e9ab46f"
+  },
+  {
+    "path": "firmware/h723/main.c",
+    "sha256": "8276b8d7300211b81612ef0fa92424edde2ad5cfe5cbced46ae4475e969b6dcc"
+  },
+  {
+    "path": "firmware/h723/stm32h7xx_hal_conf.h",
+    "sha256": "0c31d9983d9c0c6d95143cad71027613c0cf60369e79ac76f2cc118e9af8a1e2"
+  },
+  {
+    "path": "firmware/protocol/protocol.c",
+    "sha256": "f2452d348038e2232339c1aaf21ccef84c4df205c8225d57d76cab9fbc460691"
+  },
+  {
+    "path": "firmware/protocol/protocol.h",
+    "sha256": "43744dffae4d91fc790c9cbc20cf54dc2aad37577f43c1d2d77b852b76a9c045"
+  },
+  {
+    "path": "firmware/protocol/replay.c",
+    "sha256": "977ff8a7ab99e74c8f52034d5f3351d363f91567fd78e17165c2d2aa5c98469f"
+  },
+  {
+    "path": "firmware/protocol/replay.h",
+    "sha256": "f8f80c6a76c63395de3daaf921611520e7c2ecd118c22c3a6e3d66e5a2755d91"
+  },
+  {
+    "path": "firmware/protocol/test_protocol.c",
+    "sha256": "9e25cae6dd8d74122a8ba0a3bd2307d01d1435b9be900b8d0fb2432a408c0758"
+  },
+  {
+    "path": "firmware/protocol/test_replay.c",
+    "sha256": "8c118143e5371b08809aa391e5f5f0da2e98f5b511a5b84939c2d6091ef5f17c"
+  },
+  {
+    "path": "firmware/virtual_board/main.c",
+    "sha256": "1d723680b90d527905282793196c876be5464152047e103643648f1e2621213c"
+  },
+  {
+    "path": "harness/Cargo.lock",
+    "sha256": "459e0da14a8d9ff21fda33997492d4d4e25f51c7d6716b3a76ee5ca2a202f0a4"
+  },
+  {
+    "path": "harness/Cargo.toml",
+    "sha256": "cf12f5c1a0a4272c296fbbc4615e467fe672ba26be4a7e9a2c10ee5e40c77985"
+  },
+  {
+    "path": "harness/README.md",
+    "sha256": "e811fc208da9e039d9534b650d18651cc999543db53768660654afd3f5b2f331"
+  },
+  {
+    "path": "harness/__init__.py",
+    "sha256": "26efd0f091ee48ee49431b4b82b98fb40272e47d3989222b587d888f9f18b1b7"
+  },
+  {
+    "path": "harness/build.rs",
+    "sha256": "404843d036a34a0a73969ef291fab7d8f5c23b21991d27687b283627d758ea6d"
+  },
+  {
+    "path": "harness/c32.py",
+    "sha256": "5e4a8699e10ad11c02e5af9009e22703ac6ad59ff31ffc52d0a397432451c525"
+  },
+  {
+    "path": "harness/ci.py",
+    "sha256": "4520c14e8d68ec6f3612f0635828edf3ff73ae75aa7c677554427963ea9508f2"
+  },
+  {
+    "path": "harness/compare.py",
+    "sha256": "daf8b43ec3d320960c9a15ac5db96b0abfb1aa9940c92a023da1cce289f775d9"
+  },
+  {
+    "path": "harness/contract.json",
+    "sha256": "a9488e7cbbfea5ccb22ab4054cfb7e7a445cdf0fdf281d9f14272a3ed473d789"
+  },
+  {
+    "path": "harness/hardware.py",
+    "sha256": "bfc4546954e136b8d509cca9efd773f4a682ac6e961281dae6ea713aa1f88347"
+  },
+  {
+    "path": "harness/plant_server.py",
+    "sha256": "5a146af06716a167200700d964b9f122e1d2de0dfc3f19741cbd7019eab1a56c"
+  },
+  {
+    "path": "harness/replay_report.py",
+    "sha256": "fcf831914ba195c4bfe5b2452e179518c600ca1a28ef47e61b8c00a969cd2a7b"
+  },
+  {
+    "path": "harness/run.py",
+    "sha256": "445f79dacf0944db958330bd0b27884881ee2e094426c116ba55c9ce8ba1dcff"
+  },
+  {
+    "path": "harness/rust-toolchain.toml",
+    "sha256": "2ad6f15416572b4836585087f1d4abc53b8fa2dbd616f8dacfaa587ed6714228"
+  },
+  {
+    "path": "harness/rust_run.py",
+    "sha256": "48cb25499283cac6dcba5ea7e06658b45455a6cd0e6a8f7f9406f99a3a079f8c"
+  },
+  {
+    "path": "harness/src/bin/board-link.rs",
+    "sha256": "bdfbcfec9988b34a0a40a89597031e358d756bd54f914ca441d48ccfa53bc040"
+  },
+  {
+    "path": "harness/src/ffi.rs",
+    "sha256": "5157559ce0adf8a02ce3eadee83b4d2917c4bc318cbb750b072a760dfe34cd59"
+  },
+  {
+    "path": "harness/src/lib.rs",
+    "sha256": "2cdad5269d929deddd7e9b5f4254d2decdfcee42fccc883fbb0b08728ea4ae7a"
+  },
+  {
+    "path": "harness/src/main.rs",
+    "sha256": "d8f8cfea21833288148ca3352dc4f4b4a8eea18f80243477746433dc0d3e0aff"
+  },
+  {
+    "path": "harness/src/plant.rs",
+    "sha256": "f0d87ee7070ccb9b12b8613a62e7c54d9ea6b88407ebb075ba8aa95b5903b6bb"
+  },
+  {
+    "path": "harness/src/protocol.rs",
+    "sha256": "b45da9971d64c69f4d7d5455ae45dbef30eae381dcfdda90f442ed94df244422"
+  },
+  {
+    "path": "harness/src/replay.rs",
+    "sha256": "2962e453057f3de60d98c0f88bb44b0b1cb27fbc6c1b8262f56c59c7e9a9d913"
+  },
+  {
+    "path": "harness/src/runner.rs",
+    "sha256": "6c6b8239cc7270ef14c81ab9fe472cf7b93599385df21a57f0340fe1b254628d"
+  },
+  {
+    "path": "harness/src/serial.rs",
+    "sha256": "4e48ea2d8aa425c4307724289bc6dd802f15c04fc2928cfe99854cde825b9924"
+  },
+  {
+    "path": "harness/src/types.rs",
+    "sha256": "44b03c6720b76ef11ef7da77ffb86ba84cbdc5aa0bff0877a96790fee156eece"
+  },
+  {
+    "path": "harness/tests/data/protocol_v1.json",
+    "sha256": "02d0b3c8855567183386de471bb20b798d191ef0afb14aab809bb2e5519ad5df"
+  },
+  {
+    "path": "harness/tests/test_boundaries.py",
+    "sha256": "dfa36f18a4ddb5fc1ba408139ee6b97458712281a46ef1d29149fa92f143c13c"
+  },
+  {
+    "path": "harness/tests/test_c32.py",
+    "sha256": "49871e254df7b71b7c25a9d9ef0947ab5303ea22ecfee4a99f5af7713e9dc81e"
+  },
+  {
+    "path": "harness/tests/test_hardware_evidence.py",
+    "sha256": "0bee30e00daf62c1705e0fe661036e18527660331859ae23d84a2eb622f2a16b"
+  },
+  {
+    "path": "harness/tests/test_virtual_board.py",
+    "sha256": "92f0038d3329bdedc836ff69782901ec1dac9782460f27ac2e99bddda96be20d"
+  },
+  {
+    "path": "harness/virtual_board.py",
+    "sha256": "59d5e55b0ee6644632d5b22fecb19094c784c9a6dbb60922af74609173ebebf2"
+  },
+  {
+    "path": "sim/__init__.py",
+    "sha256": "c4b8da5b7a024762dbf8576c36ae66ff4c8c9534145a0c23fb0b653873f514e7"
+  },
+  {
+    "path": "sim/calibrate.py",
+    "sha256": "88ec327e4cc396751ad55e0ce610a380c412763c6251995dc58e0ccc718994ab"
+  },
+  {
+    "path": "sim/ci.py",
+    "sha256": "23d4ea7c539ab9942f2f43bcc6ae9fb34d9044894ac0c6e7990b94457e1cf916"
+  },
+  {
+    "path": "sim/config.py",
+    "sha256": "219257fd7d9493eff853d350f8f98a7df5b776d4a2fa152eb744fc78c5b1f101"
+  },
+  {
+    "path": "sim/contracts.py",
+    "sha256": "53ade152339618d9a607beef24a1d3fed629b4dd3350263e2f6f7bfb77a50df0"
+  },
+  {
+    "path": "sim/controllers.py",
+    "sha256": "0f13a809ea89ab2ce7bc983956b665e6700aaceb618b58b12554ac0f9f87903d"
+  },
+  {
+    "path": "sim/metrics.py",
+    "sha256": "f1ed1288abe8405301dbca546fc725fc64d4205a3ddf7f0075df78a138d5be03"
+  },
+  {
+    "path": "sim/plant.py",
+    "sha256": "f45d4be3cb9e57150002e2d3253965d3e162b0190c5b5cf34f8c1abd9248e50b"
+  },
+  {
+    "path": "sim/plant.xml",
+    "sha256": "aef8a51e84742568b0db6271e3ca946dcd345db3f4d426a60a906a75db587fe0"
+  },
+  {
+    "path": "sim/platform_info.py",
+    "sha256": "26450befc3930ce073a7f09e2250e8e866d3a99ef8b9edc90d43a0788bc66dd4"
+  },
+  {
+    "path": "sim/preview.py",
+    "sha256": "4ffe5dc81eb5819f4dbf83c1512d9a5802e02cd44eafed8c5c664d263fe7484a"
+  },
+  {
+    "path": "sim/reference.py",
+    "sha256": "3cfa6f47ec0faf9c63aa0aa8f793211a4fcac8e0be6c77091b817acd8ae25edf"
+  },
+  {
+    "path": "sim/reproduction_contract.json",
+    "sha256": "356f8efa4aa283eba18828b5bf2f2954df8ed332a8746fde60c6251a395e6edf"
+  },
+  {
+    "path": "sim/run.py",
+    "sha256": "7e73c7c8bb7cf53ab1d57d6e65369b6faae872b3427dbc877309a79b8a749d75"
+  },
+  {
+    "path": "sim/sensors.py",
+    "sha256": "cd89f8957f98c699cc10f9e8c7a3d96039ead8e1f1ea5fcb39e43b1e46de5b08"
+  },
+  {
+    "path": "sim/verdict_contract.json",
+    "sha256": "7e917fbac313de750d5ac6de086e6cba97ad9d1876d29b0aada6f6ceb10b8009"
+  },
+  {
+    "path": "tests/test_compare_traces.py",
+    "sha256": "b39565eec5cfe19296ee5198be1e51323369fb8b83c3306cff91e3ce47a9fa5b"
+  },
+  {
+    "path": "tests/test_delayed_feedback.py",
+    "sha256": "734e37178718a5069866018173d03636445b4dabee592898e66a56aed79c418f"
+  },
+  {
+    "path": "tests/test_determinism.py",
+    "sha256": "c347637e3a629944b039382317390f1ec7ed8bcc26e0284aeb2efe233100b71b"
+  },
+  {
+    "path": "tests/test_isolation.py",
+    "sha256": "26fb86cab2b61e4a6e2c6db0d6769aaff6e73d6baa8615360dbff64a95a62b22"
+  },
+  {
+    "path": "tests/test_offsetfree.py",
+    "sha256": "e8618e1a178940bed173906903f1c15cb23b77215523af1c7066cea8aeb97cde"
+  },
+  {
+    "path": "tests/test_plant.py",
+    "sha256": "0bf27572f0a93cf08014af94624ca561246650ee6f086c1df55bb4a3d4f4b202"
+  },
+  {
+    "path": "tests/test_platform_info.py",
+    "sha256": "a98fc00d4917d456631678faf222c422f3915d3bfdb6d257c7adeaf0f4e4105a"
+  },
+  {
+    "path": "tests/test_preview.py",
+    "sha256": "0595a2aadacc7ee85b04d2ded1847a03a13375f260d17449e2b1da5d012fc191"
+  },
+  {
+    "path": "tests/test_reproduction.py",
+    "sha256": "1859bd6a7a36956f109d1a95d9d884e7e29abec4951cae7984c476ada075a534"
+  },
+  {
+    "path": "tests/test_run.py",
+    "sha256": "f8383073a52690e07d6c751ac67db180ab027762e80cc7d42c54bacf84802327"
+  },
+  {
+    "path": "tests/test_sensors.py",
+    "sha256": "ec23dc40bccb957f97fd117ab1129375d6cd067fc555f57f3cd905e101351133"
+  },
+  {
+    "path": "tests/test_verdict.py",
+    "sha256": "4175cf6cbd2416b73372f6ff376f8207b6cea95de91d539324eff791ab26aaa3"
+  }
+]

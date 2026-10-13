@@ -1,0 +1,613 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Phase C SIL — review evidence</title>
+<style>body{max-width:1050px;margin:40px auto;padding:0 20px;background:#f5f6fa;
+color:#172235;font:16px/1.65 system-ui}h1{font-size:28px}details{background:white;
+padding:16px 20px;margin:16px 0;border-left:4px solid #4879ad;border-radius:8px}
+details.escalate{border-color:#c56c20;background:#fff6e9}summary{cursor:pointer;
+font-weight:650}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6
+ui-monospace,monospace}header p{color:#556477}</style><header>
+<h1>Phase C SIL · 审阅记录</h1><p>事实、外部反馈和未决项。记录存在不代表里程碑通过。
+工具与数据记录默认折叠；网页回复不冒充 CLI 日志。</p></header><section><h2>G</h2><details class="record"><summary>baseline-ci.json</summary><pre>[{&quot;conclusion&quot;:&quot;success&quot;,&quot;headSha&quot;:&quot;e8cb4ee7ac1420c945dbcb2ba86adfe1afa63338&quot;,&quot;name&quot;:&quot;Phase A SIL&quot;,&quot;status&quot;:&quot;completed&quot;,&quot;url&quot;:&quot;https://github.com/Jeffaaay/insertion-vv/actions/runs/38330849102&quot;},{&quot;conclusion&quot;:&quot;success&quot;,&quot;headSha&quot;:&quot;e8cb4ee7ac1420c945dbcb2ba86adfe1afa63338&quot;,&quot;name&quot;:&quot;Phase B C32&quot;,&quot;status&quot;:&quot;completed&quot;,&quot;url&quot;:&quot;https://github.com/Jeffaaay/insertion-vv/actions/runs/38330849073&quot;}]
+</pre></details><details class="record"><summary>baseline-files.json</summary><pre>[
+  {
+    &quot;path&quot;: &quot;docs/FINDINGS.md&quot;,
+    &quot;sha256&quot;: &quot;7fd5f25acc7d2cb77412061e12be59622dce119995cd109c697b8ac37f1c21d0&quot;
+  },
+  {
+    &quot;path&quot;: &quot;docs/HARDWARE_RUNBOOK.md&quot;,
+    &quot;sha256&quot;: &quot;39b2a5ca7c39d67c0a3b41b3a4c809e75fcf4af2daac8dd0902fcba2335fbbe2&quot;
+  },
+  {
+    &quot;path&quot;: &quot;docs/PHASE_A_SUMMARY.md&quot;,
+    &quot;sha256&quot;: &quot;df9cababb1eb4ece642268580299a34f3341efc465c19259ecea114bd1a0200c&quot;
+  },
+  {
+    &quot;path&quot;: &quot;docs/PHASE_B_HARDWARE_PLAN.md&quot;,
+    &quot;sha256&quot;: &quot;d441860404a63d06146f249f3b565576878c675db8c74dc26239363522f59ea0&quot;
+  },
+  {
+    &quot;path&quot;: &quot;docs/PHASE_B_PLAN.md&quot;,
+    &quot;sha256&quot;: &quot;601880144b62bbc48d8cdc5f22dd7793fc7c48958ecc8e73bee301f3d720aed2&quot;
+  },
+  {
+    &quot;path&quot;: &quot;docs/PROTOCOL.md&quot;,
+    &quot;sha256&quot;: &quot;4f8bdce14371a99b5df2326556d6963c66f3ed552f01d519f2f88411f1de52b8&quot;
+  },
+  {
+    &quot;path&quot;: &quot;docs/REPLICATION_NOTES.md&quot;,
+    &quot;sha256&quot;: &quot;271a1b1412913c8c8c686a6a5624691e76474aacc10327b63191ee0571856a31&quot;
+  },
+  {
+    &quot;path&quot;: &quot;docs/model-and-evaluation.md&quot;,
+    &quot;sha256&quot;: &quot;82c209213e5c20c01611b10c8fe1eccb74c730646896d1f6ded933348d2570ab&quot;
+  },
+  {
+    &quot;path&quot;: &quot;firmware/README.md&quot;,
+    &quot;sha256&quot;: &quot;ba0e7ecc0212ad71077af1ad739e1f109a3dc669c170158239a6336d3562f117&quot;
+  },
+  {
+    &quot;path&quot;: &quot;firmware/ctrl/README.md&quot;,
+    &quot;sha256&quot;: &quot;8806e298f34a0901ac104766870e7836e97a65f407bbe40dcacb87d11088a381&quot;
+  },
+  {
+    &quot;path&quot;: &quot;firmware/ctrl/controller.c&quot;,
+    &quot;sha256&quot;: &quot;2f05b0fe65f763f9dec75a0d9bd366364b361b3d3710b61991d632b1f4347747&quot;
+  },
+  {
+    &quot;path&quot;: &quot;firmware/ctrl/controller.h&quot;,
+    &quot;sha256&quot;: &quot;f515f64ab8f5ff47030186f01e6b361aa6bce20a86f887ccba130f137b27551a&quot;
+  },
+  {
+    &quot;path&quot;: &quot;firmware/ctrl/test_controller.c&quot;,
+    &quot;sha256&quot;: &quot;e840fc879f60762249a46a76d5d98ce06c9fca365ca3d3dcfbb0876d9d2b2902&quot;
+  },
+  {
+    &quot;path&quot;: &quot;firmware/deps.lock.json&quot;,
+    &quot;sha256&quot;: &quot;073b61b0a9c1abdec0bfb7492d0a239d276b5cea7e75c472bbc89325197fd515&quot;
+  },
+  {
+    &quot;path&quot;: &quot;firmware/h723/README.md&quot;,
+    &quot;sha256&quot;: &quot;879a40328e0133304026c77a4ee54f0d569ed30e6997bb04dea47f9a810e37c6&quot;
+  },
+  {
+    &quot;path&quot;: &quot;firmware/h723/linker.ld&quot;,
+    &quot;sha256&quot;: &quot;984e7ca21a51fe1800eeb085e07ab2277c8d5288467c028bb2f2171e9e9ab46f&quot;
+  },
+  {
+    &quot;path&quot;: &quot;firmware/h723/main.c&quot;,
+    &quot;sha256&quot;: &quot;8276b8d7300211b81612ef0fa92424edde2ad5cfe5cbced46ae4475e969b6dcc&quot;
+  },
+  {
+    &quot;path&quot;: &quot;firmware/h723/stm32h7xx_hal_conf.h&quot;,
+    &quot;sha256&quot;: &quot;0c31d9983d9c0c6d95143cad71027613c0cf60369e79ac76f2cc118e9af8a1e2&quot;
+  },
+  {
+    &quot;path&quot;: &quot;firmware/protocol/protocol.c&quot;,
+    &quot;sha256&quot;: &quot;f2452d348038e2232339c1aaf21ccef84c4df205c8225d57d76cab9fbc460691&quot;
+  },
+  {
+    &quot;path&quot;: &quot;firmware/protocol/protocol.h&quot;,
+    &quot;sha256&quot;: &quot;43744dffae4d91fc790c9cbc20cf54dc2aad37577f43c1d2d77b852b76a9c045&quot;
+  },
+  {
+    &quot;path&quot;: &quot;firmware/protocol/replay.c&quot;,
+    &quot;sha256&quot;: &quot;977ff8a7ab99e74c8f52034d5f3351d363f91567fd78e17165c2d2aa5c98469f&quot;
+  },
+  {
+    &quot;path&quot;: &quot;firmware/protocol/replay.h&quot;,
+    &quot;sha256&quot;: &quot;f8f80c6a76c63395de3daaf921611520e7c2ecd118c22c3a6e3d66e5a2755d91&quot;
+  },
+  {
+    &quot;path&quot;: &quot;firmware/protocol/test_protocol.c&quot;,
+    &quot;sha256&quot;: &quot;9e25cae6dd8d74122a8ba0a3bd2307d01d1435b9be900b8d0fb2432a408c0758&quot;
+  },
+  {
+    &quot;path&quot;: &quot;firmware/protocol/test_replay.c&quot;,
+    &quot;sha256&quot;: &quot;8c118143e5371b08809aa391e5f5f0da2e98f5b511a5b84939c2d6091ef5f17c&quot;
+  },
+  {
+    &quot;path&quot;: &quot;firmware/virtual_board/main.c&quot;,
+    &quot;sha256&quot;: &quot;1d723680b90d527905282793196c876be5464152047e103643648f1e2621213c&quot;
+  },
+  {
+    &quot;path&quot;: &quot;harness/Cargo.lock&quot;,
+    &quot;sha256&quot;: &quot;459e0da14a8d9ff21fda33997492d4d4e25f51c7d6716b3a76ee5ca2a202f0a4&quot;
+  },
+  {
+    &quot;path&quot;: &quot;harness/Cargo.toml&quot;,
+    &quot;sha256&quot;: &quot;cf12f5c1a0a4272c296fbbc4615e467fe672ba26be4a7e9a2c10ee5e40c77985&quot;
+  },
+  {
+    &quot;path&quot;: &quot;harness/README.md&quot;,
+    &quot;sha256&quot;: &quot;e811fc208da9e039d9534b650d18651cc999543db53768660654afd3f5b2f331&quot;
+  },
+  {
+    &quot;path&quot;: &quot;harness/__init__.py&quot;,
+    &quot;sha256&quot;: &quot;26efd0f091ee48ee49431b4b82b98fb40272e47d3989222b587d888f9f18b1b7&quot;
+  },
+  {
+    &quot;path&quot;: &quot;harness/build.rs&quot;,
+    &quot;sha256&quot;: &quot;404843d036a34a0a73969ef291fab7d8f5c23b21991d27687b283627d758ea6d&quot;
+  },
+  {
+    &quot;path&quot;: &quot;harness/c32.py&quot;,
+    &quot;sha256&quot;: &quot;5e4a8699e10ad11c02e5af9009e22703ac6ad59ff31ffc52d0a397432451c525&quot;
+  },
+  {
+    &quot;path&quot;: &quot;harness/ci.py&quot;,
+    &quot;sha256&quot;: &quot;4520c14e8d68ec6f3612f0635828edf3ff73ae75aa7c677554427963ea9508f2&quot;
+  },
+  {
+    &quot;path&quot;: &quot;harness/compare.py&quot;,
+    &quot;sha256&quot;: &quot;daf8b43ec3d320960c9a15ac5db96b0abfb1aa9940c92a023da1cce289f775d9&quot;
+  },
+  {
+    &quot;path&quot;: &quot;harness/contract.json&quot;,
+    &quot;sha256&quot;: &quot;a9488e7cbbfea5ccb22ab4054cfb7e7a445cdf0fdf281d9f14272a3ed473d789&quot;
+  },
+  {
+    &quot;path&quot;: &quot;harness/hardware.py&quot;,
+    &quot;sha256&quot;: &quot;bfc4546954e136b8d509cca9efd773f4a682ac6e961281dae6ea713aa1f88347&quot;
+  },
+  {
+    &quot;path&quot;: &quot;harness/plant_server.py&quot;,
+    &quot;sha256&quot;: &quot;5a146af06716a167200700d964b9f122e1d2de0dfc3f19741cbd7019eab1a56c&quot;
+  },
+  {
+    &quot;path&quot;: &quot;harness/replay_report.py&quot;,
+    &quot;sha256&quot;: &quot;fcf831914ba195c4bfe5b2452e179518c600ca1a28ef47e61b8c00a969cd2a7b&quot;
+  },
+  {
+    &quot;path&quot;: &quot;harness/run.py&quot;,
+    &quot;sha256&quot;: &quot;445f79dacf0944db958330bd0b27884881ee2e094426c116ba55c9ce8ba1dcff&quot;
+  },
+  {
+    &quot;path&quot;: &quot;harness/rust-toolchain.toml&quot;,
+    &quot;sha256&quot;: &quot;2ad6f15416572b4836585087f1d4abc53b8fa2dbd616f8dacfaa587ed6714228&quot;
+  },
+  {
+    &quot;path&quot;: &quot;harness/rust_run.py&quot;,
+    &quot;sha256&quot;: &quot;48cb25499283cac6dcba5ea7e06658b45455a6cd0e6a8f7f9406f99a3a079f8c&quot;
+  },
+  {
+    &quot;path&quot;: &quot;harness/src/bin/board-link.rs&quot;,
+    &quot;sha256&quot;: &quot;bdfbcfec9988b34a0a40a89597031e358d756bd54f914ca441d48ccfa53bc040&quot;
+  },
+  {
+    &quot;path&quot;: &quot;harness/src/ffi.rs&quot;,
+    &quot;sha256&quot;: &quot;5157559ce0adf8a02ce3eadee83b4d2917c4bc318cbb750b072a760dfe34cd59&quot;
+  },
+  {
+    &quot;path&quot;: &quot;harness/src/lib.rs&quot;,
+    &quot;sha256&quot;: &quot;2cdad5269d929deddd7e9b5f4254d2decdfcee42fccc883fbb0b08728ea4ae7a&quot;
+  },
+  {
+    &quot;path&quot;: &quot;harness/src/main.rs&quot;,
+    &quot;sha256&quot;: &quot;d8f8cfea21833288148ca3352dc4f4b4a8eea18f80243477746433dc0d3e0aff&quot;
+  },
+  {
+    &quot;path&quot;: &quot;harness/src/plant.rs&quot;,
+    &quot;sha256&quot;: &quot;f0d87ee7070ccb9b12b8613a62e7c54d9ea6b88407ebb075ba8aa95b5903b6bb&quot;
+  },
+  {
+    &quot;path&quot;: &quot;harness/src/protocol.rs&quot;,
+    &quot;sha256&quot;: &quot;b45da9971d64c69f4d7d5455ae45dbef30eae381dcfdda90f442ed94df244422&quot;
+  },
+  {
+    &quot;path&quot;: &quot;harness/src/replay.rs&quot;,
+    &quot;sha256&quot;: &quot;2962e453057f3de60d98c0f88bb44b0b1cb27fbc6c1b8262f56c59c7e9a9d913&quot;
+  },
+  {
+    &quot;path&quot;: &quot;harness/src/runner.rs&quot;,
+    &quot;sha256&quot;: &quot;6c6b8239cc7270ef14c81ab9fe472cf7b93599385df21a57f0340fe1b254628d&quot;
+  },
+  {
+    &quot;path&quot;: &quot;harness/src/serial.rs&quot;,
+    &quot;sha256&quot;: &quot;4e48ea2d8aa425c4307724289bc6dd802f15c04fc2928cfe99854cde825b9924&quot;
+  },
+  {
+    &quot;path&quot;: &quot;harness/src/types.rs&quot;,
+    &quot;sha256&quot;: &quot;44b03c6720b76ef11ef7da77ffb86ba84cbdc5aa0bff0877a96790fee156eece&quot;
+  },
+  {
+    &quot;path&quot;: &quot;harness/tests/data/protocol_v1.json&quot;,
+    &quot;sha256&quot;: &quot;02d0b3c8855567183386de471bb20b798d191ef0afb14aab809bb2e5519ad5df&quot;
+  },
+  {
+    &quot;path&quot;: &quot;harness/tests/test_boundaries.py&quot;,
+    &quot;sha256&quot;: &quot;dfa36f18a4ddb5fc1ba408139ee6b97458712281a46ef1d29149fa92f143c13c&quot;
+  },
+  {
+    &quot;path&quot;: &quot;harness/tests/test_c32.py&quot;,
+    &quot;sha256&quot;: &quot;49871e254df7b71b7c25a9d9ef0947ab5303ea22ecfee4a99f5af7713e9dc81e&quot;
+  },
+  {
+    &quot;path&quot;: &quot;harness/tests/test_hardware_evidence.py&quot;,
+    &quot;sha256&quot;: &quot;0bee30e00daf62c1705e0fe661036e18527660331859ae23d84a2eb622f2a16b&quot;
+  },
+  {
+    &quot;path&quot;: &quot;harness/tests/test_virtual_board.py&quot;,
+    &quot;sha256&quot;: &quot;92f0038d3329bdedc836ff69782901ec1dac9782460f27ac2e99bddda96be20d&quot;
+  },
+  {
+    &quot;path&quot;: &quot;harness/virtual_board.py&quot;,
+    &quot;sha256&quot;: &quot;59d5e55b0ee6644632d5b22fecb19094c784c9a6dbb60922af74609173ebebf2&quot;
+  },
+  {
+    &quot;path&quot;: &quot;sim/__init__.py&quot;,
+    &quot;sha256&quot;: &quot;c4b8da5b7a024762dbf8576c36ae66ff4c8c9534145a0c23fb0b653873f514e7&quot;
+  },
+  {
+    &quot;path&quot;: &quot;sim/calibrate.py&quot;,
+    &quot;sha256&quot;: &quot;88ec327e4cc396751ad55e0ce610a380c412763c6251995dc58e0ccc718994ab&quot;
+  },
+  {
+    &quot;path&quot;: &quot;sim/ci.py&quot;,
+    &quot;sha256&quot;: &quot;23d4ea7c539ab9942f2f43bcc6ae9fb34d9044894ac0c6e7990b94457e1cf916&quot;
+  },
+  {
+    &quot;path&quot;: &quot;sim/config.py&quot;,
+    &quot;sha256&quot;: &quot;219257fd7d9493eff853d350f8f98a7df5b776d4a2fa152eb744fc78c5b1f101&quot;
+  },
+  {
+    &quot;path&quot;: &quot;sim/contracts.py&quot;,
+    &quot;sha256&quot;: &quot;53ade152339618d9a607beef24a1d3fed629b4dd3350263e2f6f7bfb77a50df0&quot;
+  },
+  {
+    &quot;path&quot;: &quot;sim/controllers.py&quot;,
+    &quot;sha256&quot;: &quot;0f13a809ea89ab2ce7bc983956b665e6700aaceb618b58b12554ac0f9f87903d&quot;
+  },
+  {
+    &quot;path&quot;: &quot;sim/metrics.py&quot;,
+    &quot;sha256&quot;: &quot;f1ed1288abe8405301dbca546fc725fc64d4205a3ddf7f0075df78a138d5be03&quot;
+  },
+  {
+    &quot;path&quot;: &quot;sim/plant.py&quot;,
+    &quot;sha256&quot;: &quot;f45d4be3cb9e57150002e2d3253965d3e162b0190c5b5cf34f8c1abd9248e50b&quot;
+  },
+  {
+    &quot;path&quot;: &quot;sim/plant.xml&quot;,
+    &quot;sha256&quot;: &quot;aef8a51e84742568b0db6271e3ca946dcd345db3f4d426a60a906a75db587fe0&quot;
+  },
+  {
+    &quot;path&quot;: &quot;sim/platform_info.py&quot;,
+    &quot;sha256&quot;: &quot;26450befc3930ce073a7f09e2250e8e866d3a99ef8b9edc90d43a0788bc66dd4&quot;
+  },
+  {
+    &quot;path&quot;: &quot;sim/preview.py&quot;,
+    &quot;sha256&quot;: &quot;4ffe5dc81eb5819f4dbf83c1512d9a5802e02cd44eafed8c5c664d263fe7484a&quot;
+  },
+  {
+    &quot;path&quot;: &quot;sim/reference.py&quot;,
+    &quot;sha256&quot;: &quot;3cfa6f47ec0faf9c63aa0aa8f793211a4fcac8e0be6c77091b817acd8ae25edf&quot;
+  },
+  {
+    &quot;path&quot;: &quot;sim/reproduction_contract.json&quot;,
+    &quot;sha256&quot;: &quot;356f8efa4aa283eba18828b5bf2f2954df8ed332a8746fde60c6251a395e6edf&quot;
+  },
+  {
+    &quot;path&quot;: &quot;sim/run.py&quot;,
+    &quot;sha256&quot;: &quot;7e73c7c8bb7cf53ab1d57d6e65369b6faae872b3427dbc877309a79b8a749d75&quot;
+  },
+  {
+    &quot;path&quot;: &quot;sim/sensors.py&quot;,
+    &quot;sha256&quot;: &quot;cd89f8957f98c699cc10f9e8c7a3d96039ead8e1f1ea5fcb39e43b1e46de5b08&quot;
+  },
+  {
+    &quot;path&quot;: &quot;sim/verdict_contract.json&quot;,
+    &quot;sha256&quot;: &quot;7e917fbac313de750d5ac6de086e6cba97ad9d1876d29b0aada6f6ceb10b8009&quot;
+  },
+  {
+    &quot;path&quot;: &quot;tests/test_compare_traces.py&quot;,
+    &quot;sha256&quot;: &quot;b39565eec5cfe19296ee5198be1e51323369fb8b83c3306cff91e3ce47a9fa5b&quot;
+  },
+  {
+    &quot;path&quot;: &quot;tests/test_delayed_feedback.py&quot;,
+    &quot;sha256&quot;: &quot;734e37178718a5069866018173d03636445b4dabee592898e66a56aed79c418f&quot;
+  },
+  {
+    &quot;path&quot;: &quot;tests/test_determinism.py&quot;,
+    &quot;sha256&quot;: &quot;c347637e3a629944b039382317390f1ec7ed8bcc26e0284aeb2efe233100b71b&quot;
+  },
+  {
+    &quot;path&quot;: &quot;tests/test_isolation.py&quot;,
+    &quot;sha256&quot;: &quot;26fb86cab2b61e4a6e2c6db0d6769aaff6e73d6baa8615360dbff64a95a62b22&quot;
+  },
+  {
+    &quot;path&quot;: &quot;tests/test_offsetfree.py&quot;,
+    &quot;sha256&quot;: &quot;e8618e1a178940bed173906903f1c15cb23b77215523af1c7066cea8aeb97cde&quot;
+  },
+  {
+    &quot;path&quot;: &quot;tests/test_plant.py&quot;,
+    &quot;sha256&quot;: &quot;0bf27572f0a93cf08014af94624ca561246650ee6f086c1df55bb4a3d4f4b202&quot;
+  },
+  {
+    &quot;path&quot;: &quot;tests/test_platform_info.py&quot;,
+    &quot;sha256&quot;: &quot;a98fc00d4917d456631678faf222c422f3915d3bfdb6d257c7adeaf0f4e4105a&quot;
+  },
+  {
+    &quot;path&quot;: &quot;tests/test_preview.py&quot;,
+    &quot;sha256&quot;: &quot;0595a2aadacc7ee85b04d2ded1847a03a13375f260d17449e2b1da5d012fc191&quot;
+  },
+  {
+    &quot;path&quot;: &quot;tests/test_reproduction.py&quot;,
+    &quot;sha256&quot;: &quot;1859bd6a7a36956f109d1a95d9d884e7e29abec4951cae7984c476ada075a534&quot;
+  },
+  {
+    &quot;path&quot;: &quot;tests/test_run.py&quot;,
+    &quot;sha256&quot;: &quot;f8383073a52690e07d6c751ac67db180ab027762e80cc7d42c54bacf84802327&quot;
+  },
+  {
+    &quot;path&quot;: &quot;tests/test_sensors.py&quot;,
+    &quot;sha256&quot;: &quot;ec23dc40bccb957f97fd117ab1129375d6cd067fc555f57f3cd905e101351133&quot;
+  },
+  {
+    &quot;path&quot;: &quot;tests/test_verdict.py&quot;,
+    &quot;sha256&quot;: &quot;4175cf6cbd2416b73372f6ff376f8207b6cea95de91d539324eff791ab26aaa3&quot;
+  }
+]
+</pre></details><details class="record" open><summary>claude.md</summary><pre>我先自己克隆仓库核对这 5 个问题，再给启动审阅。
+
+# G 启动审阅（Claude）
+
+**核验范围：** 我独立克隆了公开仓库，HEAD = `e8cb4ee7ac1420c945dbcb2ba86adfe1afa63338`，只读了源码，没有运行任何仿真。下面的结论都基于我自己读到的代码，不依赖你的摘要。
+
+## 一、你的 5 条：全部核实成立
+
+1. **F5 注入层错了。** `PROJECT_BRIEF.md` §7 明确 F5 是 plant 参数。真实组织运动由 `sim/config.py:104 tissue_target()` 生成，`sim/plant.py:85` 每个 physics tick 都调用它。只改传感器，测到的就是&quot;传感器欺骗&quot;，不是心率漂移。交接里&quot;其余在传感器模型层&quot;这句是我写交接时加的，写错了，以 brief 为准。
+2. **F5 和注入时刻有冲突。** 固定 2–5 s 的 ramp 与 {0.2, 1.5, 2.4, 5.0} s 注入在语义上冲突。
+3. **几处定义缺失。**
+   - F1/F6 的&quot;连续 N tick&quot;与 300 ms 持续时间冲突。
+   - seed 没有给具体值。
+   - F7 的&quot;标称峰值力&quot;在全仓库都没有定义（grep 不到任何力限幅）。
+   - 图 4 用哪个档位没有指定。
+4. **多数消融是空操作。** `sim/config.py:29-30` 中噪声和丢帧默认都是 0，`sim/sensors.py` 只有采样、固定延迟、噪声、丢帧四项，没有 jitter 和量化。所以 no-noise 和 no-dropped-frame-model 在基线上是恒等变换，no-jitter-model 和 no-quantization 在基线里没有对应项。
+5. **规模计算正确。** 单控制器、单消融 308 run 的算法没错。
+
+## 二、我额外发现的（按严重度）
+
+**N1【阻塞】no-delay 消融对 preview 是退化的。**
+`sim/preview.py:69` 要求 `sampled + self.delay_us &lt;= sensors.time_us`，而估计器的 `delay_us` 被 `Config.validate` 固定为 15 ms。把传感延迟设成 0 后，每帧到达时 `sampled == time_us`，全部被拒收，estimator 一直返回 (0, 0)，preview 等于瞎了。结果是所有格子结构性 FAIL，预测 5 会因为这个 guard 而&quot;成立&quot;，不能作为&quot;延迟建模必要&quot;的证据。
+
+**N2【解释】F3 下早到的帧会被 preview 永久丢弃。**
+原因同上：延迟不足 15 ms 的帧在到达那个 tick 被拒收，之后 `fresh` 不再为真。所以对 preview 来说，F3 实际上是&quot;抖动 + 部分丢帧&quot;。这是冻结控制器的真实行为，不需要改设计，但报告解释 F3 时必须写出来。
+
+**N3【阻塞】F1 的语义必须先定。**
+`sim/controllers.py:49` 和 `sim/preview.py:71` 都会拒收序号不递增的帧：
+- 如果&quot;原样重发旧帧&quot;，控制器会直接忽略，等价于短时丢帧。
+- 如果&quot;值冻结、序号和采样时间照常递增&quot;，才是欺骗控制器。
+
+两种结果会完全不同。
+
+**N4【信息】计分窗口是 3.0–8.0 s**（`sim/verdict_contract.json:6`）。
+在 0.2、1.5、2.4 s 注入的 300 ms 内瞬态故障，都在计分开始前就结束了，只能通过残留影响导致 FAIL。不需要改预测，但报告必须说明。
+
+**其他代码事实（用于定实现约定）：**
+- `sim/config.py:63` 只允许采样率 ∈ {25, 1000}，所以 F4 必须在注入层做降采样，不能改 cfg。
+- `tissue_target` 用的是 `sin(2πft)` 加绝对时间。直接把 f 换成 f(t)，瞬时频率会变成 f + t·f′，所以 F5 必须对相位积分。
+- `sim/controllers.py:90` 的观测器每次调用固定按 1 ms 推进。F6 跳 tick 会让它的预测落后，这是 F6 要测的真实行为。
+- `sim/run.py` 每个 run 都会跑两遍做复现校验（verdict 要求 `require_verified_reproducibility`），所以确定性复跑已经内置了。
+
+## 三、M0 前可直接补充的实现约定
+
+这些写进 `C1_PREREG.md` 的&quot;实现约定&quot;一节，不改任何预测和阈值。
+
+- **Seed：** F2/F3 用 {42, 43, 44, 45, 46}。注入器用独立的 RNG（`SeedSequence([seed, fault_index])`），不消耗 Phase A 传感器的 RNG，保证无故障 run 的 trace 逐 bit 不变。
+- **F3：** 延迟 = 15 ms + N(0, σ)，四舍五入到整 tick，截到 ≥ 0。按 FIFO 投递（投递时间不递减），按采样时间判断是否落在窗口内。σ = 0.5 ms 时受 tick 量化影响很大，报告里要注明。
+- **F4：** 从注入时刻起只保留采样时间是周期整数倍的帧，其余不投递。M1 加一项对照：从 t=0 开始注入 F4@25 Hz，与现有 Phase A 25 Hz 路径对比，除序号编号外应一致。
+- **F5：** 在新模块里写 plant 子类实现，不改冻结文件。
+  - φ(t) = 2π∫f dt，二次谐波用 2φ，呼吸分量不变。
+  - ramp 开始前直接调用原来的 `tissue_target`，保证前缀逐 bit 一致。
+  - Rust 路径的 plant 来自 `harness/plant_server.py`（`MujocoPlant`），所以只需实现一次，两条路径共用。
+- **F6：** 跳过的 tick 不调用 `controller.command`，保持上一条指令。跳过期间到达的帧采用 latest-wins mailbox：恢复的那个 tick，如果期间有帧到达，就交付最新一帧并标记 `fresh`。
+- **F7：** 限幅 = p% × 同一控制器、同一消融、seed 42 的无故障 run 在全 8 s 内的 max|force|，对称限幅。这个峰值在 M2 里、跑 F7 之前算出。100% 档必须与无故障 run 逐 bit 相同。
+- **F8：** q(x) = clamp(round(x/LSB)·LSB)，LSB = 2 mm / 2^bits：
+
+  | 位数 | LSB |
+  |---|---|
+  | 10 bit | 1.953 µm |
+  | 12 bit | 0.488 µm |
+  | 16 bit | 30.5 nm |
+  | 24 bit | 0.119 nm |
+
+- **图 4 档位规则：** 每种故障取 preview 在 baseline 消融、2.4 s 注入下的 flip-point 档位；没有翻转就取最重档。
+- **精确矩阵（按第四节批准的版本）：**
+  - 每个控制器 × 每个消融：F1 24 + F2 100 + F3 100 + F4 20 + F5 4 + F6 16 + F7 16 + F8 16 + 无故障 1 = **297**
+  - preview × 6 个消融 = 1782
+  - c32 = 297
+  - 图 4 另外 3 个控制器共 51
+  - 合计 **2130 run**，每个 run 内部跑两遍
+- **记录方式：** `REVIEW_PROTOCOL.md` 写明，当前的审阅传递方式是用户指定的&quot;聊天中转&quot;，CLI 方案作废。我每次的回复原文存到 `reviews/&lt;M&gt;/claude.md`。
+
+## 四、必须由用户决定：最小修正文案（可直接批准）
+
+```
+【C1 注册修正 v1 — 用户批准后写入 C1_PREREG.md】
+1. F5 注入层 = plant（组织运动），与 PROJECT_BRIEF §7 一致。F5 固定为 2.0–5.0 s 线性 ramp，之后保持目标频率到 8 s；注入时刻轴对 F5 不适用（每档 1 个 run）。
+2. 时间定义：F1、F6 = 从注入时刻起的单次连续 N tick；F2、F3 = 从注入时刻起的 300 ms 窗口；F4、F7、F8 从注入时刻起持续到 8 s。
+3. F1 = 传感器卡死：帧照常到达、序号和采样时间照常递增，但 surface 值冻结在起点的值。
+4. 消融 = 关掉 sim 对该机制的建模，包括标称项和对应的注入故障：no-delay → 标称延迟 0（F3 抖动围绕 0，截到 ≥0）；no-jitter-model → F3 无效；no-quantization → F8 无效；no-dropped-frame-model → F2 无效；no-noise → 无变化。被测控制器不变。按构造应与无故障相同的格子，必须逐 bit 相同。
+5. 预测 5 原文不改，加注：preview 拒收采样后不满 15 ms 到达的帧（sim/preview.py:69），因此 no-delay 下 preview 收不到任何测量、结构性全部 FAIL；本条结果不作为&quot;延迟建模必要&quot;的证据。
+6. preview_c32 只跑 baseline 消融的完整矩阵（297 run）。
+7. F8 只量化 surface 测量，不量化 needle encoder。
+```
+
+可选（不在最小修正里，默认不做）：如果想让 no-delay 消融有信息量，可以额外把 `delayed_feedback_offsetfree` 作为第二个消融对象。它的 guard 是 `sampled &lt;= time_us`，不会因为延迟为 0 而变瞎。
+
+## 五、对 G 的结论
+
+这些问题只阻塞 M0，不阻塞 G。G 可以照常做：保存原始 handoff、搭记录机制。**用户批准第四节之前，不要提交 `C1_PREREG.md`。** 这份审阅只是咨询意见，不等于用户批准。
+
+```json
+{
+  &quot;verdict&quot;: &quot;ESCALATE&quot;,
+  &quot;issues&quot;: [
+    {&quot;severity&quot;: &quot;blocker&quot;, &quot;where&quot;: &quot;HANDOFF §5.1-5.2 注入点表; PROJECT_BRIEF.md §7; sim/config.py:104; sim/plant.py:85&quot;, &quot;what&quot;: &quot;F5 必须在 plant 层注入（交接里的注入点表写错了）；固定 2–5 s ramp 与注入时刻轴冲突&quot;, &quot;touches_frozen_or_registered&quot;: true},
+    {&quot;severity&quot;: &quot;blocker&quot;, &quot;where&quot;: &quot;sim/preview.py:69; HANDOFF §5.4, §5.6&quot;, &quot;what&quot;: &quot;no-delay 下 preview 拒收全部帧、结构性 FAIL；预测 5 因 guard 而成立，不能作为证据&quot;, &quot;touches_frozen_or_registered&quot;: true},
+    {&quot;severity&quot;: &quot;blocker&quot;, &quot;where&quot;: &quot;sim/config.py:29-30; sim/sensors.py; HANDOFF §5.4&quot;, &quot;what&quot;: &quot;消融语义未定义；基线没有噪声/丢帧/抖动/量化项，4 个消融在当前定义下是恒等变换&quot;, &quot;touches_frozen_or_registered&quot;: true},
+    {&quot;severity&quot;: &quot;blocker&quot;, &quot;where&quot;: &quot;sim/controllers.py:49; sim/preview.py:71; HANDOFF §5.1 F1&quot;, &quot;what&quot;: &quot;F1 是&#x27;原样重发&#x27;还是&#x27;值冻结、元数据递增&#x27;：前者被序号 guard 拒收，等价于丢帧&quot;, &quot;touches_frozen_or_registered&quot;: true},
+    {&quot;severity&quot;: &quot;blocker&quot;, &quot;where&quot;: &quot;HANDOFF §5.2&quot;, &quot;what&quot;: &quot;F1/F6 的 N tick 与 300 ms 持续时间冲突；持续性故障的起止时间未定义&quot;, &quot;touches_frozen_or_registered&quot;: true},
+    {&quot;severity&quot;: &quot;minor&quot;, &quot;where&quot;: &quot;HANDOFF §5.5&quot;, &quot;what&quot;: &quot;preview_c32 &#x27;完整矩阵&#x27;的范围不明确，建议只跑 baseline 消融（297 run）&quot;, &quot;touches_frozen_or_registered&quot;: true},
+    {&quot;severity&quot;: &quot;minor&quot;, &quot;where&quot;: &quot;HANDOFF §5.1 F8&quot;, &quot;what&quot;: &quot;量化对象不明确，建议只量化 surface 测量&quot;, &quot;touches_frozen_or_registered&quot;: true},
+    {&quot;severity&quot;: &quot;minor&quot;, &quot;where&quot;: &quot;全仓库无力限幅定义; HANDOFF §5.1 F7&quot;, &quot;what&quot;: &quot;标称峰值力未定义，按程序化规则定义：同控制器、同消融、无故障 run 的 max|force|&quot;, &quot;touches_frozen_or_registered&quot;: false},
+    {&quot;severity&quot;: &quot;minor&quot;, &quot;where&quot;: &quot;HANDOFF §5.3, §5.5&quot;, &quot;what&quot;: &quot;seed 具体值和图 4 档位未指定，按实现约定补充&quot;, &quot;touches_frozen_or_registered&quot;: false},
+    {&quot;severity&quot;: &quot;minor&quot;, &quot;where&quot;: &quot;sim/config.py:63&quot;, &quot;what&quot;: &quot;Config 只允许 25/1000 Hz，F4 必须在注入层降采样，并与 Phase A 25 Hz 路径对照&quot;, &quot;touches_frozen_or_registered&quot;: false},
+    {&quot;severity&quot;: &quot;minor&quot;, &quot;where&quot;: &quot;sim/preview.py:69&quot;, &quot;what&quot;: &quot;F3 下早到的帧被 preview 永久丢弃（真实行为），报告必须解释&quot;, &quot;touches_frozen_or_registered&quot;: false},
+    {&quot;severity&quot;: &quot;minor&quot;, &quot;where&quot;: &quot;sim/verdict_contract.json:6&quot;, &quot;what&quot;: &quot;计分窗口 3.0–8.0 s，0.2/1.5/2.4 s 的瞬态注入在计分前结束，只能通过残留影响 FAIL&quot;, &quot;touches_frozen_or_registered&quot;: false},
+    {&quot;severity&quot;: &quot;minor&quot;, &quot;where&quot;: &quot;HANDOFF §10&quot;, &quot;what&quot;: &quot;按修正后的精确矩阵为 2130 run（每个 run 内部双跑），替换原来 600–1300 的估计&quot;, &quot;touches_frozen_or_registered&quot;: false}
+  ]
+}
+```
+</pre></details><details class="escalate" open><summary>ESCALATION.md</summary><pre>&gt; Historical startup escalation. RESOLVED by the user’s subsequent delegation of routine design decisions; retained verbatim below as review history. See docs/REVIEW_PROTOCOL.md and docs/C1_DESIGN_DECISIONS.md.
+
+# G startup escalation — decision requested before M0
+
+Status: ESCALATE. No Phase C experiments or M0 registration have occurred.
+G is partially prepared, not passed. No new commit, push, hosted CI, GPT review,
+tag or completion blog is claimed. Baseline tracked files remain unchanged.
+
+## External response retained
+
+`claude.md` is the complete response copied from the existing Claude conversation.
+Its text was compared against the browser clipboard: 6,560 UTF-16 characters,
+FNV-1a 32-bit `c1e063e3`, excluding the archive file&#x27;s final newline. This check
+guards transcription; it is not the experimental SHA-256 sealing mechanism.
+The verdict JSON says ESCALATE. The reviewer reports independently cloning and
+reading baseline e8cb4ee; that is a reviewer claim, not a local tool execution.
+
+## Local assessment of that response
+
+Confirmed from local source: F5 belongs to physical plant motion; changing only
+sensor values is a different experiment. The fixed 2–5 s ramp cannot also begin
+at every prescribed injection time. Preview rejects fresh measurements younger
+than 15 ms; duplicate sequence/sample metadata is rejected. The scoring window
+is 3–8 s. Zero nominal noise/dropout makes relevant baseline ablations identities.
+
+Do not adopt the reviewer&#x27;s blanket claim that *all* no-delay cases necessarily
+FAIL. If F3 jitter remains active, some frames can have age &gt;=15 ms; F6 mailbox
+handling can also change delivery age. No experiment has verified every verdict,
+or that prediction 5 has the largest flip count. Report measured outcomes only.
+The original response is preserved unchanged, with this qualification separate.
+
+Do not silently reduce preview_c32 coverage as proposed in the response. The
+decision proposal below retains both controllers across all six ablations.
+Figure 4 must also use F5&#x27;s sole fixed ramp, not a nonexistent 2.4 s F5 onset.
+
+## Proposed decision for user approval — not yet registered
+
+1. F5 changes real tissue motion through an additional plant implementation;
+   frozen source/MJCF/controllers remain unchanged. Keep the 2.0–5.0 s frequency
+   ramp, hold its target through 8 s, and exempt F5 from the injection-time axis.
+   Integrate frequency into phase; keep respiration unchanged.
+2. F1/F6 are single N-tick bursts at the selected onset. F2/F3 last 300 ms.
+   F4/F7/F8 persist from onset through the end of the run.
+3. F1 freezes surface measurement values while sample timestamps and frame
+   sequence numbers continue normally. It models a stuck sensor rather than a
+   retransmission of identical frame metadata.
+4. Ablations remove the named sensor mechanism, including its injected effect:
+   no-jitter disables F3; no-quantization disables F8; no-dropped-frame disables
+   F2; no-noise is explicitly an identity under zero baseline noise. No-delay
+   removes the 15 ms nominal delay while retaining F3 jitter around zero,
+   clipped nonnegative. Keep controllers and verdict thresholds unchanged.
+   Label disabled-fault/identity cases and avoid overstating causal evidence.
+5. Keep all five predictions verbatim, but qualify interpretation of prediction 5:
+   zero-delay nominal frames are rejected by the frozen preview age guard.
+   Do not predeclare any cell FAIL or any prediction confirmed before running.
+6. Retain preview_c32 across all six ablations, matching preview. With the F5
+   exception and one nominal case per controller/ablation, that is 297 cases
+   per matrix, 3,564 main cases; three additional figure-4 controllers add
+   51 cases including their nominal references: 3,615 logical runs before each
+   run&#x27;s determinism replay and any separately documented validation checks.
+7. Quantize only the tissue surface measurement for F8; preserve the needle
+   encoder. Fix five random seeds to 42–46 and deterministic implementation
+   conventions before experiments. F7 uses the corresponding controller and
+   ablation&#x27;s seed-42 nominal full-run maximum absolute force as its reference.
+   Figure-4 severity uses a predeclared selection rule; F5 uses its fixed ramp.
+
+This proposal changes the experiment definition, not just file formatting.
+User approval is needed to resolve incompatible instructions before M0.
+The handoff&#x27;s section 10 explicitly says: “如果发现注册内容本身不合理：停下来报告，
+不要自己放宽”; section 8 also names reviewer ESCALATE as a stopping condition.
+The current user&#x27;s direct browser-review instruction remains authoritative over
+the handoff&#x27;s obsolete CLI-only transport restriction.
+
+## Resume
+
+After the user&#x27;s decision, finish G&#x27;s actual gate implementation and exact-commit
+CI/reviews. Then register the accepted design at M0 before any Phase C run.
+Continue the user-requested pause/send/wait/copy loop at every milestone. Write
+the short blog only after M4 is complete; release tagging remains separately
+subject to user approval.
+</pre></details><details class="record"><summary>local-checks.json</summary><pre>{
+  &quot;baseline_commit&quot;: &quot;e8cb4ee7ac1420c945dbcb2ba86adfe1afa63338&quot;,
+  &quot;phase_c_runs&quot;: 0,
+  &quot;handoff_copy_equal&quot;: true,
+  &quot;frozen_file_mismatches&quot;: [],
+  &quot;milestone_passed&quot;: false
+}
+</pre></details><details class="record" open><summary>packet.md</summary><pre># G startup design review — not a completed milestone
+
+Baseline: `e8cb4ee7ac1420c945dbcb2ba86adfe1afa63338`.
+Local branch: `phase-c-sil`. No Phase C simulation has run. M0 is not registered.
+
+## Acceptance still pending
+
+Save the original handoff, implement review evidence capture and rendering,
+commit, obtain CI for that new commit, and pass review before M0.
+The original handoff is copied without alteration into
+`docs/HANDOFF_PHASE_C_SIL.md`. `baseline-files.json` records existing file hashes.
+
+## Verified baseline CI
+
+- Phase A: https://github.com/Jeffaaay/insertion-vv/actions/runs/38330849073 — success.
+- Phase B: https://github.com/Jeffaaay/insertion-vv/actions/runs/38330849102 — success.
+
+These apply only to the baseline, not to G. Machine-readable evidence:
+`baseline-ci.json`. No new milestone commit or hosted CI is claimed.
+
+## User-requested review channel
+
+The current user explicitly requests sending milestone evidence to the existing
+Claude chat, waiting for its answer and copying the answer back to the Codex task.
+This supersedes the handoff&#x27;s Claude-CLI-only/no-chat-webpage transport rule.
+Destination: https://claude.ai/chat/88a45c0b-4051-4fea-8c12-bdfa77bd4de1
+The reviewer response is advisory, never user approval to change scope.
+Browser transcript records must not be represented as CLI stream-json output.
+
+## Design conflicts submitted before registration
+
+1. F5 changes actual cardiac motion but handoff groups it under sensor injection.
+   `PROJECT_BRIEF.md` section 7 calls F5 a plant parameter;
+   `sim/config.py:tissue_target` and `sim/plant.py:step` confirm the distinction.
+2. F5&#x27;s fixed 2–5 s ramp conflicts with onset values 0.2, 1.5, 2.4, 5.0 s.
+3. F1/F6 N-tick bursts versus the common 300 ms duration are underspecified.
+4. Five F2/F3 seed values, F7 nominal-force reference and figure-4 levels are
+   unspecified and must be fixed before seeing experimental results.
+5. Existing sensor noise/dropout are zero; jitter and quantization baseline
+   models are absent. Identity ablations must be reported honestly.
+6. The stated grid is 308 runs per controller per ablation, hence 1,848 for six
+   ablations or 3,696 for both controllers, before repeats/figure-4 controls.
+
+The cloud reviewer was asked to inspect public source independently, disclose
+access failures, classify decisions and propose minimal corrections if needed.
+The reviewer was explicitly told not to claim G passed or experiments ran.
+
+## Work state
+
+Frozen tracked source files have not been modified. Only new handoff and review
+records are being added. Any ESCALATE decision will be saved and brought to the
+user before dependent implementation or registration proceeds.
+</pre></details><details class="record" open><summary>sessions.md</summary><pre># Sessions
+
+- Local task: projectless Codex workspace, branch `phase-c-sil`.
+- Claude web review: existing **Neuralink project** conversation.
+  Reopen: https://claude.ai/chat/88a45c0b-4051-4fea-8c12-bdfa77bd4de1
+- Message: G startup design review, following the original 10-message history.
+- Transport: user-authorized browser interaction. No Claude CLI session or
+  CLI stream-json transcript exists for this review.
+- GPT CLI review: not started; G implementation and design decisions pending.
+
+The browser response must be preserved verbatim when complete; quotations remain
+reviewer claims rather than verification performed by the local agent.
+</pre></details></section></html>
