@@ -32,13 +32,16 @@ DMA buffer or physical actuator output is configured. UART/DMA errors, overrun,
 partial-frame timeout, bad CRC or invalid framing stop the firmware with a
 debugger-readable `board_error`; resetting the board is then required.
 
-TIM6 uses the 260 MHz APB1 timer clock, PSC=259 and ARR=999 for 1 kHz. In B1 it only
-counts interrupts: lockstep control runs when a valid sensor frame arrives. INFO
-advertises only lockstep, and replay requests receive unsupported status. DWT
-records `ctrl_step` start and elapsed cycles; lockstep is a functional experiment,
-not a real-time 1 kHz claim. Main may sleep between UART events, so entry-cycle
-differences must not be treated as wall-clock interval measurements. B2 replay
-must keep the CPU awake during its timed interval and use TIM-driven control.
+TIM6 uses the 260 MHz APB1 timer clock, PSC=259 and ARR=999 for 1 kHz. B2 supports
+both lockstep and recorded-input replay. Lockstep control runs on a valid sensor
+frame; it is functional equivalence, not a real-time 1 kHz claim. Main may sleep
+between lockstep UART events, so lockstep entry-cycle differences are not wall time.
+During replay the CPU stays awake, TIM6 calls the unchanged controller, and UART
+handling is deferred. The entry shim reads DWT before the C prologue. Computation,
+entry-to-control delay and ISR body durations are separate; the latter excludes
+the final timestamp/store, GPIO clear and return epilogue. PG2 (ZIO D49 / CN8 pin
+14) pulses high during the ISR body for future external measurement. It is only
+instrumentation. Build success does not verify timing or absolute tick frequency.
 
 The unchanged C32 core uses `-O2 -ffp-contract=off -fno-fast-math`, Cortex-M7
 `-mfpu=fpv5-d16 -mfloat-abi=hard`, FPSCR=0 (nearest rounding, no flush-to-zero).
@@ -53,12 +56,17 @@ hash, firmware source hashes, ELF/bin hashes and dependency pins.
 |---|---|---|
 | Flash, 0x08000000 | Code and initialized-data image | 1 MiB capacity |
 | DTCM, 0x20000000 | State, 104000-byte telemetry, reserved 16384-byte stack | 128 KiB capacity; linker checks the gap |
-| AXI, 0x24000000 | 8000 × 32-byte complete CtrlSensors = 256000 bytes | 320 KiB capacity, 71680 bytes spare |
+| AXI, 0x24000000 | 256000-byte full inputs + 64000-byte timing breakdown | 320 KiB capacity, 7680 bytes spare |
 | D2, 0x30000000 | 512-byte DMA RX buffer | 32 KiB capacity |
 
-Code runs from Flash, not DTCM. The two replay arrays are reserved and kept by the
-linker even though B1 does not execute replay; this tests the actual future budget.
-NOLOAD buffers must be populated before use in B2. A 16 KiB stack reservation is
-not a measured stack high-water mark. The linker's DTCM "100%" high-water line
+Code runs from Flash, not DTCM. NOLOAD buffers are populated before use; uploaded
+input CRC32 is recomputed from canonical records in RAM before START. Command and
+timing records each have whole-stream CRC32 checked after fetching. Boot paints
+only unused stack below MSP; a runtime scan measures conservative untouched stack
+headroom, with a preregistered 4 KiB gate. No high-water result exists before an
+actual run. The linker's DTCM "100%" high-water line
 includes the stack at the top of the bank; `build.json` reports the free gap
 between data/telemetry and that stack separately.
+
+See [B2 preregistration](../../docs/PHASE_B_HARDWARE_PLAN.md) and
+[protocol layouts](../../docs/PROTOCOL.md). Build tooling never flashes a board.

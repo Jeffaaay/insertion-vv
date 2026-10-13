@@ -42,8 +42,8 @@ int vv_decode(const uint8_t *wire, size_t size, VvFrame *frame) {
     if (crc != vv_crc(wire + 2, size - 4))
         return -1;
     uint8_t type = wire[3];
-    if (!((type >= 1 && type <= 8) || (type >= 0x81 && type <= 0x83) || type == 0x85 ||
-          type == 0x87 || type == 0x88))
+    if (!((type >= 1 && type <= 10) || (type >= 0x81 && type <= 0x83) || type == 0x85 ||
+          (type >= 0x87 && type <= 0x8a)))
         return -1;
     frame->type = wire[3];
     frame->session = vv_u32(wire + 6);

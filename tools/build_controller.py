@@ -103,6 +103,23 @@ def build(output, cc=None, arm_cc=None):
     subprocess.run(
         [str(protocol_test), *(row["frame_hex"] for row in golden["frames"])], check=True
     )
+    replay_test = output / ("replay_test.exe" if os.name == "nt" else "replay_test")
+    subprocess.run(
+        [
+            cc,
+            *FLAGS,
+            str(CTRL / "controller.c"),
+            str(protocol),
+            str(protocol.with_name("replay.c")),
+            str(protocol.with_name("test_replay.c")),
+            "-o",
+            str(replay_test),
+            "-lm",
+        ],
+        check=True,
+    )
+    subprocess.run([str(replay_test)], check=True)
+    report["replay_tests"] = "PASS (synthetic clocks; not hardware timing)"
     virtual = output / ("virtual_board.exe" if os.name == "nt" else "virtual_board")
     virtual_flags = FLAGS + ([] if os.name == "nt" else ["-fPIC"])
     subprocess.run(

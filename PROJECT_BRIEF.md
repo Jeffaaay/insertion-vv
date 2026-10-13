@@ -379,3 +379,13 @@ registered in that plan. The user authorizes continuation after each review chec
 H723 has a DP-FPU supporting binary32 and binary64. The C32 implementation is an
 experimental precision choice, not a hardware restriction. A later double build
 can be a separate ablation; no such numeric change is included in B1.
+
+## 21. B2 replay and hardware verification (2026-10-12)
+
+B1 is accepted after six separate green checkpoints. Continue with build-only
+replay, then host hardware tooling, then actual board experiments when connected.
+`docs/PHASE_B_HARDWARE_PLAN.md` registers the sequence, stricter hardware-only
+contact RMS <1% comparison, compute/jitter/stack gates and exact timing semantics
+before any hardware experiment. Existing Phase A/C32 contracts remain unchanged.
+Physical hardware evidence is required before the Phase B summary/release tag;
+do not replace it with compile success, a virtual board or inferred timing.

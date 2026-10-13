@@ -1,5 +1,5 @@
 /* Development-board controller only. MuJoCo is the plant; no actuator pins. */
-#include "../protocol/protocol.h"
+#include "../protocol/replay.h"
 #include "build_identity.h"
 #include "stm32h7xx_hal.h"
 #include <errno.h>
@@ -9,20 +9,39 @@ UART_HandleTypeDef uart;
 DMA_HandleTypeDef rx_dma;
 TIM_HandleTypeDef timer;
 static VvDevice device;
+static VvReplay replay;
 volatile uint32_t board_error, timer_ticks, last_timer_entry;
 static volatile uint32_t rx_produced, rx_consumed, uart_error;
 static uint32_t rx_last_position;
 static uint8_t rx_bytes[512] __attribute__((section(".dma"), aligned(32)));
 
-/* Reserve the complete B2 budget now. B1 advertises lockstep only. */
+/* Full decoded inputs; timing telemetry stays in DTCM. */
 CtrlSensors replay_inputs[VV_TICKS] __attribute__((section(".replay_inputs"), used, aligned(32)));
-typedef struct {
-    float force[VV_TICKS];
-    uint32_t entry[VV_TICKS], compute[VV_TICKS];
-    uint8_t status[VV_TICKS];
-} ReplayTelemetry;
-ReplayTelemetry replay_telemetry __attribute__((section(".telemetry"), used, aligned(8)));
-_Static_assert(sizeof(CtrlSensors) == 32 && sizeof(ReplayTelemetry) == 104000, "replay RAM budget");
+VvTelemetry replay_telemetry __attribute__((section(".telemetry"), used, aligned(8)));
+VvTiming replay_timing __attribute__((section(".replay_timing"), used, aligned(8)));
+extern uint8_t _stack_limit, _flash_image_end;
+static uint32_t stack_painted, flash_crc, flash_bytes;
+
+static void paint_stack(void) {
+    __disable_irq();
+    volatile uint8_t *p = &_stack_limit;
+    uintptr_t stop = __get_MSP() - 256u; /* Never overwrite active frames. */
+    stack_painted = (uint32_t)(stop - (uintptr_t)p);
+    while ((uintptr_t)p < stop)
+        *p++ = 0xa5;
+    __enable_irq();
+}
+static void diagnostics(void) {
+    uint32_t free = 0;
+    volatile const uint8_t *p = &_stack_limit;
+    while (free < stack_painted && p[free] == 0xa5)
+        free++;
+    replay.stack_free = free;
+    replay.stack_painted = stack_painted;
+    replay.fpscr = __get_FPSCR();
+    replay.flash_crc = flash_crc;
+    replay.flash_bytes = flash_bytes;
+}
 
 static void fatal(uint32_t reason) {
     board_error = reason;
@@ -124,6 +143,15 @@ static void uart_init(void) {
 }
 
 static void timer_init(void) {
+    /* PG2 = ZIO D49 / CN8 pin 14; instrumentation only, no actuator. */
+    __HAL_RCC_GPIOG_CLK_ENABLE();
+    GPIOG->BSRR = GPIO_PIN_2 << 16;
+    GPIO_InitTypeDef gpio = {0};
+    gpio.Pin = GPIO_PIN_2;
+    gpio.Mode = GPIO_MODE_OUTPUT_PP;
+    gpio.Pull = GPIO_NOPULL;
+    gpio.Speed = GPIO_SPEED_FREQ_HIGH;
+    HAL_GPIO_Init(GPIOG, &gpio);
     __HAL_RCC_TIM6_CLK_ENABLE();
     timer.Instance = TIM6;
     /* APB1 is /2, hence its timer clock is 2*PCLK1 = 260 MHz. */
@@ -155,6 +183,7 @@ static uint8_t receive_byte(uint32_t start, int waiting_for_first) {
 }
 
 int main(void) {
+    paint_stack();
     /* Instruction cache enabled; D-cache disabled so DMA SRAM stays coherent. */
     SCB_EnableICache();
     SCB_DisableDCache();
@@ -167,12 +196,14 @@ int main(void) {
     DWT->CTRL |= DWT_CTRL_CYCCNTENA_Msk;
     if (DWT->CTRL & DWT_CTRL_NOCYCCNT_Msk)
         fatal(13);
+    flash_bytes = (uint32_t)((uintptr_t)&_flash_image_end - 0x08000000u);
+    flash_crc = ~vv_crc32_update(0xffffffffu, (const uint8_t *)0x08000000u, flash_bytes);
     uart_init();
     timer_init();
     uint8_t info[VV_INFO_SIZE] = {0};
     info[0] = 1;
     info[1] = 1;
-    info[2] = 1;
+    info[2] = 3;
     vv_put32(info + 4, SystemCoreClock);
     vv_put32(info + 8, 2 * HAL_RCC_GetPCLK1Freq());
     vv_put32(info + 12, VV_TICKS);
@@ -184,6 +215,7 @@ int main(void) {
     vv_put32(info + 132, DBGMCU->IDCODE);
     vv_put32(info + 136, SCB->CPUID);
     vv_device_init(&device, info);
+    vv_replay_init(&replay, &device, replay_inputs, &replay_telemetry, &replay_timing);
     for (;;) {
         uint8_t wire[VV_MAX_FRAME];
         VvFrame request, response;
@@ -198,23 +230,77 @@ int main(void) {
             wire[i] = receive_byte(start, 0);
         if (vv_decode(wire, length + 12, &request))
             fatal(24);
-        vv_handle(&device, &request, &response, cycles);
+        diagnostics();
+        vv_replay_handle(&replay, &request, &response, cycles);
         size_t count = vv_encode(&response, wire);
         if (!count)
             fatal(25);
         check(HAL_UART_Transmit(&uart, wire, (uint16_t)count, 2000), 26);
+        if (replay.armed) {
+            /* ACK fully transmitted first. No UART code or sleep during replay. */
+            __disable_irq();
+            TIM6->CR1 = 0;
+            TIM6->CNT = 0;
+            TIM6->EGR = TIM_EGR_UG; /* Restart the prescaler as well as CNT. */
+            __HAL_TIM_CLEAR_FLAG(&timer, TIM_FLAG_UPDATE);
+            HAL_NVIC_ClearPendingIRQ(TIM6_DAC_IRQn);
+            HAL_NVIC_DisableIRQ(DMA1_Stream0_IRQn);
+            HAL_NVIC_DisableIRQ(USART3_IRQn);
+            timer_ticks = 0;
+            uint32_t low = cycles();
+            TIM6->CR1 = TIM_CR1_CEN;
+            __DSB();
+            uint32_t high = cycles();
+            vv_replay_arm(&replay, low, high, SystemCoreClock / 1000u);
+            __enable_irq();
+            while (replay.state == 1)
+                __NOP();
+            __DMB();
+            TIM6->CR1 = 0;
+            vv_replay_seal_telemetry(&replay);
+            diagnostics();
+            HAL_NVIC_EnableIRQ(DMA1_Stream0_IRQn);
+            HAL_NVIC_EnableIRQ(USART3_IRQn);
+        }
     }
 }
 
 void SysTick_Handler(void) { HAL_IncTick(); }
 void DMA1_Stream0_IRQHandler(void) { HAL_DMA_IRQHandler(&rx_dma); }
 void USART3_IRQHandler(void) { HAL_UART_IRQHandler(&uart); }
-void TIM6_DAC_IRQHandler(void) { HAL_TIM_IRQHandler(&timer); }
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *handle) {
-    if (handle->Instance == TIM6) {
-        last_timer_entry = cycles();
-        timer_ticks++;
+/* Two loads before the C prologue; exception stacking precedes this timestamp.
+ */
+__attribute__((naked)) void TIM6_DAC_IRQHandler(void) {
+    __asm volatile("ldr r0, =0xe0001004\n"
+                   "ldr r0, [r0]\n"
+                   "b tim6_body\n");
+}
+void tim6_body(uint32_t entry) {
+    if (!(TIM6->SR & TIM_SR_UIF))
+        return;
+    __HAL_TIM_CLEAR_FLAG(&timer, TIM_FLAG_UPDATE);
+    GPIOG->BSRR = GPIO_PIN_2;
+    last_timer_entry = entry;
+    timer_ticks++;
+    if (replay.state == 1 && !replay.armed) {
+        vv_replay_tick(&replay, entry, cycles);
+        uint32_t exit_cycles = cycles();
+        int pending = (TIM6->SR & TIM_SR_UIF) != 0;
+        vv_replay_exit(&replay, exit_cycles, pending);
+        /* Also catch a rollover during the final telemetry bookkeeping. */
+        if ((TIM6->SR & TIM_SR_UIF) && !pending) {
+            uint32_t k = replay.completed - 1;
+            replay.overruns++;
+            if (!(replay_telemetry.status[k] & 0x80)) {
+                replay_telemetry.status[k] |= 0x80;
+                replay.misses++;
+            }
+        }
+        if (replay.state != 1)
+            TIM6->CR1 = 0;
+        replay_timing.isr_body[replay.completed - 1] = cycles() - entry;
     }
+    GPIOG->BSRR = GPIO_PIN_2 << 16;
 }
 void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *handle, uint16_t size) {
     if (handle->Instance == USART3) {

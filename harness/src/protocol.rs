@@ -59,7 +59,7 @@ impl Frame {
             "CRC mismatch",
         )?;
         require(
-            matches!(data[3], 1..=8 | 0x81..=0x83 | 0x85 | 0x87 | 0x88),
+            matches!(data[3], 1..=10 | 0x81..=0x83 | 0x85 | 0x87..=0x8a),
             "unknown frame type",
         )?;
         Ok(Self {

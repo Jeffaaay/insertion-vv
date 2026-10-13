@@ -98,6 +98,7 @@ def build(output, compiler):
     own = [
         ROOT / "firmware/ctrl/controller.c",
         ROOT / "firmware/protocol/protocol.c",
+        ROOT / "firmware/protocol/replay.c",
         BOARD / "main.c",
     ]
     supplied = sorted((vendor / "hal/Src").glob("*.c")) + [
@@ -155,6 +156,18 @@ def build(output, compiler):
     for handler in ("TIM6_DAC_IRQHandler", "USART3_IRQHandler", "DMA1_Stream0_IRQHandler"):
         if symbols[handler] == symbols["Default_Handler"]:
             raise ValueError(f"unimplemented interrupt: {handler}")
+    shim = subprocess.check_output(
+        [str(tool("objdump")), "-d", "--disassemble=TIM6_DAC_IRQHandler", str(elf)], text=True
+    )
+    (output / "irq_entry_disassembly.txt").write_text(shim)
+    instructions = re.findall(r"^\s*[0-9a-f]+:\s+(?:[0-9a-f]{4}\s+)+([^\n]+)", shim, re.M)
+    if (
+        len(instructions) != 3
+        or not re.match(r"ldr\s+r0, \[pc,", instructions[0])
+        or not re.match(r"ldr\s+r0, \[r0", instructions[1])
+        or "<tim6_body>" not in instructions[2]
+    ):
+        raise ValueError("IRQ entry must sample DWT before a C prologue")
     if any(name in symbols for name in ("malloc", "_malloc_r", "calloc", "realloc")):
         raise ValueError("unexpected dynamic allocator linked into firmware")
     attributes = subprocess.check_output([str(tool("readelf")), "-A", str(elf)], text=True)
@@ -189,6 +202,8 @@ def build(output, compiler):
         }
     if sections[".replay_inputs"]["size"] != 256000 or sections[".telemetry"]["size"] != 104000:
         raise ValueError("incomplete replay memory reservation")
+    if sections[".replay_timing"]["size"] != 64000:
+        raise ValueError("incomplete replay timing breakdown")
     if sections[".stack"]["size"] != 16384 or sections[".dma"]["vma"] != 0x30000000:
         raise ValueError("invalid stack/DMA placement")
     licenses = output / "licenses"
@@ -204,7 +219,7 @@ def build(output, compiler):
         ).strip()
     )
     report = {
-        "stage": "B1.6-build-only",
+        "stage": "B2.1-build-only",
         "status": "PASS",
         "hardware_measured": False,
         "git_commit": git_commit,
@@ -225,11 +240,13 @@ def build(output, compiler):
                 BOARD / "linker.ld",
                 ROOT / "firmware/ctrl/controller.h",
                 ROOT / "firmware/protocol/protocol.h",
+                ROOT / "firmware/protocol/replay.h",
             ]
         },
         "elf_sha256": digest(elf),
         "binary_sha256": digest(binary),
         "binary_bytes": binary.stat().st_size,
+        "irq_entry_shim_verified": True,
         "sections": sections,
         "memory": memory,
         "dtcm_gap_before_stack_bytes": symbols["_stack_limit"] - symbols["_dtcm_used_end"],
@@ -249,8 +266,11 @@ def build(output, compiler):
             "instruction_cache": True,
             "data_cache": False,
             "fpu": "fpv5-d16 hard ABI; FPSCR=0",
-            "replay_implemented": False,
-            "lockstep_capability_only": True,
+            "replay_implemented": True,
+            "lockstep_capability_only": False,
+            "replay_cpu_sleep": False,
+            "stack_watermark": "boot paints unused prefix below MSP minus 256 bytes",
+            "instrumentation_gpio": "PG2 / ZIO D49 / CN8 pin 14; 3.3 V ISR body pulse",
         },
     }
     (output / "build.json").write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")

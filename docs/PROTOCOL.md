@@ -50,15 +50,20 @@ uses 5 s. Reads may be fragmented; the deadline is total, not refreshed per byte
 | 0x04 | FINISH | host → controller | 4 |
 | 0x05 | REPLAY_LOAD | host → controller | 29 |
 | 0x85 | REPLAY_LOAD_ACK | controller → host | 5 |
-| 0x06 | REPLAY_START | host → controller | 0 |
+| 0x06 | REPLAY_START | host → controller | 4 |
 | 0x07 | REPLAY_STATUS | host → controller | 0 |
 | 0x87 | REPLAY_STATE | controller → host | 9 |
 | 0x08 | REPLAY_FETCH | host → controller | 6 |
 | 0x88 | REPLAY_DATA | controller → host | 6 + 17 × count |
+| 0x09 | REPLAY_SUMMARY | host → controller | 0 |
+| 0x89 | REPLAY_SUMMARY_DATA | controller → host | 84 |
+| 0x0A | REPLAY_TIMING_FETCH | host → controller | 6 |
+| 0x8A | REPLAY_TIMING_DATA | controller → host | 6 + 8 × count |
 
-Replay types are reserved for B2. B1 firmware advertises only LOCKSTEP capability
-and returns an unsupported status for replay commands. An unsupported/stub mode
-can never satisfy a hardware timing gate.
+B1 firmware advertises only LOCKSTEP and returns unsupported for replay. B2 adds
+REPLAY capability; its START carries the expected whole-input CRC32. The fixed
+SENSORS/COMMAND envelopes and B1 lockstep behavior are unchanged. An unsupported
+mode or host synthetic clock can never satisfy a hardware timing gate.
 
 ### Identification and reset
 
@@ -147,32 +152,58 @@ the protocol run even if the host already logged 8000 command rows. The host sto
 raw TX/RX, session, tick, CRC/error counts and monotonic send/receive times; wall
 time/session/DWT metadata are excluded from numerical trace SHA.
 
-### Replay reservation (B2)
+### Replay (B2)
 
 RESET(mode=1) → 8000 REPLAY_LOAD frames in tick order → REPLAY_START. Each load is
-acknowledged with `tick u32, status u8`. Loading never steps the controller. START
-resets controller state, acknowledges readiness, then drives the stored logical
+acknowledged with `tick u32, status u8`. Loading never steps the controller. Read
+SUMMARY after loading and verify the complete input CRC32. START carries that
+CRC32 as u32; firmware recomputes it from decoded RAM and refuses a mismatch.
+START resets controller state, acknowledges readiness, then drives the stored logical
 inputs using the hardware 1 kHz TIM interrupt. No UART transport is in that loop.
 
 REPLAY_STATE: `state u8` (0 loading, 1 running, 2 complete, 3 error),
-`completed_ticks u32`, `deadline_misses u32`. FETCH is allowed only once complete:
+`completed_ticks u32`, `deadline_misses u32`. FETCH is allowed once complete or
+stopped in error (partial evidence only; never a valid timing result):
 `first_index u32, count u16` (1–10, within the recorded count). DATA repeats those
 six bytes then count COMMAND payloads with their original ticks. Record every
 entry counter, compute duration and deadline flag. Unwrap adjacent DWT differences
-modulo 2^32 using the measured core clock; at 550 MHz the counter wraps within an
-8 s replay, so raw subtraction without wrap handling is invalid.
+modulo 2^32 using the reported core clock. At 520 MHz it wraps every 8.26 s;
+initialization/upload means wrap may occur anywhere in an 8 s replay.
+
+SUMMARY is polled before START or after completion, never unsolicited timed-loop
+traffic. Its 21 little-endian u32 words are, in order: state, loaded count,
+completed count, scheduled deadline misses, input CRC32, command-telemetry CRC32,
+serviced TIM6 count, CEN-start DWT lower/upper bounds, last checked ISR-end DWT,
+untouched stack-prefix bytes, originally painted stack bytes, FPSCR, core Hz,
+timer Hz, configuration flags (bit0 I-cache, bit1 D-cache, bit2 awake replay),
+Flash CRC32, Flash image bytes, UIF overruns, period cycles, timing-breakdown CRC32.
+The Flash CRC covers the contiguous linked image from 0x08000000 through the end
+of initialized data, matching the binary. It is checked in addition to the
+external readback SHA and manifest, never substituted for those.
+
+CRC32/ISO-HDLC uses reflected poly 0xEDB88320, init/xorout 0xFFFFFFFF. Input CRC
+covers the 8000 canonical 29-byte sensor payloads reserialized from RAM, excluding
+alignment padding. Command telemetry CRC covers all 8000 17-byte COMMAND payloads.
+TIMING_FETCH uses the same first/count header and 1–10 record bound as FETCH;
+each record has two u32 durations: IRQ-entry-to-ctrl_step-start and measured ISR
+body duration. Its CRC covers those 8000 eight-byte records. Body duration includes
+the prologue/control/bookkeeping but excludes the final sample/store, GPIO clear
+and exception epilogue; the PG2 instrumentation pulse supports external timing.
+CRC, echoed index/count and complete count must all match before a timing PASS.
 
 Publish computation p50/p95/p99/max and interrupt-period jitter. Pre-registered
-gate: p99 <100 µs, zero 1 ms deadline misses across 8000 ticks, and command bits
+gate: p99 <100 µs, |jitter| p99 <5 µs, zero 1 ms deadline misses across 8000 ticks,
+at least 4 KiB measured stack headroom, and command bits
 identical to the same binary's lockstep run for the same stored inputs. Scheduling
-lateness and compute-overrun definitions will be tied to the actual TIM/DWT startup
-in B2 before its first hardware experiment. No assumed USB latency or estimated
+lateness/overrun definitions are registered in `PHASE_B_HARDWARE_PLAN.md` before
+the first hardware experiment. No assumed USB latency or estimated
 computation cost is substituted for measurement.
 
 The complete input structure is 32 aligned bytes/tick (256000 bytes for 8000),
 not the earlier abbreviated 96 KB estimate. Telemetry can omit redundant tick
 storage and use separate force/entry/compute/status arrays (104000 bytes). The
-linker must place these in suitable SRAM banks, leave stack/firmware headroom and
+timing breakdown adds 64000 bytes in AXI; total AXI allocation is 320000 of 327680
+bytes (7680 spare). The linker must place these in suitable SRAM banks, leave stack/firmware headroom and
 publish section sizes before flashing; nominal total RAM alone is insufficient.
 
 ## UART budget

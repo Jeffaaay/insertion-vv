@@ -907,3 +907,39 @@ trace/truth bytes equal their earlier baselines. Final local evidence is under
 `artifacts/b1-firmware-{phase-a,host,arm-core,final}`. Full-image CI is now part of
 the existing ARM job, separately uploaded as `phase-b-h723-<commit>`; rendering
 remains outside every CI dependency.
+
+B1.6 commit `c81c4a4` passes [Phase B CI 38327529395](https://github.com/Jeffaaay/insertion-vv/actions/runs/38327529395)
+and [Phase A CI 38327529389](https://github.com/Jeffaaay/insertion-vv/actions/runs/38327529389).
+Downloaded C32/FFI/TCP trace and truth bytes remain exact versus B1.2 on both OSes;
+16 historical Phase A comparisons pass. The Linux-built and Windows-built firmware
+BIN SHA is identical (`e8cabfd41fac22e081b250d8bf10983fd2e341e4d4d35c8ddcfb07e04a988352`);
+ELF debug/path metadata differs. Neither image has been flashed. Consolidated
+evidence `artifacts/release/b1_ready_report.json` was sent to the authorized Claude
+review conversation, which accepted B1.
+
+## B2.1 recorded-input firmware replay, build-only
+
+The B2 plan is registered before any hardware experiment. The review's 512-byte
+upload chunks exceeded the protocol limit, so existing 29-byte/tick frames retain
+CRC16/sequence/ACK and add complete input CRC32, reserialized from decoded RAM.
+The raw 256000-byte C array is not the wire format. START rejects a whole-stream
+CRC mismatch; it reinitializes the same frozen controller. No gain or numeric code
+changes. The native test runs all 8000 records and requires force bits identical
+to direct C execution; it also checks wrong order, corrupt input, invalid ranges,
+modular DWT wrap, pending UIF and delayed/coalesced interrupt deadlines.
+
+TIM6 now executes replay. A naked three-instruction entry shim reads CYCCNT before
+the compiler/HAL prologue; build tooling verifies its disassembly. The CPU remains
+awake while replay runs. DWT and TIM share a clock tree; neither serviced tick
+count nor USB host elapsed proves absolute frequency. PG2/D49 instrumentation
+supports later independent timing. ISR entry/control/body timings are separate,
+with their measurement boundary and excluded epilogue explicitly documented.
+Input, command telemetry and extra timing arrays have separate canonical CRC32s.
+Stack watermark is conservative unused-prefix evidence; the 4 KiB gate is pending.
+
+The verified local image is 31104 bytes Flash, 256000-byte input + 64000-byte timing
+arrays in AXI (7680 spare), 104000-byte telemetry and 16 KiB stack in DTCM (9608-byte
+gap), and 512-byte RX DMA buffer in D2. Flash CRC32 will be compared with the host
+binary, separately from OpenOCD readback SHA and CI artifact SHA. The old B1 binary
+is not a replay image. No board detection, programming, timing PASS or hardware
+numerical equivalence is claimed at this build-only checkpoint.
