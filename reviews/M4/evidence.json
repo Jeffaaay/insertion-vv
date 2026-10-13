@@ -1,0 +1,556 @@
+{
+  "commit": "25bfc23e4b68b70d2a7aa7d02b4410d98934b3c9",
+  "ci_green": true,
+  "required_workflows": [
+    "Phase A SIL",
+    "Phase B C32",
+    "Phase C integrity"
+  ],
+  "runs": [
+    {
+      "conclusion": "success",
+      "databaseId": 38349076776,
+      "headSha": "25bfc23e4b68b70d2a7aa7d02b4410d98934b3c9",
+      "name": "Phase C integrity",
+      "status": "completed",
+      "url": "https://github.com/Jeffaaay/insertion-vv/actions/runs/38349076776"
+    },
+    {
+      "conclusion": "success",
+      "databaseId": 38349076797,
+      "headSha": "25bfc23e4b68b70d2a7aa7d02b4410d98934b3c9",
+      "name": "Phase B C32",
+      "status": "completed",
+      "url": "https://github.com/Jeffaaay/insertion-vv/actions/runs/38349076797"
+    },
+    {
+      "conclusion": "success",
+      "databaseId": 38349076838,
+      "headSha": "25bfc23e4b68b70d2a7aa7d02b4410d98934b3c9",
+      "name": "Phase A SIL",
+      "status": "completed",
+      "url": "https://github.com/Jeffaaay/insertion-vv/actions/runs/38349076838"
+    }
+  ],
+  "frozen_checks": [
+    {
+      "path": ".gitattributes",
+      "baseline_sha256": "2b81c62ebf08a104d54ff5d051366d508cddf442c721ac3979add216e0777dae",
+      "unchanged": true
+    },
+    {
+      "path": ".github/workflows/phase-a.yml",
+      "baseline_sha256": "50c8ace15d80e06482e2a9f3b243d3e73c754752dbd1089c15afd461c3b23fa4",
+      "unchanged": true
+    },
+    {
+      "path": ".github/workflows/phase-b.yml",
+      "baseline_sha256": "2719cd0480ff87e62f41b6b2059b2f4cbd264bbb972ad173b161e65e0a688025",
+      "unchanged": true
+    },
+    {
+      "path": ".gitignore",
+      "baseline_sha256": "9d7cf46e65385acf244acf6f00501bc7344884e9dd88be3a5a5d9931dc5b24a6",
+      "unchanged": true
+    },
+    {
+      "path": "PROJECT_BRIEF.md",
+      "baseline_sha256": "f207a296e2897416abf6b86e4b2c59e2e577d78962c8b6ec5d347ec531600928",
+      "unchanged": true
+    },
+    {
+      "path": "README.md",
+      "baseline_sha256": "13a5cf090d783d283a5b9c4ee7536e313d7ff4705c850cb8ef66850353d0666d",
+      "unchanged": true
+    },
+    {
+      "path": "docs/HARDWARE_RUNBOOK.md",
+      "baseline_sha256": "39b2a5ca7c39d67c0a3b41b3a4c809e75fcf4af2daac8dd0902fcba2335fbbe2",
+      "unchanged": true
+    },
+    {
+      "path": "docs/PHASE_A_SUMMARY.md",
+      "baseline_sha256": "df9cababb1eb4ece642268580299a34f3341efc465c19259ecea114bd1a0200c",
+      "unchanged": true
+    },
+    {
+      "path": "docs/PHASE_B_HARDWARE_PLAN.md",
+      "baseline_sha256": "d441860404a63d06146f249f3b565576878c675db8c74dc26239363522f59ea0",
+      "unchanged": true
+    },
+    {
+      "path": "docs/PHASE_B_PLAN.md",
+      "baseline_sha256": "601880144b62bbc48d8cdc5f22dd7793fc7c48958ecc8e73bee301f3d720aed2",
+      "unchanged": true
+    },
+    {
+      "path": "docs/PROTOCOL.md",
+      "baseline_sha256": "4f8bdce14371a99b5df2326556d6963c66f3ed552f01d519f2f88411f1de52b8",
+      "unchanged": true
+    },
+    {
+      "path": "docs/REPLICATION_NOTES.md",
+      "baseline_sha256": "271a1b1412913c8c8c686a6a5624691e76474aacc10327b63191ee0571856a31",
+      "unchanged": true
+    },
+    {
+      "path": "docs/model-and-evaluation.md",
+      "baseline_sha256": "82c209213e5c20c01611b10c8fe1eccb74c730646896d1f6ded933348d2570ab",
+      "unchanged": true
+    },
+    {
+      "path": "faults/README.md",
+      "baseline_sha256": "c2d36d39417201be7097dad46b00c3705e6cbe7c98d855e6a79f0c67aff491ed",
+      "unchanged": true
+    },
+    {
+      "path": "firmware/README.md",
+      "baseline_sha256": "ba0e7ecc0212ad71077af1ad739e1f109a3dc669c170158239a6336d3562f117",
+      "unchanged": true
+    },
+    {
+      "path": "firmware/ctrl/README.md",
+      "baseline_sha256": "8806e298f34a0901ac104766870e7836e97a65f407bbe40dcacb87d11088a381",
+      "unchanged": true
+    },
+    {
+      "path": "firmware/ctrl/controller.c",
+      "baseline_sha256": "2f05b0fe65f763f9dec75a0d9bd366364b361b3d3710b61991d632b1f4347747",
+      "unchanged": true
+    },
+    {
+      "path": "firmware/ctrl/controller.h",
+      "baseline_sha256": "f515f64ab8f5ff47030186f01e6b361aa6bce20a86f887ccba130f137b27551a",
+      "unchanged": true
+    },
+    {
+      "path": "firmware/ctrl/test_controller.c",
+      "baseline_sha256": "e840fc879f60762249a46a76d5d98ce06c9fca365ca3d3dcfbb0876d9d2b2902",
+      "unchanged": true
+    },
+    {
+      "path": "firmware/deps.lock.json",
+      "baseline_sha256": "073b61b0a9c1abdec0bfb7492d0a239d276b5cea7e75c472bbc89325197fd515",
+      "unchanged": true
+    },
+    {
+      "path": "firmware/h723/README.md",
+      "baseline_sha256": "879a40328e0133304026c77a4ee54f0d569ed30e6997bb04dea47f9a810e37c6",
+      "unchanged": true
+    },
+    {
+      "path": "firmware/h723/linker.ld",
+      "baseline_sha256": "984e7ca21a51fe1800eeb085e07ab2277c8d5288467c028bb2f2171e9e9ab46f",
+      "unchanged": true
+    },
+    {
+      "path": "firmware/h723/main.c",
+      "baseline_sha256": "8276b8d7300211b81612ef0fa92424edde2ad5cfe5cbced46ae4475e969b6dcc",
+      "unchanged": true
+    },
+    {
+      "path": "firmware/h723/stm32h7xx_hal_conf.h",
+      "baseline_sha256": "0c31d9983d9c0c6d95143cad71027613c0cf60369e79ac76f2cc118e9af8a1e2",
+      "unchanged": true
+    },
+    {
+      "path": "firmware/protocol/protocol.c",
+      "baseline_sha256": "f2452d348038e2232339c1aaf21ccef84c4df205c8225d57d76cab9fbc460691",
+      "unchanged": true
+    },
+    {
+      "path": "firmware/protocol/protocol.h",
+      "baseline_sha256": "43744dffae4d91fc790c9cbc20cf54dc2aad37577f43c1d2d77b852b76a9c045",
+      "unchanged": true
+    },
+    {
+      "path": "firmware/protocol/replay.c",
+      "baseline_sha256": "977ff8a7ab99e74c8f52034d5f3351d363f91567fd78e17165c2d2aa5c98469f",
+      "unchanged": true
+    },
+    {
+      "path": "firmware/protocol/replay.h",
+      "baseline_sha256": "f8f80c6a76c63395de3daaf921611520e7c2ecd118c22c3a6e3d66e5a2755d91",
+      "unchanged": true
+    },
+    {
+      "path": "firmware/protocol/test_protocol.c",
+      "baseline_sha256": "9e25cae6dd8d74122a8ba0a3bd2307d01d1435b9be900b8d0fb2432a408c0758",
+      "unchanged": true
+    },
+    {
+      "path": "firmware/protocol/test_replay.c",
+      "baseline_sha256": "8c118143e5371b08809aa391e5f5f0da2e98f5b511a5b84939c2d6091ef5f17c",
+      "unchanged": true
+    },
+    {
+      "path": "firmware/virtual_board/main.c",
+      "baseline_sha256": "1d723680b90d527905282793196c876be5464152047e103643648f1e2621213c",
+      "unchanged": true
+    },
+    {
+      "path": "harness/Cargo.lock",
+      "baseline_sha256": "459e0da14a8d9ff21fda33997492d4d4e25f51c7d6716b3a76ee5ca2a202f0a4",
+      "unchanged": true
+    },
+    {
+      "path": "harness/Cargo.toml",
+      "baseline_sha256": "cf12f5c1a0a4272c296fbbc4615e467fe672ba26be4a7e9a2c10ee5e40c77985",
+      "unchanged": true
+    },
+    {
+      "path": "harness/README.md",
+      "baseline_sha256": "e811fc208da9e039d9534b650d18651cc999543db53768660654afd3f5b2f331",
+      "unchanged": true
+    },
+    {
+      "path": "harness/__init__.py",
+      "baseline_sha256": "26efd0f091ee48ee49431b4b82b98fb40272e47d3989222b587d888f9f18b1b7",
+      "unchanged": true
+    },
+    {
+      "path": "harness/build.rs",
+      "baseline_sha256": "404843d036a34a0a73969ef291fab7d8f5c23b21991d27687b283627d758ea6d",
+      "unchanged": true
+    },
+    {
+      "path": "harness/c32.py",
+      "baseline_sha256": "5e4a8699e10ad11c02e5af9009e22703ac6ad59ff31ffc52d0a397432451c525",
+      "unchanged": true
+    },
+    {
+      "path": "harness/ci.py",
+      "baseline_sha256": "4520c14e8d68ec6f3612f0635828edf3ff73ae75aa7c677554427963ea9508f2",
+      "unchanged": true
+    },
+    {
+      "path": "harness/compare.py",
+      "baseline_sha256": "daf8b43ec3d320960c9a15ac5db96b0abfb1aa9940c92a023da1cce289f775d9",
+      "unchanged": true
+    },
+    {
+      "path": "harness/contract.json",
+      "baseline_sha256": "a9488e7cbbfea5ccb22ab4054cfb7e7a445cdf0fdf281d9f14272a3ed473d789",
+      "unchanged": true
+    },
+    {
+      "path": "harness/hardware.py",
+      "baseline_sha256": "bfc4546954e136b8d509cca9efd773f4a682ac6e961281dae6ea713aa1f88347",
+      "unchanged": true
+    },
+    {
+      "path": "harness/plant_server.py",
+      "baseline_sha256": "5a146af06716a167200700d964b9f122e1d2de0dfc3f19741cbd7019eab1a56c",
+      "unchanged": true
+    },
+    {
+      "path": "harness/replay_report.py",
+      "baseline_sha256": "fcf831914ba195c4bfe5b2452e179518c600ca1a28ef47e61b8c00a969cd2a7b",
+      "unchanged": true
+    },
+    {
+      "path": "harness/run.py",
+      "baseline_sha256": "445f79dacf0944db958330bd0b27884881ee2e094426c116ba55c9ce8ba1dcff",
+      "unchanged": true
+    },
+    {
+      "path": "harness/rust-toolchain.toml",
+      "baseline_sha256": "2ad6f15416572b4836585087f1d4abc53b8fa2dbd616f8dacfaa587ed6714228",
+      "unchanged": true
+    },
+    {
+      "path": "harness/rust_run.py",
+      "baseline_sha256": "48cb25499283cac6dcba5ea7e06658b45455a6cd0e6a8f7f9406f99a3a079f8c",
+      "unchanged": true
+    },
+    {
+      "path": "harness/src/bin/board-link.rs",
+      "baseline_sha256": "bdfbcfec9988b34a0a40a89597031e358d756bd54f914ca441d48ccfa53bc040",
+      "unchanged": true
+    },
+    {
+      "path": "harness/src/ffi.rs",
+      "baseline_sha256": "5157559ce0adf8a02ce3eadee83b4d2917c4bc318cbb750b072a760dfe34cd59",
+      "unchanged": true
+    },
+    {
+      "path": "harness/src/lib.rs",
+      "baseline_sha256": "2cdad5269d929deddd7e9b5f4254d2decdfcee42fccc883fbb0b08728ea4ae7a",
+      "unchanged": true
+    },
+    {
+      "path": "harness/src/main.rs",
+      "baseline_sha256": "d8f8cfea21833288148ca3352dc4f4b4a8eea18f80243477746433dc0d3e0aff",
+      "unchanged": true
+    },
+    {
+      "path": "harness/src/plant.rs",
+      "baseline_sha256": "f0d87ee7070ccb9b12b8613a62e7c54d9ea6b88407ebb075ba8aa95b5903b6bb",
+      "unchanged": true
+    },
+    {
+      "path": "harness/src/protocol.rs",
+      "baseline_sha256": "b45da9971d64c69f4d7d5455ae45dbef30eae381dcfdda90f442ed94df244422",
+      "unchanged": true
+    },
+    {
+      "path": "harness/src/replay.rs",
+      "baseline_sha256": "2962e453057f3de60d98c0f88bb44b0b1cb27fbc6c1b8262f56c59c7e9a9d913",
+      "unchanged": true
+    },
+    {
+      "path": "harness/src/runner.rs",
+      "baseline_sha256": "6c6b8239cc7270ef14c81ab9fe472cf7b93599385df21a57f0340fe1b254628d",
+      "unchanged": true
+    },
+    {
+      "path": "harness/src/serial.rs",
+      "baseline_sha256": "4e48ea2d8aa425c4307724289bc6dd802f15c04fc2928cfe99854cde825b9924",
+      "unchanged": true
+    },
+    {
+      "path": "harness/src/types.rs",
+      "baseline_sha256": "44b03c6720b76ef11ef7da77ffb86ba84cbdc5aa0bff0877a96790fee156eece",
+      "unchanged": true
+    },
+    {
+      "path": "harness/tests/data/protocol_v1.json",
+      "baseline_sha256": "02d0b3c8855567183386de471bb20b798d191ef0afb14aab809bb2e5519ad5df",
+      "unchanged": true
+    },
+    {
+      "path": "harness/tests/test_boundaries.py",
+      "baseline_sha256": "dfa36f18a4ddb5fc1ba408139ee6b97458712281a46ef1d29149fa92f143c13c",
+      "unchanged": true
+    },
+    {
+      "path": "harness/tests/test_c32.py",
+      "baseline_sha256": "49871e254df7b71b7c25a9d9ef0947ab5303ea22ecfee4a99f5af7713e9dc81e",
+      "unchanged": true
+    },
+    {
+      "path": "harness/tests/test_hardware_evidence.py",
+      "baseline_sha256": "0bee30e00daf62c1705e0fe661036e18527660331859ae23d84a2eb622f2a16b",
+      "unchanged": true
+    },
+    {
+      "path": "harness/tests/test_virtual_board.py",
+      "baseline_sha256": "92f0038d3329bdedc836ff69782901ec1dac9782460f27ac2e99bddda96be20d",
+      "unchanged": true
+    },
+    {
+      "path": "harness/virtual_board.py",
+      "baseline_sha256": "59d5e55b0ee6644632d5b22fecb19094c784c9a6dbb60922af74609173ebebf2",
+      "unchanged": true
+    },
+    {
+      "path": "pyproject.toml",
+      "baseline_sha256": "cab3cd4c4a68ec0cb790901988ba20de55cbda86ecd632ada155a23ef581c62b",
+      "unchanged": true
+    },
+    {
+      "path": "requirements-lock.txt",
+      "baseline_sha256": "713bc031c33c42271a06011de11e5ad0b2cce3c151aa7910adcfb7a0908a4a52",
+      "unchanged": true
+    },
+    {
+      "path": "requirements.txt",
+      "baseline_sha256": "34a148f661f86e48ed4bd8f2728eccd7a797f8a8963f6b360f6834b1e130a2da",
+      "unchanged": true
+    },
+    {
+      "path": "sim/__init__.py",
+      "baseline_sha256": "c4b8da5b7a024762dbf8576c36ae66ff4c8c9534145a0c23fb0b653873f514e7",
+      "unchanged": true
+    },
+    {
+      "path": "sim/calibrate.py",
+      "baseline_sha256": "88ec327e4cc396751ad55e0ce610a380c412763c6251995dc58e0ccc718994ab",
+      "unchanged": true
+    },
+    {
+      "path": "sim/ci.py",
+      "baseline_sha256": "23d4ea7c539ab9942f2f43bcc6ae9fb34d9044894ac0c6e7990b94457e1cf916",
+      "unchanged": true
+    },
+    {
+      "path": "sim/config.py",
+      "baseline_sha256": "219257fd7d9493eff853d350f8f98a7df5b776d4a2fa152eb744fc78c5b1f101",
+      "unchanged": true
+    },
+    {
+      "path": "sim/contracts.py",
+      "baseline_sha256": "53ade152339618d9a607beef24a1d3fed629b4dd3350263e2f6f7bfb77a50df0",
+      "unchanged": true
+    },
+    {
+      "path": "sim/controllers.py",
+      "baseline_sha256": "0f13a809ea89ab2ce7bc983956b665e6700aaceb618b58b12554ac0f9f87903d",
+      "unchanged": true
+    },
+    {
+      "path": "sim/metrics.py",
+      "baseline_sha256": "f1ed1288abe8405301dbca546fc725fc64d4205a3ddf7f0075df78a138d5be03",
+      "unchanged": true
+    },
+    {
+      "path": "sim/plant.py",
+      "baseline_sha256": "f45d4be3cb9e57150002e2d3253965d3e162b0190c5b5cf34f8c1abd9248e50b",
+      "unchanged": true
+    },
+    {
+      "path": "sim/plant.xml",
+      "baseline_sha256": "aef8a51e84742568b0db6271e3ca946dcd345db3f4d426a60a906a75db587fe0",
+      "unchanged": true
+    },
+    {
+      "path": "sim/platform_info.py",
+      "baseline_sha256": "26450befc3930ce073a7f09e2250e8e866d3a99ef8b9edc90d43a0788bc66dd4",
+      "unchanged": true
+    },
+    {
+      "path": "sim/preview.py",
+      "baseline_sha256": "4ffe5dc81eb5819f4dbf83c1512d9a5802e02cd44eafed8c5c664d263fe7484a",
+      "unchanged": true
+    },
+    {
+      "path": "sim/reference.py",
+      "baseline_sha256": "3cfa6f47ec0faf9c63aa0aa8f793211a4fcac8e0be6c77091b817acd8ae25edf",
+      "unchanged": true
+    },
+    {
+      "path": "sim/reproduction_contract.json",
+      "baseline_sha256": "356f8efa4aa283eba18828b5bf2f2954df8ed332a8746fde60c6251a395e6edf",
+      "unchanged": true
+    },
+    {
+      "path": "sim/run.py",
+      "baseline_sha256": "7e73c7c8bb7cf53ab1d57d6e65369b6faae872b3427dbc877309a79b8a749d75",
+      "unchanged": true
+    },
+    {
+      "path": "sim/sensors.py",
+      "baseline_sha256": "cd89f8957f98c699cc10f9e8c7a3d96039ead8e1f1ea5fcb39e43b1e46de5b08",
+      "unchanged": true
+    },
+    {
+      "path": "sim/verdict_contract.json",
+      "baseline_sha256": "7e917fbac313de750d5ac6de086e6cba97ad9d1876d29b0aada6f6ceb10b8009",
+      "unchanged": true
+    },
+    {
+      "path": "tests/test_compare_traces.py",
+      "baseline_sha256": "b39565eec5cfe19296ee5198be1e51323369fb8b83c3306cff91e3ce47a9fa5b",
+      "unchanged": true
+    },
+    {
+      "path": "tests/test_delayed_feedback.py",
+      "baseline_sha256": "734e37178718a5069866018173d03636445b4dabee592898e66a56aed79c418f",
+      "unchanged": true
+    },
+    {
+      "path": "tests/test_determinism.py",
+      "baseline_sha256": "c347637e3a629944b039382317390f1ec7ed8bcc26e0284aeb2efe233100b71b",
+      "unchanged": true
+    },
+    {
+      "path": "tests/test_isolation.py",
+      "baseline_sha256": "26fb86cab2b61e4a6e2c6db0d6769aaff6e73d6baa8615360dbff64a95a62b22",
+      "unchanged": true
+    },
+    {
+      "path": "tests/test_offsetfree.py",
+      "baseline_sha256": "e8618e1a178940bed173906903f1c15cb23b77215523af1c7066cea8aeb97cde",
+      "unchanged": true
+    },
+    {
+      "path": "tests/test_plant.py",
+      "baseline_sha256": "0bf27572f0a93cf08014af94624ca561246650ee6f086c1df55bb4a3d4f4b202",
+      "unchanged": true
+    },
+    {
+      "path": "tests/test_platform_info.py",
+      "baseline_sha256": "a98fc00d4917d456631678faf222c422f3915d3bfdb6d257c7adeaf0f4e4105a",
+      "unchanged": true
+    },
+    {
+      "path": "tests/test_preview.py",
+      "baseline_sha256": "0595a2aadacc7ee85b04d2ded1847a03a13375f260d17449e2b1da5d012fc191",
+      "unchanged": true
+    },
+    {
+      "path": "tests/test_reproduction.py",
+      "baseline_sha256": "1859bd6a7a36956f109d1a95d9d884e7e29abec4951cae7984c476ada075a534",
+      "unchanged": true
+    },
+    {
+      "path": "tests/test_run.py",
+      "baseline_sha256": "f8383073a52690e07d6c751ac67db180ab027762e80cc7d42c54bacf84802327",
+      "unchanged": true
+    },
+    {
+      "path": "tests/test_sensors.py",
+      "baseline_sha256": "ec23dc40bccb957f97fd117ab1129375d6cd067fc555f57f3cd905e101351133",
+      "unchanged": true
+    },
+    {
+      "path": "tests/test_verdict.py",
+      "baseline_sha256": "4175cf6cbd2416b73372f6ff376f8207b6cea95de91d539324eff791ab26aaa3",
+      "unchanged": true
+    },
+    {
+      "path": "tools/README.md",
+      "baseline_sha256": "b07e36efa76a1d90b1ea95bac8f3359f43348e93f0a613fe3b057b4764be0ca5",
+      "unchanged": true
+    },
+    {
+      "path": "tools/_run_artifact.py",
+      "baseline_sha256": "60c848b2f8e5c42b37152038e36e3d556b9ab3bd462673e8f94301d5e2d4ab52",
+      "unchanged": true
+    },
+    {
+      "path": "tools/board.py",
+      "baseline_sha256": "60343f6b0c3046641388d5f722d02e43b93445e6d37af49f37d0666083df726d",
+      "unchanged": true
+    },
+    {
+      "path": "tools/build_controller.py",
+      "baseline_sha256": "02048b59ff478603e22b6ba9f52366b32cc7820fdef33cbdcfbe086bd841cb47",
+      "unchanged": true
+    },
+    {
+      "path": "tools/build_firmware.py",
+      "baseline_sha256": "202b52b944331d9eeb13c3e9bda55b2b0e757ef1d8a91fc2c9ac8cca267142f4",
+      "unchanged": true
+    },
+    {
+      "path": "tools/compare_traces.py",
+      "baseline_sha256": "0f8ba5c8cf8454fc5cc44545ded4e3b153ee210e74a6235051f21bc515b3894b",
+      "unchanged": true
+    },
+    {
+      "path": "tools/plot_run.py",
+      "baseline_sha256": "a99bd6f6fd9c0204cc8e46ebab85838efd94b4587033a19ffda7d33434d54cdf",
+      "unchanged": true
+    },
+    {
+      "path": "tools/plot_timing.py",
+      "baseline_sha256": "f9cf7f5287f4f2b0fc6ed3dcf1abd564315fb18e317170bcb37b2ff0cb564b24",
+      "unchanged": true
+    },
+    {
+      "path": "tools/render_video.py",
+      "baseline_sha256": "8470099987177a94464879d8277735a815c81665799ffb39fa80daa5e4d36a29",
+      "unchanged": true
+    },
+    {
+      "path": "tools/requirements-viz.txt",
+      "baseline_sha256": "69fbf8c8cd3fa9d50da8f002f5c351bb8f7691e0c2a05df21bc041e7f41aaf74",
+      "unchanged": true
+    },
+    {
+      "path": "docs/FINDINGS.md",
+      "historical_prefix_unchanged": true
+    }
+  ]
+}

@@ -30,12 +30,13 @@ def main():
         *root.glob("*.json"),
         *root.glob("*.html"),
         *root.glob("*.zip"),
+        *root.glob("*.sha256"),
         *root.glob("figs/*"),
         *root.glob("videos/*"),
     ]
     paths = sorted(p for p in paths if p.is_file() and p.name != "derived-artifacts.json")
     for path in paths:
-        if path.suffix in (".json", ".html", ".svg"):
+        if path.suffix in (".json", ".html", ".svg", ".sha256"):
             path.write_bytes(path.read_bytes().replace(b"\r\n", b"\n"))
     assert load_sealed(root)[1] == digest
     with args.archive.open("rb") as stream:
