@@ -69,6 +69,24 @@ def test_replay_wrap_and_registered_gate_boundaries():
         assert analyze(*synthetic_replay(**changes))["status"] == "FAIL"
 
 
+def test_max_compute_tick_remains_visible_when_p99_passes():
+    data = synthetic_replay()
+    raw, timing = bytearray(data[0]), bytearray(data[1])
+    struct.pack_into("<I", raw, 17 * 17 + 12, 78000)
+    struct.pack_into("<I", timing, 17 * 8 + 4, 78300)
+    data[0], data[1] = bytes(raw), bytes(timing)
+    data[4][5], data[4][20] = zlib.crc32(raw), zlib.crc32(timing)
+    report = analyze(*data)
+    assert report["status"] == "PASS" and report["compute_us"]["p99"] == 10
+    assert report["max_compute"] == {
+        "tick": 17,
+        "cycles": 78000,
+        "us": 150,
+        "ties": "first tick reported",
+    }
+    assert report["first_tick_compute_us"] == 10 and report["warmup_ticks_excluded"] == 0
+
+
 @pytest.mark.parametrize(
     "case",
     [

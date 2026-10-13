@@ -159,14 +159,19 @@ def openocd(executable, scripts, probe, output, commands):
     return log.decode("utf-8", errors="replace")
 
 
+RDP_GUARD = (
+    "if {(([lindex [read_memory 0x5200201c 32 1] 0] >> 8) & 255) != 170} "
+    '{error "RDP is not Level 0; no unlock or programming allowed"}\n'
+)
+
 IDENTITY = """init
 reset halt
-flash probe 0
+dump_image {options} 0x5200201c 4
+{rdp_guard}flash probe 0
 dump_image {idcode} 0x5c001000 4
 dump_image {cpuid} 0xe000ed00 4
 dump_image {uid} 0x1ff1e800 12
 dump_image {size} 0x1ff1e880 2
-dump_image {options} 0x5200201c 4
 stm32h7x option_read 0 0x1c
 stm32h7x option_read 0 0x38
 """
@@ -175,10 +180,11 @@ stm32h7x option_read 0 0x38
 def identify(executable, scripts, probe, output):
     output = fresh(output)
     commands = IDENTITY.format(
+        rdp_guard=RDP_GUARD,
         **{
             name: tcl_path(output / (name + ".bin"))
             for name in ("idcode", "cpuid", "uid", "size", "options")
-        }
+        },
     )
     log = openocd(executable, scripts, probe, output, commands + "resume")
 
@@ -227,7 +233,7 @@ def flash(executable, scripts, probe, firmware, output):
     check_identity(identity)
     uid_words = struct.unpack("<III", bytes.fromhex(identity["unique_id_hex"]))
     # Revalidate the same UID in the programming connection, before any write.
-    guard = "init\nreset halt\nflash probe 0\n"
+    guard = "init\nreset halt\n" + RDP_GUARD + "flash probe 0\n"
     for i, word in enumerate(uid_words):
         guard += (
             f"if {{[lindex [read_memory {0x1FF1E800 + 4 * i:#x} 32 1] 0] != {word}}} "

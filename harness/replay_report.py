@@ -214,6 +214,7 @@ def analyze(commands, timings, expected_forces, inputs, words):
             raise ValueError("unreported scheduled deadline miss")
     divisor = words[13] / 1e6
     compute = percentiles([r[3] / divisor for r in rows])
+    max_tick = max(range(8000), key=lambda k: rows[k][3])
     jitter_values = [(d - words[19]) / divisor for d in deltas]
     absolute_jitter = percentiles([abs(v) for v in jitter_values])
     checks = {
@@ -228,6 +229,14 @@ def analyze(commands, timings, expected_forces, inputs, words):
         "status": "PASS" if all(checks.values()) else "FAIL",
         "checks": checks,
         "compute_us": compute,
+        "max_compute": {
+            "tick": max_tick,
+            "cycles": rows[max_tick][3],
+            "us": rows[max_tick][3] / divisor,
+            "ties": "first tick reported",
+        },
+        "first_tick_compute_us": rows[0][3] / divisor,
+        "warmup_ticks_excluded": 0,
         "signed_period_jitter_us": percentiles(jitter_values),
         "absolute_period_jitter_us": absolute_jitter,
         "entry_to_control_us": percentiles([v[0] / divisor for v in extra]),

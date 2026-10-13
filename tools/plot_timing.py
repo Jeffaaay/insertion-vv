@@ -45,7 +45,10 @@ def main():
         ax.hist(values, bins=40, color=color, alpha=0.85)
         ax.set(xlabel=label, ylabel="Ticks")
         ax.grid(axis="y", alpha=0.2)
-    axes[0].set_title(f"p99 {report['compute_us']['p99']:.3f} µs; gate <100 µs")
+    axes[0].set_title(
+        f"p99 {report['compute_us']['p99']:.3f} µs; gate <100 µs\n"
+        f"max {report['max_compute']['us']:.3f} µs at tick {report['max_compute']['tick']}"
+    )
     axes[1].set_title(
         f"|jitter| p99 {report['absolute_period_jitter_us']['p99']:.3f} µs; gate <5 µs"
     )

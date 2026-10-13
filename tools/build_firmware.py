@@ -269,6 +269,10 @@ def build(output, compiler):
             "replay_implemented": True,
             "lockstep_capability_only": False,
             "replay_cpu_sleep": False,
+            "mode_exclusivity": (
+                "TIM6 IRQ/UIE disabled outside replay; UART/DMA IRQs disabled during replay; "
+                "runtime register assertions"
+            ),
             "stack_watermark": "boot paints unused prefix below MSP minus 256 bytes",
             "instrumentation_gpio": "PG2 / ZIO D49 / CN8 pin 14; 3.3 V ISR body pulse",
         },

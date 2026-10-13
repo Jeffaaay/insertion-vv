@@ -76,6 +76,10 @@ future call path. If <4 KiB remains, stop and redesign placement. The remaining
 AXI space cannot accommodate all 104 KiB telemetry without another layout change.
 The B2 timing breakdown consumes an additional 64 KiB (64000 bytes), leaving
 7680 bytes of AXI; this allocation is checked by the linker/build.
+Thus even a 64000-byte telemetry relocation no longer fits. Only if the stack
+gate fails, a candidate is packing inputs into 232000 canonical wire bytes
+(freeing 24000 padding bytes) plus smaller DTCM telemetry. Re-audit the complete
+layout before implementing any redesign; none is performed preemptively.
 
 The review additionally requested an external instrumentation pin. PG2 (ZIO D49,
 CN8 pin 14, [UM2407 Table 19](https://www.st.com/resource/en/user_manual/um2407-stm32h7-nucleo144-board-stmicroelectronics.pdf))
@@ -91,3 +95,9 @@ uncertainty, never enforce 8 s +/-1 ms or infer MCO accuracy from it. DWT and TI
 share the clock tree; absolute frequency verification needs independent calibrated
 equipment. Board-vs-host numerical differences are measurements; libm causality
 remains a hypothesis unless isolated. These limitations do not relax any gate.
+
+Pre-hardware review adds explicit NVIC/DIER dispatch assertions: TIM6 disabled
+in lockstep, UART/DMA handlers disabled during timed replay. Retain every timing
+sample, with maximum-compute tick/value and first-tick compute separate from p99.
+No warm-up exclusion or inferred cache explanation. Report RDP/MCU/UID before
+programming; application HELLO follows the verified image boot.

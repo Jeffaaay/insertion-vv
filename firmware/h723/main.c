@@ -21,6 +21,7 @@ VvTelemetry replay_telemetry __attribute__((section(".telemetry"), used, aligned
 VvTiming replay_timing __attribute__((section(".replay_timing"), used, aligned(8)));
 extern uint8_t _stack_limit, _flash_image_end;
 static uint32_t stack_painted, flash_crc, flash_bytes;
+static volatile uint32_t timed_window;
 
 static void paint_stack(void) {
     __disable_irq();
@@ -52,6 +53,13 @@ static void fatal(uint32_t reason) {
 static void check(HAL_StatusTypeDef status, uint32_t reason) {
     if (status != HAL_OK)
         fatal(reason);
+}
+static void assert_dispatch_mode(uint32_t timed) {
+    /* Register readback, not just a software mode flag: exactly one dispatcher. */
+    if (timed_window != timed || !!NVIC_GetEnableIRQ(TIM6_DAC_IRQn) != timed ||
+        !!(TIM6->DIER & TIM_DIER_UIE) != timed || !!NVIC_GetEnableIRQ(USART3_IRQn) != !timed ||
+        !!NVIC_GetEnableIRQ(DMA1_Stream0_IRQn) != !timed)
+        fatal(27);
 }
 
 static void clock_init(void) {
@@ -162,8 +170,11 @@ static void timer_init(void) {
     check(HAL_TIM_Base_Init(&timer), 11);
     __HAL_TIM_CLEAR_FLAG(&timer, TIM_FLAG_UPDATE);
     HAL_NVIC_SetPriority(TIM6_DAC_IRQn, 0, 0);
-    HAL_NVIC_EnableIRQ(TIM6_DAC_IRQn);
-    check(HAL_TIM_Base_Start_IT(&timer), 12);
+    /* Lockstep has no timer dispatcher, including no background heartbeat. */
+    TIM6->CR1 = 0;
+    TIM6->DIER = 0;
+    HAL_NVIC_DisableIRQ(TIM6_DAC_IRQn);
+    HAL_NVIC_ClearPendingIRQ(TIM6_DAC_IRQn);
 }
 static uint32_t cycles(void) { return DWT->CYCCNT; }
 static uint8_t receive_byte(uint32_t start, int waiting_for_first) {
@@ -217,6 +228,7 @@ int main(void) {
     vv_device_init(&device, info);
     vv_replay_init(&replay, &device, replay_inputs, &replay_telemetry, &replay_timing);
     for (;;) {
+        assert_dispatch_mode(0);
         uint8_t wire[VV_MAX_FRAME];
         VvFrame request, response;
         wire[0] = receive_byte(0, 1);
@@ -246,6 +258,10 @@ int main(void) {
             HAL_NVIC_ClearPendingIRQ(TIM6_DAC_IRQn);
             HAL_NVIC_DisableIRQ(DMA1_Stream0_IRQn);
             HAL_NVIC_DisableIRQ(USART3_IRQn);
+            TIM6->DIER = TIM_DIER_UIE;
+            HAL_NVIC_EnableIRQ(TIM6_DAC_IRQn);
+            timed_window = 1;
+            assert_dispatch_mode(1);
             timer_ticks = 0;
             uint32_t low = cycles();
             TIM6->CR1 = TIM_CR1_CEN;
@@ -256,18 +272,34 @@ int main(void) {
             while (replay.state == 1)
                 __NOP();
             __DMB();
+            __disable_irq();
             TIM6->CR1 = 0;
+            TIM6->DIER = 0;
+            HAL_NVIC_DisableIRQ(TIM6_DAC_IRQn);
+            __HAL_TIM_CLEAR_FLAG(&timer, TIM_FLAG_UPDATE);
+            HAL_NVIC_ClearPendingIRQ(TIM6_DAC_IRQn);
+            timed_window = 0;
             vv_replay_seal_telemetry(&replay);
             diagnostics();
             HAL_NVIC_EnableIRQ(DMA1_Stream0_IRQn);
             HAL_NVIC_EnableIRQ(USART3_IRQn);
+            assert_dispatch_mode(0);
+            __enable_irq();
         }
     }
 }
 
 void SysTick_Handler(void) { HAL_IncTick(); }
-void DMA1_Stream0_IRQHandler(void) { HAL_DMA_IRQHandler(&rx_dma); }
-void USART3_IRQHandler(void) { HAL_UART_IRQHandler(&uart); }
+void DMA1_Stream0_IRQHandler(void) {
+    if (timed_window)
+        fatal(28);
+    HAL_DMA_IRQHandler(&rx_dma);
+}
+void USART3_IRQHandler(void) {
+    if (timed_window)
+        fatal(29);
+    HAL_UART_IRQHandler(&uart);
+}
 /* Two loads before the C prologue; exception stacking precedes this timestamp.
  */
 __attribute__((naked)) void TIM6_DAC_IRQHandler(void) {
@@ -280,6 +312,7 @@ void tim6_body(uint32_t entry) {
         return;
     __HAL_TIM_CLEAR_FLAG(&timer, TIM_FLAG_UPDATE);
     GPIOG->BSRR = GPIO_PIN_2;
+    assert_dispatch_mode(1);
     last_timer_entry = entry;
     timer_ticks++;
     if (replay.state == 1 && !replay.armed) {

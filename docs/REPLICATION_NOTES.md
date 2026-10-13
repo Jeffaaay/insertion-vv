@@ -993,3 +993,35 @@ through ctypes/FFI/TCP, Arm core compile and full H723 link. Evidence is under
 backend trace/truth files are byte-identical to B2.1. Serial-port enumeration and
 present ST-LINK PnP enumeration are both empty at this checkpoint. Hosted results
 will be verified at the resulting commit before any programming step.
+
+B2.2 commit `f180be6` passes [Phase A CI 38330077978](https://github.com/Jeffaaay/insertion-vv/actions/runs/38330077978)
+and [Phase B CI 38330077954](https://github.com/Jeffaaay/insertion-vv/actions/runs/38330077954).
+Downloaded test counts and all numerical regressions are verified. Its Linux CI
+BIN matches the clean local build, SHA
+`089c02f11ae57327a4b25dfddcac7a2efe3d7cef138adcd09b54ae2dcbd4b38a`.
+The report was delivered to the authorized `neralink project` Claude conversation;
+software readiness was accepted. The board remains disconnected.
+
+## B2 pre-hardware review follow-up
+
+The review adds explicit firmware dispatch assertions: TIM6 IRQ/UIE stay disabled
+outside replay, UART/DMA IRQ processing stays disabled inside it, and register
+readback verifies those conditions on both paths. Lockstep no longer has the
+unused TIM6 heartbeat. Controller arithmetic and replay inputs are unchanged.
+The RDP Level 0 gate already preceded backup/programming; it now also executes
+inside every OpenOCD connection before Flash probing, with no unlock operation.
+
+Timing reports add maximum-compute tick/cycles/µs, first-tick compute and the
+explicit zero warm-up exclusion. A synthetic isolated outlier test verifies it
+remains visible even when p99 passes. No cache-causality claim is inferred from
+an early maximum. The obsolete 64 KiB AXI relocation fallback is replaced by a
+conditional complete-layout redesign; no compression or relocation is implemented.
+Pre-flash identity means ST-LINK MCU/UID/options; application HELLO is post-flash.
+No actual hardware timing or numerical result exists at this checkpoint.
+
+Local full-workflow rerun passes with 170 Phase A tests, 47 Phase B Python tests,
+13 Rust tests, three native C suites and both profiles through every host backend.
+All 28 local trace/truth files remain byte-identical to B2.2. Arm core and image
+checks pass; the updated image is 31112 Flash bytes, with 9600 bytes DTCM gap and
+unchanged 7680 bytes AXI spare. Evidence: `artifacts/b2-review-{phase-a,host,arm,firmware-final}`.
+The runtime headroom gate is still unmeasured, and the board is still disconnected.

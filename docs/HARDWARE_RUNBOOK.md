@@ -42,6 +42,11 @@ Identification resets/halts and resumes the board, reads MCU family/CPUID, 96-bi
 UID, Flash size and option status. It requires H72x/H73x Cortex-M7, 1 MiB Flash and
 unprotected RDP Level 0. A different family, invalid UID, protection or a failed
 read stops execution. No option-byte writes/unlock commands are performed.
+The RDP read and fail-closed check happen before Flash probing in each OpenOCD
+connection, including the later backup and programming connections. Report the
+observed ST-LINK MCU/UID/option-byte evidence before programming. Application
+HELLO and runtime Flash CRC are checked after the new image is verified and boots;
+an arbitrary original firmware cannot be expected to speak this protocol.
 
 Before programming, the tool saves the full original 1 MiB Flash and its SHA locally.
 UID is checked again in each backup/program connection. Programming erases only
@@ -83,6 +88,14 @@ Python analysis handles DWT wrap and audits absolute scheduled deadlines. Valid
 data exceeding timing gates is FAIL; corrupt, incomplete or inconsistent data is
 INVALID. Raw logs and partial results are preserved in either case.
 
+TIM6 IRQ and update interrupt are disabled outside the timed replay window.
+UART/DMA IRQ processing is disabled inside it. Firmware asserts the actual NVIC
+and DIER enable bits on both dispatch paths; mode violations halt the board and
+the host times out as INVALID. No controller has two active dispatchers. The
+report retains all 8000 samples, including first executions: max compute tick,
+cycles and µs, first-tick compute and p99 are separate fields. No warm-up samples
+are discarded, and a large first sample alone does not establish a cache cause.
+
 Optional plotting uses the separate visualization environment and is never a CI
 dependency:
 
@@ -106,3 +119,11 @@ is a 3.3 V ISR instrumentation output for an independently calibrated instrument
 it is not an actuator drive. Record any later instrument model, calibration and
 capture separately. Only actual successful functional/timing experiments support
 a Phase B hardware summary and tag; synthetic CI tests never do.
+
+If runtime stack headroom is <4 KiB, stop before further claims. The earlier
+proposal to move 64 KiB of compressed telemetry into AXI is obsolete: its current
+spare space is only 7680 bytes. A conditional redesign candidate is packed
+29-byte input records (232000 bytes, freeing 24000 bytes of structure padding)
+plus smaller DTCM telemetry. This requires a complete rechecked memory layout,
+protocol/timing evidence and fresh CI before rerunning; it is not implemented
+unless that runtime gate fails.
