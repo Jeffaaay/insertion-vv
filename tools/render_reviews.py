@@ -12,7 +12,7 @@ from pathlib import Path
 
 def render(root: Path, output: Path) -> None:
     blocks = []
-    for milestone in ("G", "M0", "M1", "M2", "M3", "M4"):
+    for milestone in ("G", "M0", "M1", "M2", "M3", "M4", "Journal"):
         directory = root / milestone
         if not directory.is_dir():
             continue

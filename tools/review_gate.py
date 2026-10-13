@@ -22,6 +22,25 @@ def frozen_check():
         if not (ROOT / name).is_file():
             raise RuntimeError(f"Frozen file missing: {name}")
         old = command("git", "show", f"{BASELINE}:{name}")
+        if name == "README.md":
+            # The user requested a current repository entry point after SIL closure.
+            # Permit only a marked documentation preface; preserve the entire old body.
+            current = (ROOT / name).read_text(encoding="utf-8")
+            marker = "<!-- FROZEN_BASELINE_README_BELOW -->\n"
+            original = old.decode().replace("\r\n", "\n")
+            unchanged = current == original or (
+                current.count(marker) == 1 and current.split(marker, 1)[1] == original
+            )
+            checks.append(
+                {
+                    "path": name,
+                    "baseline_sha256": hashlib.sha256(old).hexdigest(),
+                    "historical_body_unchanged": unchanged,
+                    "unchanged": unchanged,
+                    "scope": "original body; current documentation preface allowed",
+                }
+            )
+            continue
         # Git normalizes checkout line endings; compare the actual Git object.
         current_blob = command("git", "hash-object", "--path", name, name).decode().strip()
         old_blob = command("git", "rev-parse", f"{BASELINE}:{name}").decode().strip()

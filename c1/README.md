@@ -1,7 +1,16 @@
 # Phase C SIL extension
 
+Read the [project journal](../docs/PROJECT_JOURNAL.md) for the experiment history,
+review corrections, videos and future hardware chapter. The multimedia page is
+`artifacts/c1/blog.html`; build it with `python -m c1.build_journal` using the sealed
+matrix and existing videos. Its editable source is `c1/blog-template.html`.
+After an editorial change, rebuild, reseal with the local full archive, and run
+`python -m c1.verify_public`. Do not rerun simulations to update the article.
+
 This package adds registered faults without modifying any of the 104 baseline
-tracked files. `faults/README.md` is preserved historical text; implementation now
+tracked files during the SIL campaign. The later project-journal update adds a
+current README preface, preserving its entire original body; all other baseline
+checks retain their original scope. `faults/README.md` is preserved historical text; implementation now
 lives here. `docs/C1_PREREG.md` and its prospective A1 amendment define semantics.
 
 `faults/F1.yaml`–`F8.yaml` use JSON syntax (valid YAML 1.2 subset). The Python and

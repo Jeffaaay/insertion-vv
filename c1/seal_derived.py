@@ -50,6 +50,9 @@ def main():
         for p in (
             Path("c1/build_report.py"),
             Path("c1/hub-template.html"),
+            Path("c1/build_journal.py"),
+            Path("c1/blog-template.html"),
+            Path("docs/PROJECT_JOURNAL.md"),
             Path("docs/PHASE_C_SIL_SUMMARY.md"),
             Path("docs/FINDINGS.md"),
         )

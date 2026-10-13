@@ -1,3 +1,37 @@
+# Current project record — Phase C SIL complete
+
+Start with the **[project journal: text, images and videos](docs/PROJECT_JOURNAL.md)**.
+It records the original predictions, the failures, review corrections and the
+hardware chapter that remains to be measured. The full multimedia article is
+[artifacts/c1/blog.html](artifacts/c1/blog.html); GitHub shows its source. To view
+it with embedded video, clone this branch and run:
+
+```text
+python -m http.server 8765 --bind 127.0.0.1 --directory artifacts/c1
+```
+
+Open `http://127.0.0.1:8765/blog.html`. All media is local; no simulation is run.
+
+Phase C Windows SIL: **3,615 cases attempted twice; 2,730 PASS, 789 FAIL,
+96 INVALID**. Of 1,782 Python/C32 pairs, 1,686 valid pairs agree; C32 F6 has
+0/96 valid coverage. The 96 incomplete cases remain INVALID. Board measurements
+are still pending. Firmware/tool readiness is not a hardware validation result.
+
+- [One-page results](docs/PHASE_C_SIL_SUMMARY.md) and [sealed predictions](docs/C1_SIL_PREDICTIONS.md)
+- [Preregistration](docs/C1_PREREG.md), [findings](docs/FINDINGS.md), [review records](reviews)
+- [Figures, videos and matrix](artifacts/c1) and [reproduction/verification](c1/README.md)
+- [Hardware runbook](docs/HARDWARE_RUNBOOK.md) for the future HIL chapter
+
+The source and evidence live on `phase-c-sil`. The SIL closeout is pinned at
+[8f5dacad](https://github.com/Jeffaaay/insertion-vv/tree/8f5dacad219366b4bfe32caf9a5f8a862633b768).
+This journal update changes documentation and presentation, not the sealed matrix.
+
+## Historical baseline README
+
+The complete earlier README follows unchanged. Its references to future Phase C
+work describe that earlier checkpoint; use the current links above for Phase C.
+
+<!-- FROZEN_BASELINE_README_BELOW -->
 # Insertion verification stack
 
 Headless, deterministic MuJoCo SIL for a 1-axis needle and pulsating tissue.

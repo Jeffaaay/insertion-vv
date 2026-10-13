@@ -7,16 +7,19 @@
     "c1/analyze.py": "49295523c487ead28fa147e19f2be771f7b00b0111d580a133b48c3e484a527f",
     "c1/visualize.py": "591bf7aae4e7ae190e0ada3fa16e21a34fcd660c437dbb1be8cdbde7e81248ac",
     "c1/heatmap-template.html": "ce52af0fb54051afe1236bf436e8948102b8e527fcecceed7aea7320ac2163d6",
-    "c1/seal_derived.py": "881f8c448ab683318e3667f3b5d9d067f2efc4373243bc105736e6046d3d98e0",
+    "c1/seal_derived.py": "8cb006cc4064421b49200c7b8e134444d45abe7767955cbace11d74f699f5325",
     "c1/build_report.py": "43f4c0b3646cd8c35eb54b94bdfd8c02f3ce60004e58b0219fe99a10fa221485",
-    "c1/hub-template.html": "780a7ca6c2dad4ac66b8fbd8f9c5d30cc8041615d48a4c71c0518516fccbbe8e",
+    "c1/hub-template.html": "7c1230dbd8e4c3d4263755af443b818bafa4db662a00110bb64b8b1be3396ee5",
+    "c1/build_journal.py": "bf76479feca46d7bf5c0389d0608544483750026ae71a8cc55786ba26162fd80",
+    "c1/blog-template.html": "bf12afe245744bf656ee4235043a6679fa1a6f42e387db015f5956d0600f5fdd",
+    "docs/PROJECT_JOURNAL.md": "2f0577c883611f2f6563b57ae025a2ad201dbf08ffd675c7f63d9d6f76e64689",
     "docs/PHASE_C_SIL_SUMMARY.md": "edf8f453c88b297914fa4e04a6bf5cc6d27f723d16d792397a59eade77c26fbc",
     "docs/FINDINGS.md": "74e98019cc6c3d0a2d7ce9d11056c4bfe61c463ec595742051282601aa1d7e9e"
   },
   "files": {
     "blog.html": {
-      "sha256": "e98779e1b1049611a66102353eb295d16addd5394d2c43db7eab340bbcf20d78",
-      "bytes": 3876
+      "sha256": "deb73d7b1b4766512b769d8152462a6597451042e73b4a33e04a7af393101002",
+      "bytes": 25398
     },
     "evidence-audit.json": {
       "sha256": "4f23d8c306286c0783ce459eecefce3377a047f16d845092b64d3a5d6a27e30d",
@@ -75,8 +78,8 @@
       "bytes": 2708436
     },
     "index.html": {
-      "sha256": "d1500822d9a7632d32de45b57b09a28256248aba66aea5304c8341e0656c71e2",
-      "bytes": 8190
+      "sha256": "befa06f14ab8deff44c566c63da046c34eca13159feeb4f834f519e9c3678a64",
+      "bytes": 8200
     },
     "matrix.json": {
       "sha256": "cc833c35864f0f8cfa4d67671bf605a129c2b18a5f59710be41ee11e2eb98aa9",
@@ -91,8 +94,8 @@
       "bytes": 4813
     },
     "reviews.html": {
-      "sha256": "fd3ae0c6d217a2f7acef838836abecc6dc305b8a608a7da2333e5d4cd69bec44",
-      "bytes": 226572
+      "sha256": "121f835aa06caab0de3658db6e77291dafdaaa6060391658353224e9eec49e12",
+      "bytes": 228090
     },
     "selected-traces.zip": {
       "sha256": "8ba5d81c618037113a51480bed930558bae084ca5f857c0e4321c4d0683ea1ae",

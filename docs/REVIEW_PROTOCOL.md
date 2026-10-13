@@ -1,5 +1,15 @@
 # Phase C milestone reviews
 
+## Post-closeout project journal
+
+After M4 closure, the user requested a multimedia process journal and an updated
+GitHub repository. This authorizes editorial updates and a current README entry
+point. The baseline README body remains verbatim after a marked preface; the
+frozen-content gate checks that complete body. Other baseline checks, numerical
+code, firmware, contracts, registered predictions and sealed run evidence retain
+their original protections. This is a documentation change, not a new experiment.
+The journal distinguishes measured SIL evidence from future HIL material.
+
 ## Current execution policy
 
 The user's latest instruction delegates routine design and implementation choices
