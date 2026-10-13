@@ -233,6 +233,72 @@
       "nonmonotonic": false
     }
   },
+  "baseline_margins": {
+    "F1": {
+      "min_rms_um": 1.096277481059588,
+      "max_rms_um": 13.318464877177203,
+      "max_peak_abs_edot_mm_s": 0.7698502881236784,
+      "rms_margin_um": 6.6815351228227975,
+      "edot_margin_mm_s": 1.2301497118763216,
+      "max_abs_rms_difference_from_nominal_nm": 12195.90127064531
+    },
+    "F2": {
+      "min_rms_um": 1.1200459486453276,
+      "max_rms_um": 1.1230268157393246,
+      "max_peak_abs_edot_mm_s": 0.0727509083322008,
+      "rms_margin_um": 18.876973184260674,
+      "edot_margin_mm_s": 1.9272490916677991,
+      "max_abs_rms_difference_from_nominal_nm": 2.5176578865657717
+    },
+    "F3": {
+      "min_rms_um": 1.1143531824363795,
+      "max_rms_um": 1.1241242778655742,
+      "max_peak_abs_edot_mm_s": 0.07310622784442039,
+      "rms_margin_um": 18.875875722134424,
+      "edot_margin_mm_s": 1.9268937721555797,
+      "max_abs_rms_difference_from_nominal_nm": 8.210424095513869
+    },
+    "F4": {
+      "min_rms_um": 1.0362495206131057,
+      "max_rms_um": 1.440954060609738,
+      "max_peak_abs_edot_mm_s": 0.09430673362532743,
+      "rms_margin_um": 18.559045939390263,
+      "edot_margin_mm_s": 1.9056932663746726,
+      "max_abs_rms_difference_from_nominal_nm": 318.3904540778446
+    },
+    "F5": {
+      "min_rms_um": 52.68387453365554,
+      "max_rms_um": 157.13527218691578,
+      "max_peak_abs_edot_mm_s": 3.1302357982958036,
+      "rms_margin_um": -137.13527218691578,
+      "edot_margin_mm_s": -1.1302357982958036,
+      "max_abs_rms_difference_from_nominal_nm": 156012.7085803839
+    },
+    "F6": {
+      "min_rms_um": 1.1224493889633074,
+      "max_rms_um": 1.2260592027544615,
+      "max_peak_abs_edot_mm_s": 0.07282965292579,
+      "rms_margin_um": 18.773940797245537,
+      "edot_margin_mm_s": 1.92717034707421,
+      "max_abs_rms_difference_from_nominal_nm": 103.4955962225681
+    },
+    "F7": {
+      "min_rms_um": 1.1225636065318934,
+      "max_rms_um": 264.0937590873359,
+      "max_peak_abs_edot_mm_s": 3.538195583568524,
+      "rms_margin_um": -244.0937590873359,
+      "edot_margin_mm_s": -1.5381955835685241,
+      "max_abs_rms_difference_from_nominal_nm": 262971.195480804
+    },
+    "F8": {
+      "min_rms_um": 1.1225637866702205,
+      "max_rms_um": 1.1258786879718952,
+      "max_peak_abs_edot_mm_s": 0.07291495571045932,
+      "rms_margin_um": 18.874121312028105,
+      "edot_margin_mm_s": 1.9270850442895406,
+      "max_abs_rms_difference_from_nominal_nm": 3.3150814400018103
+    }
+  },
   "predictions": {
     "P1": {
       "supported": false,
@@ -1201,6 +1267,56 @@
         "fault": "F6",
         "error": "ValueError: C controller rejected tick 215"
       }
-    ]
+    ],
+    "metric_difference_maxima": {
+      "rms_absolute_difference_um": {
+        "python_run_id": "4d55b8f5b57e6a1701ca3fae",
+        "c32_run_id": "ac3c05b106e090aabfabceb5",
+        "scenario": {
+          "ablation": "no-delay",
+          "contact_profile": "primary",
+          "controller": "preview",
+          "fault": "F3",
+          "level": 10,
+          "onset_ms": 200,
+          "seed": 45
+        },
+        "rms_absolute_difference_um": 0.0022464751895654445,
+        "rms_relative_difference_percent": 0.0008322817332739765,
+        "peak_edot_absolute_difference_mm_s": 9.844989314444774e-06
+      },
+      "rms_relative_difference_percent": {
+        "python_run_id": "14f8336fd852804cbe589d3f",
+        "c32_run_id": "1f146716bc6a2c903811d7ba",
+        "scenario": {
+          "ablation": "no-jitter-model",
+          "contact_profile": "primary",
+          "controller": "preview",
+          "fault": "F1",
+          "level": 120,
+          "onset_ms": 1500,
+          "seed": 42
+        },
+        "rms_absolute_difference_um": 0.0008069218724608973,
+        "rms_relative_difference_percent": 0.07336107010737433,
+        "peak_edot_absolute_difference_mm_s": 1.73212539456985e-05
+      },
+      "peak_edot_absolute_difference_mm_s": {
+        "python_run_id": "05e78c78a32c8c044f7537e7",
+        "c32_run_id": "9ae92d7a5a3389b2ef50b93a",
+        "scenario": {
+          "ablation": "no-jitter-model",
+          "contact_profile": "primary",
+          "controller": "preview",
+          "fault": "F7",
+          "level": 50,
+          "onset_ms": 5000,
+          "seed": 42
+        },
+        "rms_absolute_difference_um": 0.0014951341088220715,
+        "rms_relative_difference_percent": 0.001628811999093642,
+        "peak_edot_absolute_difference_mm_s": 6.3510650815779e-05
+      }
+    }
   }
 }

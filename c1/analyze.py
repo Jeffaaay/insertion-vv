@@ -295,7 +295,7 @@ def figures(matrix, summary, root):
             rms = max(
                 r["contact"]["rms_e_um"] for r in subset(base, fault=fault, level=item["level"])
             )
-            label += f"\nRMS {rms:.3f} µm"
+            label += f"\nmax RMS {rms:.3f} µm"
             ax.text(x, y, label, ha="center", va="center", color="white", fontsize=9)
     ax.set(
         xlim=(-0.6, 5.6),

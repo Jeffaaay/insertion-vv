@@ -1,0 +1,115 @@
+{
+  "matrix_sha256": "cc833c35864f0f8cfa4d67671bf605a129c2b18a5f59710be41ee11e2eb98aa9",
+  "simulations_executed": 0,
+  "heatmap_cells": 37,
+  "videos": [
+    {
+      "fault": "F1",
+      "run_id": "936fad1f3eb8be94db2669e9",
+      "normal_run_id": "a3aab64245c595654c78dfbb",
+      "truth_sha256": "c9350ffe08e55df3a781d591278732cfd2edb87d7d8a4dfb18c974a91e45d887",
+      "normal_truth_sha256": "95fb57aaeb56ecd3cbb648430bc7033efda184a18aedfde79fe35f65bb3e7e76",
+      "frames": 192,
+      "fps": 24,
+      "duration_s": 8,
+      "file_sha256": "2b67213cb79c9be096a441d89518c0cab8525bb282e2886c8df216dec56759f6",
+      "decoded_verification": "192 frames / 24 fps / 1280x720 / 8 seconds"
+    },
+    {
+      "fault": "F2",
+      "run_id": "cb371aa6a8b4699c44a67463",
+      "normal_run_id": "a3aab64245c595654c78dfbb",
+      "truth_sha256": "dd983fee9ef98c1dfc7458894adad931a5c66f3e42e532d9bd67d089a8b91064",
+      "normal_truth_sha256": "95fb57aaeb56ecd3cbb648430bc7033efda184a18aedfde79fe35f65bb3e7e76",
+      "frames": 192,
+      "fps": 24,
+      "duration_s": 8,
+      "file_sha256": "fb7abb153b4c6a6953c119227043c8643ed80d9502a780bc17a60f92a8218206",
+      "decoded_verification": "192 frames / 24 fps / 1280x720 / 8 seconds"
+    },
+    {
+      "fault": "F3",
+      "run_id": "4cc48140796b57154c2914cd",
+      "normal_run_id": "a3aab64245c595654c78dfbb",
+      "truth_sha256": "807ab119a27bf2eaae174466fc1af0a6e794920a917c8f5f84228a7b9a2a26be",
+      "normal_truth_sha256": "95fb57aaeb56ecd3cbb648430bc7033efda184a18aedfde79fe35f65bb3e7e76",
+      "frames": 192,
+      "fps": 24,
+      "duration_s": 8,
+      "file_sha256": "52596b617332a2a3a331f729bc0426147bf926dc698404c6863483ac50ba8ab4",
+      "decoded_verification": "192 frames / 24 fps / 1280x720 / 8 seconds"
+    },
+    {
+      "fault": "F4",
+      "run_id": "3e496a24b954adefa053a2e9",
+      "normal_run_id": "a3aab64245c595654c78dfbb",
+      "truth_sha256": "a06b1c49afe7809b566b0f1a568042e4bb04f4e429e63bda3ecb242c7fac1ac5",
+      "normal_truth_sha256": "95fb57aaeb56ecd3cbb648430bc7033efda184a18aedfde79fe35f65bb3e7e76",
+      "frames": 192,
+      "fps": 24,
+      "duration_s": 8,
+      "file_sha256": "d3f88e4d842e70c58727f1fc89cefcc5489c15a0b61a361a74303756df4e838a",
+      "decoded_verification": "192 frames / 24 fps / 1280x720 / 8 seconds"
+    },
+    {
+      "fault": "F5",
+      "run_id": "5cbe77e0ab78b8f2363885a1",
+      "normal_run_id": "a3aab64245c595654c78dfbb",
+      "truth_sha256": "3457047a6dfb1e9b4b91e1ed7253822ac1b6932157e1fc13b5250be7479568e0",
+      "normal_truth_sha256": "95fb57aaeb56ecd3cbb648430bc7033efda184a18aedfde79fe35f65bb3e7e76",
+      "frames": 192,
+      "fps": 24,
+      "duration_s": 8,
+      "file_sha256": "5730b94cb03e9859cb5b499d79e39d418fc157e52207ca4b3a9dc41c72e25ca8",
+      "decoded_verification": "192 frames / 24 fps / 1280x720 / 8 seconds"
+    },
+    {
+      "fault": "F6",
+      "run_id": "c70974d5c087ce4ed6d543a9",
+      "normal_run_id": "a3aab64245c595654c78dfbb",
+      "truth_sha256": "f03f7e4d20f20a9cde99509edc572256b2844db6bd767ebedbc3d8ba93c08d5d",
+      "normal_truth_sha256": "95fb57aaeb56ecd3cbb648430bc7033efda184a18aedfde79fe35f65bb3e7e76",
+      "frames": 192,
+      "fps": 24,
+      "duration_s": 8,
+      "file_sha256": "52137fb1298d77030a702e2d2971ae22bb2e0b90b9c338113c0fb4e6e0c4f58a",
+      "decoded_verification": "192 frames / 24 fps / 1280x720 / 8 seconds"
+    },
+    {
+      "fault": "F7",
+      "run_id": "d52175ce5d9f564540106f2a",
+      "normal_run_id": "a3aab64245c595654c78dfbb",
+      "truth_sha256": "c21f760c4c3d7bebe6cc6d2f24211fc60a9de107653d0dfcf51942587c8ad928",
+      "normal_truth_sha256": "95fb57aaeb56ecd3cbb648430bc7033efda184a18aedfde79fe35f65bb3e7e76",
+      "frames": 192,
+      "fps": 24,
+      "duration_s": 8,
+      "file_sha256": "6beecbd615ed243537ea17cb8b1a29229360c3d5c40de06653a1274734c957f7",
+      "decoded_verification": "192 frames / 24 fps / 1280x720 / 8 seconds"
+    },
+    {
+      "fault": "F8",
+      "run_id": "4e5d669d00e7c45816ca858d",
+      "normal_run_id": "a3aab64245c595654c78dfbb",
+      "truth_sha256": "223bec8f57351dc57edcc1e0487d1683d02109fbc8e7a8255ba7e141486ba81a",
+      "normal_truth_sha256": "95fb57aaeb56ecd3cbb648430bc7033efda184a18aedfde79fe35f65bb3e7e76",
+      "frames": 192,
+      "fps": 24,
+      "duration_s": 8,
+      "file_sha256": "56250f8fce27448d3488f6f1e9208e4d566ec07065eda4708d58535fd63a458b",
+      "decoded_verification": "192 frames / 24 fps / 1280x720 / 8 seconds"
+    }
+  ],
+  "display_sampling": {
+    "heatmap_ms": 10,
+    "video_curve_ms": 8,
+    "metrics_ms": 1
+  },
+  "visualization_environment": {
+    "python": "3.12.10",
+    "pillow": "11.3.0",
+    "imageio": "2.37.0",
+    "imageio-ffmpeg": "0.6.0"
+  },
+  "visualize_source_sha256": "af5dcc69256cbc1e38590257b32659fb8f7c92921f943c7a4a593f943d47581a"
+}

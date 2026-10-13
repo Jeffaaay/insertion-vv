@@ -2940,6 +2940,12 @@ Frozen checks: 104 PASS
 - Phase B C32: completed/success — https://github.com/Jeffaaay/insertion-vv/actions/runs/38346326496
 
 See round notes for acceptance criteria, artifacts and limitations.
+</pre></details><details class="record"><summary>reply-integrity.json</summary><pre>{
+  &quot;conversation_url&quot;: &quot;https://claude.ai/chat/88a45c0b-4051-4fea-8c12-bdfa77bd4de1&quot;,
+  &quot;reviewed_commit&quot;: &quot;d0b86986c7677985ccae5d358b3a3c2ba7128672&quot;,
+  &quot;response_sha256&quot;: &quot;f3da7e7aca66a793b861c70419c9b1d6b4ef439c60cd6817160c9b025dcca429&quot;,
+  &quot;transport&quot;: &quot;browser Copy response, copied verbatim&quot;
+}
 </pre></details><details class="record" open><summary>response-actions.md</summary><pre># Response to M2 PASS review
 
 The full browser response is preserved in claude-round-1.md. Claude independently
@@ -2991,4 +2997,31 @@ Large lossless traces stay local (3.78 GB compressed), while matrix and scientif
 figures are committed. M3 visualization source is drafted but its artifacts have
 not been generated and it has not run any simulation. External reply will be
 copied verbatim from the user-selected Claude conversation.
+</pre></details></section><section><h2>M3</h2><details class="record" open><summary>round-1.md</summary><pre># M3 trace-only visualization acceptance
+
+M2 external result: PASS. Its full reply and independent corrections are archived
+under reviews/M2. Presentation feedback was applied without any simulation rerun.
+Matrix SHA remains cc833c35864f0f8cfa4d67671bf605a129c2b18a5f59710be41ee11e2eb98aa9.
+
+- Eight videos F1–F8: 8 s, 192 frames, 24 fps, 1280x720; all decoded and checked.
+  Three panels: nominal, faulty, difference times 100 on an explicitly separate
+  labeled axis; lower plot is time-dependent error with normal/fault legend and
+  contact-window shading. Schematics use measured traces, not a new plant render.
+  Selected IDs match the preregistered pooled boundary/strongest-level policy.
+- Offline heatmap: 37 preview-baseline severity cells, pooled verdict separate from
+  representative verdict and run ID. All three curves update on click; full/contact
+  window selection tested in Chrome. No JavaScript console errors observed.
+  Display decimation is labeled; metrics remain full-rate.
+- Five figures now show maximum RMS per cell, overlapping-curve explanation and
+  pre-existing nominal failures. No-delay interpretation and exact nanometre-scale
+  RMS differences are documented. RMS/velocity margins and C32 metric differences
+  were derived from the sealed matrix.
+- Public selected-traces.zip contains 9 original runs (video cases + shared nominal).
+  Complete 3.78 GB evidence archive stays in local deliverables. Every derived file
+  is hashed in derived-artifacts.json, including render-source normalized-LF hashes.
+
+Visual QA: inspected all video preview frames in a contact sheet, figure layouts,
+heatmap grid and updated three-curve detail view (F7=50%, then contact window).
+Source compile/lint passed. Final CI/frozen checks are in packet.md/evidence.json.
+No HIL claim; F6 hardware semantics, F9 CRC and F10 drift remain unverified.
 </pre></details></section></html>

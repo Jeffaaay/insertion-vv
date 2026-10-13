@@ -124,7 +124,7 @@ def videos(matrix, summary, root):
             font=font,
             fill="#414d57",
         )
-        for x, label in ((40, "NORMAL"), (450, "FAULT"), (860, "DIFFERENCE x100")):
+        for x, label in ((40, "NORMAL"), (450, "FAULT"), (860, "DELTA x100 / own axis")):
             d.rounded_rectangle(
                 (x, 113, x + 380, 429), radius=12, fill="white", outline="#d6ddd9", width=2
             )
@@ -140,6 +140,12 @@ def videos(matrix, summary, root):
             "Instantaneous relative-position error (um) | full trace, not an RMS threshold",
             font=font,
             fill="#183747",
+        )
+        d.text(
+            (45, 474),
+            "Gray: normal | Orange: fault | Shaded: contact scoring window",
+            font=small,
+            fill="#526169",
         )
         d.rectangle((ex(3), 490, ex(8), 633), fill="#e7efeb")
         for t in range(9):
@@ -249,6 +255,7 @@ def main():
             "python": platform.python_version(),
             **{name: version(name) for name in ("pillow", "imageio", "imageio-ffmpeg")},
         },
+        "visualize_source_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
     }
     (args.root / "visualization-manifest.json").write_text(json.dumps(record, indent=2) + "\n")
 
