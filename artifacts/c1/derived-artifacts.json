@@ -11,15 +11,15 @@
     "c1/build_report.py": "43f4c0b3646cd8c35eb54b94bdfd8c02f3ce60004e58b0219fe99a10fa221485",
     "c1/hub-template.html": "7c1230dbd8e4c3d4263755af443b818bafa4db662a00110bb64b8b1be3396ee5",
     "c1/build_journal.py": "bf76479feca46d7bf5c0389d0608544483750026ae71a8cc55786ba26162fd80",
-    "c1/blog-template.html": "bf12afe245744bf656ee4235043a6679fa1a6f42e387db015f5956d0600f5fdd",
-    "docs/PROJECT_JOURNAL.md": "2f0577c883611f2f6563b57ae025a2ad201dbf08ffd675c7f63d9d6f76e64689",
+    "c1/blog-template.html": "ad2f465e774e649a9d7b29e32ee6509035e1351bd5bdadefc8787c86c30f03ca",
+    "docs/PROJECT_JOURNAL.md": "7742a8c464e61e098e6ff997c86887d0ffbeb7c4f013d430f1af6d9dcdceb46f",
     "docs/PHASE_C_SIL_SUMMARY.md": "edf8f453c88b297914fa4e04a6bf5cc6d27f723d16d792397a59eade77c26fbc",
     "docs/FINDINGS.md": "74e98019cc6c3d0a2d7ce9d11056c4bfe61c463ec595742051282601aa1d7e9e"
   },
   "files": {
     "blog.html": {
-      "sha256": "deb73d7b1b4766512b769d8152462a6597451042e73b4a33e04a7af393101002",
-      "bytes": 25398
+      "sha256": "572ec368a49cc220c3ebcef102c335c5be5d19cedd5944ea4f1332ac95b348e9",
+      "bytes": 25871
     },
     "evidence-audit.json": {
       "sha256": "4f23d8c306286c0783ce459eecefce3377a047f16d845092b64d3a5d6a27e30d",
@@ -94,8 +94,8 @@
       "bytes": 4813
     },
     "reviews.html": {
-      "sha256": "121f835aa06caab0de3658db6e77291dafdaaa6060391658353224e9eec49e12",
-      "bytes": 228090
+      "sha256": "6e8f8c52fdf90d8b1868ff2b7bb34046afba74f24166b7ed8bd0eb38c0b89fc7",
+      "bytes": 257162
     },
     "selected-traces.zip": {
       "sha256": "8ba5d81c618037113a51480bed930558bae084ca5f857c0e4321c4d0683ea1ae",

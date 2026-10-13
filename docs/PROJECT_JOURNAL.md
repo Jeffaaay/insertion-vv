@@ -104,15 +104,20 @@ preview 单一故障的通过率。3,519 个场景完整复现；不完整记录
 
 计划让 NUCLEO-H723ZG 运行冻结 C32，MuJoCo 继续模拟被控对象。固件和工具的准备
 不等于板上验证完成，MCU HIL 也不等于实体针或临床验证。
-执行前阅读 [硬件 runbook](HARDWARE_RUNBOOK.md) 和 [已有硬件计划](PHASE_B_HARDWARE_PLAN.md)。
+nominal 链路与计时沿用 [硬件 runbook](HARDWARE_RUNBOOK.md) 和 [已有硬件计划](PHASE_B_HARDWARE_PLAN.md)。
+故障注入 HIL 工具尚未实现，不能直接按 runbook 执行全部故障。
 
-| 将来补入的材料 | 当前状态 |
-| --- | --- |
-| 板子、PC、仿真连接的实拍照片和短视频 | 未拍摄 |
-| 固件版本、compute p99、overrun、jitter p99、栈余量 | 未测量 |
-| F1/F5/F7 同场景 SIL/HIL 判定与数值差异 | 未运行 |
-| F6 真实 MCU deadline miss 与现有覆盖缺口 | 未验证 |
-| F9 CRC 和 F10 板子/PC 时钟漂移 | HIL-only |
+| 将来补入的材料 | 工具状态 | 实验状态 |
+| --- | --- | --- |
+| 板子、PC、仿真连接的实拍照片和短视频 | 待整理拍摄材料 | 未拍摄 |
+| nominal 链路与 compute p99、overrun、jitter p99、栈余量 | 已有 runbook、lockstep/replay 与分析工具 | 未测量 |
+| F1/F5/F7 同场景 SIL/HIL 判定与数值差异 | HIL 注入路径待开发；Rust 注入器目前仅做离线语义对照 | 未运行 |
+| F6 真实 MCU deadline miss 与现有覆盖缺口 | 受控负载或单独记哈希的实验固件变体待开发 | 未验证 |
+| F9 CRC 和 F10 板子/PC 时钟漂移 | 链路帧损坏与时钟漂移记录工具待开发 | HIL-only |
+
+lockstep 由主机推进，主要检查 MCU 与 host C32 的数值一致性，不是实时性验证。
+1,686 对有效软件场景的一致性提供了对照基线，板上结果仍待测量。独立 replay
+的计时、真实 F6、链路/时钟故障必须分别留下证据。
 
 既有门槛是 compute p99 <100 µs、overrun = 0、jitter p99 <5 µs、栈余量 ≥4 KiB，
 均为待检验目标。硬件回来后，保留首次差异和失败的材料，再追加解释与修复记录。

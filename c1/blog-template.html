@@ -13,7 +13,7 @@
 <p>这个项目把针与运动组织的相互作用缩成了一维问题：针沿一条轴运动，组织表面按周期起伏，控制器需要维持目标相对插入深度。MuJoCo 提供被控对象；传感器给出的组织位置带有延迟，控制器只能依据收到的测量作出动作。</p>
 <p>前面的工作里，固定频率的 preview 控制器已经把标称接触 RMS 做到了约 1.12 µm。RMS 是接触阶段相对深度误差的均方根；它能概括一段时间的偏差，却不能单独解释一次失败是怎么发生的。</p>
 <p>接下来要问的是：组织频率偏离预测器、传感器连续读到旧值，或执行器输出不足时，原来的通过还能保持吗？以后把同一个控制器放到 STM32 板子上，仿真又能预测多少真实固件的行为？</p>
-<div class="route"><div><b>Phase A · 控制</b><span>建立一轴仿真与控制器基线<br>软件基线已完成</span></div><div><b>Phase C · SIL</b><span>冻结控制器，注入故障<br>本篇：软件证据已封存</span></div><div class="pending"><b>Phase B / C · HIL</b><span>固件和工具已准备<br>真实板上实验尚未完成</span></div></div>
+<div class="route"><div><b>Phase A · 控制</b><span>建立一轴仿真与控制器基线<br>软件基线已完成</span></div><div><b>Phase C · SIL</b><span>冻结控制器，注入故障<br>本篇：软件证据已封存</span></div><div class="pending"><b>Phase B / C · HIL</b><span>nominal 链路工具已准备<br>故障 HIL 工具仍待开发</span></div></div>
 <p class="note">这里的 HIL 计划是让真实 MCU 运行控制器，MuJoCo 继续模拟针与组织。即使后续 HIL 通过，也不能直接推导出实体针、执行器或临床场景已经验证。</p></section>
 <section id="before"><span class="kicker">02 / BEFORE THE FIRST RUN</span><h2>先写预测，再看结果。</h2>
 <p>Phase C 开始之前，先固定了八类故障、严重度档位、注入时刻、种子和消融组合。主矩阵比较 Python float64 与 C float32 控制器。一次场景运行 8 秒、控制周期 1 ms；接触评价窗口是 3–8 秒，判定要求 RMS 严格小于 20 µm，峰值误差速度严格小于 2 mm/s。</p>
@@ -40,8 +40,9 @@
 <blockquote>当后来的解释变了，仍然能够找到当时的预测、原始数据和改变判断的那条证据。</blockquote>
 <p>软件封存提交是 <a href="https://github.com/Jeffaaay/insertion-vv/tree/8f5dacad219366b4bfe32caf9a5f8a862633b768"><code>8f5dacad</code></a>。本篇是在它之后扩写的项目记录；已封存的矩阵、场景与数值结论没有改变。后续文字更新和硬件结果应有自己的版本，旧证据继续可访问。</p></section>
 <section id="hardware"><span class="kicker">06 / NEXT CHAPTER — NOT MEASURED YET</span><h2>硬件回来之后，在同一份记录里对答案。</h2>
-<p>下一篇会把真实 MCU、连接方式、固件版本、板上计时和故障对照加入这里。计划使用 NUCLEO-H723ZG 运行冻结 C32 控制器，先验证链路与 lockstep，再进行独立 1 kHz replay。具体操作沿用仓库的 <a href="https://github.com/Jeffaaay/insertion-vv/blob/8f5dacad219366b4bfe32caf9a5f8a862633b768/docs/HARDWARE_RUNBOOK.md">hardware runbook</a>。</p>
-<div class="table-wrap"><table><thead><tr><th>要补的记录</th><th>为什么要有</th><th>当前状态</th></tr></thead><tbody><tr><td>实拍连接图与短视频</td><td>说明 MCU、PC 与仿真如何连接，区分实拍和轨迹回放。</td><td class="status">未拍摄</td></tr><tr><td>固件与板上计时</td><td>记录 compute p99、overrun、jitter p99、栈余量；对照既有门槛。</td><td class="status">未测量</td></tr><tr><td>F1 / F5 / F7 对照</td><td>比较同一场景的 SIL 与 HIL verdict、RMS 和误差速度。</td><td class="status">未运行</td></tr><tr><td>真实 F6 时序</td><td>区分软件跳过调用与 MCU 实际错过 deadline，并处理现有覆盖缺口。</td><td class="status">未验证</td></tr><tr><td>F9 CRC / F10 时钟漂移</td><td>留下仿真没有给出结论的链路与时钟证据。</td><td class="status">HIL-only</td></tr></tbody></table></div>
+<p>下一篇会把真实 MCU、连接方式、固件版本、板上计时和故障对照加入这里。计划使用 NUCLEO-H723ZG 运行冻结 C32 控制器，先验证链路与 lockstep，再进行独立 1 kHz replay。nominal 链路与计时验证沿用仓库的 <a href="https://github.com/Jeffaaay/insertion-vv/blob/8f5dacad219366b4bfe32caf9a5f8a862633b768/docs/HARDWARE_RUNBOOK.md">hardware runbook</a>。故障注入 HIL 工具尚未实现，不能直接照 runbook 执行下表全部故障。</p>
+<div class="table-wrap"><table><thead><tr><th>要补的记录</th><th>工具状态</th><th>实验状态</th></tr></thead><tbody><tr><td>实拍连接图与短视频</td><td>待整理拍摄材料，说明 MCU、PC 与仿真如何连接。</td><td class="status">未拍摄</td></tr><tr><td>nominal 链路与板上计时</td><td>已有 runbook、lockstep/replay 与计时分析工具。</td><td class="status">未测量</td></tr><tr><td>F1 / F5 / F7 对照</td><td>待开发：在独立 HIL 路径中接入故障场景；Rust 注入器当前仅完成离线语义对照。</td><td class="status">未运行</td></tr><tr><td>真实 F6 时序</td><td>待开发：受控负载或单独记录哈希的实验固件变体；冻结固件本身不包含故障制造能力。</td><td class="status">未验证</td></tr><tr><td>F9 CRC / F10 时钟漂移</td><td>待开发：链路帧损坏与时钟漂移记录工具。</td><td class="status">HIL-only</td></tr></tbody></table></div>
+<p>lockstep 由主机推进，主要用于检查 MCU 的数值输出是否与 host C32 一致，不是实时运行验证。已有的 1,686 对有效软件场景一致提供了对照基线；板上是否一致仍待测量。独立 replay 的计时、真实 F6 和链路/时钟故障，需要各自的证据。</p>
 <p>已有的计时门槛是 compute p99 &lt;100 µs、overrun = 0、jitter p99 &lt;5 µs、栈余量 ≥4 KiB；这些是待检验目标，不是测量结果。若硬件与 SIL 不一致，记录首次出现差异的场景、原始数据和解释，后续修复作为新版本保留。</p>
 <figure><a href="figs/fig5_hil_only.png"><img loading="lazy" src="figs/fig5_hil_only.png" alt="图5：SIL 不覆盖、需要后续 HIL 对照的项目"></a><figcaption>图 5 · 当前证据的边界，也是下一篇的取材清单。此处没有用示意图充当硬件实拍。</figcaption></figure></section>
 <section id="evidence"><span class="kicker">APPENDIX / OPEN THE EVIDENCE</span><h2>继续看视频，或沿证据往下读。</h2>

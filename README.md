@@ -15,7 +15,8 @@ Open `http://127.0.0.1:8765/blog.html`. All media is local; no simulation is run
 Phase C Windows SIL: **3,615 cases attempted twice; 2,730 PASS, 789 FAIL,
 96 INVALID**. Of 1,782 Python/C32 pairs, 1,686 valid pairs agree; C32 F6 has
 0/96 valid coverage. The 96 incomplete cases remain INVALID. Board measurements
-are still pending. Firmware/tool readiness is not a hardware validation result.
+are still pending. Nominal link/timing tools exist; fault-injection HIL tools still
+need development. Firmware/tool readiness is not a hardware validation result.
 
 - [One-page results](docs/PHASE_C_SIL_SUMMARY.md) and [sealed predictions](docs/C1_SIL_PREDICTIONS.md)
 - [Preregistration](docs/C1_PREREG.md), [findings](docs/FINDINGS.md), [review records](reviews)
