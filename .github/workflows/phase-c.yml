@@ -14,3 +14,4 @@ jobs:
           python-version: '3.12.10'
       - run: python tools/review_gate.py --check-only
       - run: python tools/render_reviews.py
+      - run: git diff --exit-code reviews/index.html

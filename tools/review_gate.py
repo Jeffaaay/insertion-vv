@@ -16,14 +16,11 @@ def command(*args):
 
 def frozen_check():
     paths = command("git", "ls-tree", "-r", "--name-only", BASELINE).decode().splitlines()
-    protected = [
-        p
-        for p in paths
-        if p.startswith(("sim/", "firmware/", "tests/"))
-        or p in ("harness/contract.json", "requirements-lock.txt")
-    ]
+    protected = [p for p in paths if p != "docs/FINDINGS.md"]
     checks = []
     for name in protected:
+        if not (ROOT / name).is_file():
+            raise RuntimeError(f"Frozen file missing: {name}")
         old = command("git", "show", f"{BASELINE}:{name}")
         # Git normalizes checkout line endings; compare the actual Git object.
         current_blob = command("git", "hash-object", "--path", name, name).decode().strip()
@@ -76,7 +73,6 @@ def main():
             "name,headSha,status,conclusion,url,databaseId",
         )
     )
-    required = {"Phase A baselines", "Phase B C32", "Phase C integrity"}
     # Permit the established Phase A workflow's actual display name.
     actual_a = json.loads(command("gh", "workflow", "list", "--json", "name,path"))
     required = {
