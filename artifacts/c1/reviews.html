@@ -1,0 +1,3725 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Phase C SIL — review evidence</title>
+<style>body{max-width:1050px;margin:40px auto;padding:0 20px;background:#f5f6fa;
+color:#172235;font:16px/1.65 system-ui}h1{font-size:28px}details{background:white;
+padding:16px 20px;margin:16px 0;border-left:4px solid #4879ad;border-radius:8px}
+details.escalate{border-color:#c56c20;background:#fff6e9}
+details.pass{border-color:#2d8878;background:#f2faf6}
+details.block{border-color:#c45343;background:#fff4f0}summary{cursor:pointer;
+font-weight:650}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6
+ui-monospace,monospace}header p{color:#556477}</style><header>
+<h1>Phase C SIL · 审阅记录</h1><p>事实、外部反馈和未决项。记录存在不代表里程碑通过。
+工具与数据记录默认折叠；网页回复不冒充 CLI 日志。</p></header><section><h2>G</h2><details class="escalate" open><summary>ESCALATION.md</summary><pre>&gt; Historical startup escalation. RESOLVED by the user’s subsequent delegation of routine design decisions; retained verbatim below as review history. See docs/REVIEW_PROTOCOL.md and docs/C1_DESIGN_DECISIONS.md.
+
+# G startup escalation — decision requested before M0
+
+Status: ESCALATE. No Phase C experiments or M0 registration have occurred.
+G is partially prepared, not passed. No new commit, push, hosted CI, GPT review,
+tag or completion blog is claimed. Baseline tracked files remain unchanged.
+
+## External response retained
+
+`claude.md` is the complete response copied from the existing Claude conversation.
+Its text was compared against the browser clipboard: 6,560 UTF-16 characters,
+FNV-1a 32-bit `c1e063e3`, excluding the archive file&#x27;s final newline. This check
+guards transcription; it is not the experimental SHA-256 sealing mechanism.
+The verdict JSON says ESCALATE. The reviewer reports independently cloning and
+reading baseline e8cb4ee; that is a reviewer claim, not a local tool execution.
+
+## Local assessment of that response
+
+Confirmed from local source: F5 belongs to physical plant motion; changing only
+sensor values is a different experiment. The fixed 2–5 s ramp cannot also begin
+at every prescribed injection time. Preview rejects fresh measurements younger
+than 15 ms; duplicate sequence/sample metadata is rejected. The scoring window
+is 3–8 s. Zero nominal noise/dropout makes relevant baseline ablations identities.
+
+Do not adopt the reviewer&#x27;s blanket claim that *all* no-delay cases necessarily
+FAIL. If F3 jitter remains active, some frames can have age &gt;=15 ms; F6 mailbox
+handling can also change delivery age. No experiment has verified every verdict,
+or that prediction 5 has the largest flip count. Report measured outcomes only.
+The original response is preserved unchanged, with this qualification separate.
+
+Do not silently reduce preview_c32 coverage as proposed in the response. The
+decision proposal below retains both controllers across all six ablations.
+Figure 4 must also use F5&#x27;s sole fixed ramp, not a nonexistent 2.4 s F5 onset.
+
+## Proposed decision for user approval — not yet registered
+
+1. F5 changes real tissue motion through an additional plant implementation;
+   frozen source/MJCF/controllers remain unchanged. Keep the 2.0–5.0 s frequency
+   ramp, hold its target through 8 s, and exempt F5 from the injection-time axis.
+   Integrate frequency into phase; keep respiration unchanged.
+2. F1/F6 are single N-tick bursts at the selected onset. F2/F3 last 300 ms.
+   F4/F7/F8 persist from onset through the end of the run.
+3. F1 freezes surface measurement values while sample timestamps and frame
+   sequence numbers continue normally. It models a stuck sensor rather than a
+   retransmission of identical frame metadata.
+4. Ablations remove the named sensor mechanism, including its injected effect:
+   no-jitter disables F3; no-quantization disables F8; no-dropped-frame disables
+   F2; no-noise is explicitly an identity under zero baseline noise. No-delay
+   removes the 15 ms nominal delay while retaining F3 jitter around zero,
+   clipped nonnegative. Keep controllers and verdict thresholds unchanged.
+   Label disabled-fault/identity cases and avoid overstating causal evidence.
+5. Keep all five predictions verbatim, but qualify interpretation of prediction 5:
+   zero-delay nominal frames are rejected by the frozen preview age guard.
+   Do not predeclare any cell FAIL or any prediction confirmed before running.
+6. Retain preview_c32 across all six ablations, matching preview. With the F5
+   exception and one nominal case per controller/ablation, that is 297 cases
+   per matrix, 3,564 main cases; three additional figure-4 controllers add
+   51 cases including their nominal references: 3,615 logical runs before each
+   run&#x27;s determinism replay and any separately documented validation checks.
+7. Quantize only the tissue surface measurement for F8; preserve the needle
+   encoder. Fix five random seeds to 42–46 and deterministic implementation
+   conventions before experiments. F7 uses the corresponding controller and
+   ablation&#x27;s seed-42 nominal full-run maximum absolute force as its reference.
+   Figure-4 severity uses a predeclared selection rule; F5 uses its fixed ramp.
+
+This proposal changes the experiment definition, not just file formatting.
+User approval is needed to resolve incompatible instructions before M0.
+The handoff&#x27;s section 10 explicitly says: “如果发现注册内容本身不合理：停下来报告，
+不要自己放宽”; section 8 also names reviewer ESCALATE as a stopping condition.
+The current user&#x27;s direct browser-review instruction remains authoritative over
+the handoff&#x27;s obsolete CLI-only transport restriction.
+
+## Resume
+
+After the user&#x27;s decision, finish G&#x27;s actual gate implementation and exact-commit
+CI/reviews. Then register the accepted design at M0 before any Phase C run.
+Continue the user-requested pause/send/wait/copy loop at every milestone. Write
+the short blog only after M4 is complete; release tagging remains separately
+subject to user approval.
+</pre></details><details class="record"><summary>baseline-ci.json</summary><pre>[{&quot;conclusion&quot;:&quot;success&quot;,&quot;headSha&quot;:&quot;e8cb4ee7ac1420c945dbcb2ba86adfe1afa63338&quot;,&quot;name&quot;:&quot;Phase A SIL&quot;,&quot;status&quot;:&quot;completed&quot;,&quot;url&quot;:&quot;https://github.com/Jeffaaay/insertion-vv/actions/runs/38330849102&quot;},{&quot;conclusion&quot;:&quot;success&quot;,&quot;headSha&quot;:&quot;e8cb4ee7ac1420c945dbcb2ba86adfe1afa63338&quot;,&quot;name&quot;:&quot;Phase B C32&quot;,&quot;status&quot;:&quot;completed&quot;,&quot;url&quot;:&quot;https://github.com/Jeffaaay/insertion-vv/actions/runs/38330849073&quot;}]
+</pre></details><details class="record"><summary>baseline-files.json</summary><pre>[
+  {
+    &quot;path&quot;: &quot;docs/FINDINGS.md&quot;,
+    &quot;sha256&quot;: &quot;7fd5f25acc7d2cb77412061e12be59622dce119995cd109c697b8ac37f1c21d0&quot;
+  },
+  {
+    &quot;path&quot;: &quot;docs/HARDWARE_RUNBOOK.md&quot;,
+    &quot;sha256&quot;: &quot;39b2a5ca7c39d67c0a3b41b3a4c809e75fcf4af2daac8dd0902fcba2335fbbe2&quot;
+  },
+  {
+    &quot;path&quot;: &quot;docs/PHASE_A_SUMMARY.md&quot;,
+    &quot;sha256&quot;: &quot;df9cababb1eb4ece642268580299a34f3341efc465c19259ecea114bd1a0200c&quot;
+  },
+  {
+    &quot;path&quot;: &quot;docs/PHASE_B_HARDWARE_PLAN.md&quot;,
+    &quot;sha256&quot;: &quot;d441860404a63d06146f249f3b565576878c675db8c74dc26239363522f59ea0&quot;
+  },
+  {
+    &quot;path&quot;: &quot;docs/PHASE_B_PLAN.md&quot;,
+    &quot;sha256&quot;: &quot;601880144b62bbc48d8cdc5f22dd7793fc7c48958ecc8e73bee301f3d720aed2&quot;
+  },
+  {
+    &quot;path&quot;: &quot;docs/PROTOCOL.md&quot;,
+    &quot;sha256&quot;: &quot;4f8bdce14371a99b5df2326556d6963c66f3ed552f01d519f2f88411f1de52b8&quot;
+  },
+  {
+    &quot;path&quot;: &quot;docs/REPLICATION_NOTES.md&quot;,
+    &quot;sha256&quot;: &quot;271a1b1412913c8c8c686a6a5624691e76474aacc10327b63191ee0571856a31&quot;
+  },
+  {
+    &quot;path&quot;: &quot;docs/model-and-evaluation.md&quot;,
+    &quot;sha256&quot;: &quot;82c209213e5c20c01611b10c8fe1eccb74c730646896d1f6ded933348d2570ab&quot;
+  },
+  {
+    &quot;path&quot;: &quot;firmware/README.md&quot;,
+    &quot;sha256&quot;: &quot;ba0e7ecc0212ad71077af1ad739e1f109a3dc669c170158239a6336d3562f117&quot;
+  },
+  {
+    &quot;path&quot;: &quot;firmware/ctrl/README.md&quot;,
+    &quot;sha256&quot;: &quot;8806e298f34a0901ac104766870e7836e97a65f407bbe40dcacb87d11088a381&quot;
+  },
+  {
+    &quot;path&quot;: &quot;firmware/ctrl/controller.c&quot;,
+    &quot;sha256&quot;: &quot;2f05b0fe65f763f9dec75a0d9bd366364b361b3d3710b61991d632b1f4347747&quot;
+  },
+  {
+    &quot;path&quot;: &quot;firmware/ctrl/controller.h&quot;,
+    &quot;sha256&quot;: &quot;f515f64ab8f5ff47030186f01e6b361aa6bce20a86f887ccba130f137b27551a&quot;
+  },
+  {
+    &quot;path&quot;: &quot;firmware/ctrl/test_controller.c&quot;,
+    &quot;sha256&quot;: &quot;e840fc879f60762249a46a76d5d98ce06c9fca365ca3d3dcfbb0876d9d2b2902&quot;
+  },
+  {
+    &quot;path&quot;: &quot;firmware/deps.lock.json&quot;,
+    &quot;sha256&quot;: &quot;073b61b0a9c1abdec0bfb7492d0a239d276b5cea7e75c472bbc89325197fd515&quot;
+  },
+  {
+    &quot;path&quot;: &quot;firmware/h723/README.md&quot;,
+    &quot;sha256&quot;: &quot;879a40328e0133304026c77a4ee54f0d569ed30e6997bb04dea47f9a810e37c6&quot;
+  },
+  {
+    &quot;path&quot;: &quot;firmware/h723/linker.ld&quot;,
+    &quot;sha256&quot;: &quot;984e7ca21a51fe1800eeb085e07ab2277c8d5288467c028bb2f2171e9e9ab46f&quot;
+  },
+  {
+    &quot;path&quot;: &quot;firmware/h723/main.c&quot;,
+    &quot;sha256&quot;: &quot;8276b8d7300211b81612ef0fa92424edde2ad5cfe5cbced46ae4475e969b6dcc&quot;
+  },
+  {
+    &quot;path&quot;: &quot;firmware/h723/stm32h7xx_hal_conf.h&quot;,
+    &quot;sha256&quot;: &quot;0c31d9983d9c0c6d95143cad71027613c0cf60369e79ac76f2cc118e9af8a1e2&quot;
+  },
+  {
+    &quot;path&quot;: &quot;firmware/protocol/protocol.c&quot;,
+    &quot;sha256&quot;: &quot;f2452d348038e2232339c1aaf21ccef84c4df205c8225d57d76cab9fbc460691&quot;
+  },
+  {
+    &quot;path&quot;: &quot;firmware/protocol/protocol.h&quot;,
+    &quot;sha256&quot;: &quot;43744dffae4d91fc790c9cbc20cf54dc2aad37577f43c1d2d77b852b76a9c045&quot;
+  },
+  {
+    &quot;path&quot;: &quot;firmware/protocol/replay.c&quot;,
+    &quot;sha256&quot;: &quot;977ff8a7ab99e74c8f52034d5f3351d363f91567fd78e17165c2d2aa5c98469f&quot;
+  },
+  {
+    &quot;path&quot;: &quot;firmware/protocol/replay.h&quot;,
+    &quot;sha256&quot;: &quot;f8f80c6a76c63395de3daaf921611520e7c2ecd118c22c3a6e3d66e5a2755d91&quot;
+  },
+  {
+    &quot;path&quot;: &quot;firmware/protocol/test_protocol.c&quot;,
+    &quot;sha256&quot;: &quot;9e25cae6dd8d74122a8ba0a3bd2307d01d1435b9be900b8d0fb2432a408c0758&quot;
+  },
+  {
+    &quot;path&quot;: &quot;firmware/protocol/test_replay.c&quot;,
+    &quot;sha256&quot;: &quot;8c118143e5371b08809aa391e5f5f0da2e98f5b511a5b84939c2d6091ef5f17c&quot;
+  },
+  {
+    &quot;path&quot;: &quot;firmware/virtual_board/main.c&quot;,
+    &quot;sha256&quot;: &quot;1d723680b90d527905282793196c876be5464152047e103643648f1e2621213c&quot;
+  },
+  {
+    &quot;path&quot;: &quot;harness/Cargo.lock&quot;,
+    &quot;sha256&quot;: &quot;459e0da14a8d9ff21fda33997492d4d4e25f51c7d6716b3a76ee5ca2a202f0a4&quot;
+  },
+  {
+    &quot;path&quot;: &quot;harness/Cargo.toml&quot;,
+    &quot;sha256&quot;: &quot;cf12f5c1a0a4272c296fbbc4615e467fe672ba26be4a7e9a2c10ee5e40c77985&quot;
+  },
+  {
+    &quot;path&quot;: &quot;harness/README.md&quot;,
+    &quot;sha256&quot;: &quot;e811fc208da9e039d9534b650d18651cc999543db53768660654afd3f5b2f331&quot;
+  },
+  {
+    &quot;path&quot;: &quot;harness/__init__.py&quot;,
+    &quot;sha256&quot;: &quot;26efd0f091ee48ee49431b4b82b98fb40272e47d3989222b587d888f9f18b1b7&quot;
+  },
+  {
+    &quot;path&quot;: &quot;harness/build.rs&quot;,
+    &quot;sha256&quot;: &quot;404843d036a34a0a73969ef291fab7d8f5c23b21991d27687b283627d758ea6d&quot;
+  },
+  {
+    &quot;path&quot;: &quot;harness/c32.py&quot;,
+    &quot;sha256&quot;: &quot;5e4a8699e10ad11c02e5af9009e22703ac6ad59ff31ffc52d0a397432451c525&quot;
+  },
+  {
+    &quot;path&quot;: &quot;harness/ci.py&quot;,
+    &quot;sha256&quot;: &quot;4520c14e8d68ec6f3612f0635828edf3ff73ae75aa7c677554427963ea9508f2&quot;
+  },
+  {
+    &quot;path&quot;: &quot;harness/compare.py&quot;,
+    &quot;sha256&quot;: &quot;daf8b43ec3d320960c9a15ac5db96b0abfb1aa9940c92a023da1cce289f775d9&quot;
+  },
+  {
+    &quot;path&quot;: &quot;harness/contract.json&quot;,
+    &quot;sha256&quot;: &quot;a9488e7cbbfea5ccb22ab4054cfb7e7a445cdf0fdf281d9f14272a3ed473d789&quot;
+  },
+  {
+    &quot;path&quot;: &quot;harness/hardware.py&quot;,
+    &quot;sha256&quot;: &quot;bfc4546954e136b8d509cca9efd773f4a682ac6e961281dae6ea713aa1f88347&quot;
+  },
+  {
+    &quot;path&quot;: &quot;harness/plant_server.py&quot;,
+    &quot;sha256&quot;: &quot;5a146af06716a167200700d964b9f122e1d2de0dfc3f19741cbd7019eab1a56c&quot;
+  },
+  {
+    &quot;path&quot;: &quot;harness/replay_report.py&quot;,
+    &quot;sha256&quot;: &quot;fcf831914ba195c4bfe5b2452e179518c600ca1a28ef47e61b8c00a969cd2a7b&quot;
+  },
+  {
+    &quot;path&quot;: &quot;harness/run.py&quot;,
+    &quot;sha256&quot;: &quot;445f79dacf0944db958330bd0b27884881ee2e094426c116ba55c9ce8ba1dcff&quot;
+  },
+  {
+    &quot;path&quot;: &quot;harness/rust-toolchain.toml&quot;,
+    &quot;sha256&quot;: &quot;2ad6f15416572b4836585087f1d4abc53b8fa2dbd616f8dacfaa587ed6714228&quot;
+  },
+  {
+    &quot;path&quot;: &quot;harness/rust_run.py&quot;,
+    &quot;sha256&quot;: &quot;48cb25499283cac6dcba5ea7e06658b45455a6cd0e6a8f7f9406f99a3a079f8c&quot;
+  },
+  {
+    &quot;path&quot;: &quot;harness/src/bin/board-link.rs&quot;,
+    &quot;sha256&quot;: &quot;bdfbcfec9988b34a0a40a89597031e358d756bd54f914ca441d48ccfa53bc040&quot;
+  },
+  {
+    &quot;path&quot;: &quot;harness/src/ffi.rs&quot;,
+    &quot;sha256&quot;: &quot;5157559ce0adf8a02ce3eadee83b4d2917c4bc318cbb750b072a760dfe34cd59&quot;
+  },
+  {
+    &quot;path&quot;: &quot;harness/src/lib.rs&quot;,
+    &quot;sha256&quot;: &quot;2cdad5269d929deddd7e9b5f4254d2decdfcee42fccc883fbb0b08728ea4ae7a&quot;
+  },
+  {
+    &quot;path&quot;: &quot;harness/src/main.rs&quot;,
+    &quot;sha256&quot;: &quot;d8f8cfea21833288148ca3352dc4f4b4a8eea18f80243477746433dc0d3e0aff&quot;
+  },
+  {
+    &quot;path&quot;: &quot;harness/src/plant.rs&quot;,
+    &quot;sha256&quot;: &quot;f0d87ee7070ccb9b12b8613a62e7c54d9ea6b88407ebb075ba8aa95b5903b6bb&quot;
+  },
+  {
+    &quot;path&quot;: &quot;harness/src/protocol.rs&quot;,
+    &quot;sha256&quot;: &quot;b45da9971d64c69f4d7d5455ae45dbef30eae381dcfdda90f442ed94df244422&quot;
+  },
+  {
+    &quot;path&quot;: &quot;harness/src/replay.rs&quot;,
+    &quot;sha256&quot;: &quot;2962e453057f3de60d98c0f88bb44b0b1cb27fbc6c1b8262f56c59c7e9a9d913&quot;
+  },
+  {
+    &quot;path&quot;: &quot;harness/src/runner.rs&quot;,
+    &quot;sha256&quot;: &quot;6c6b8239cc7270ef14c81ab9fe472cf7b93599385df21a57f0340fe1b254628d&quot;
+  },
+  {
+    &quot;path&quot;: &quot;harness/src/serial.rs&quot;,
+    &quot;sha256&quot;: &quot;4e48ea2d8aa425c4307724289bc6dd802f15c04fc2928cfe99854cde825b9924&quot;
+  },
+  {
+    &quot;path&quot;: &quot;harness/src/types.rs&quot;,
+    &quot;sha256&quot;: &quot;44b03c6720b76ef11ef7da77ffb86ba84cbdc5aa0bff0877a96790fee156eece&quot;
+  },
+  {
+    &quot;path&quot;: &quot;harness/tests/data/protocol_v1.json&quot;,
+    &quot;sha256&quot;: &quot;02d0b3c8855567183386de471bb20b798d191ef0afb14aab809bb2e5519ad5df&quot;
+  },
+  {
+    &quot;path&quot;: &quot;harness/tests/test_boundaries.py&quot;,
+    &quot;sha256&quot;: &quot;dfa36f18a4ddb5fc1ba408139ee6b97458712281a46ef1d29149fa92f143c13c&quot;
+  },
+  {
+    &quot;path&quot;: &quot;harness/tests/test_c32.py&quot;,
+    &quot;sha256&quot;: &quot;49871e254df7b71b7c25a9d9ef0947ab5303ea22ecfee4a99f5af7713e9dc81e&quot;
+  },
+  {
+    &quot;path&quot;: &quot;harness/tests/test_hardware_evidence.py&quot;,
+    &quot;sha256&quot;: &quot;0bee30e00daf62c1705e0fe661036e18527660331859ae23d84a2eb622f2a16b&quot;
+  },
+  {
+    &quot;path&quot;: &quot;harness/tests/test_virtual_board.py&quot;,
+    &quot;sha256&quot;: &quot;92f0038d3329bdedc836ff69782901ec1dac9782460f27ac2e99bddda96be20d&quot;
+  },
+  {
+    &quot;path&quot;: &quot;harness/virtual_board.py&quot;,
+    &quot;sha256&quot;: &quot;59d5e55b0ee6644632d5b22fecb19094c784c9a6dbb60922af74609173ebebf2&quot;
+  },
+  {
+    &quot;path&quot;: &quot;sim/__init__.py&quot;,
+    &quot;sha256&quot;: &quot;c4b8da5b7a024762dbf8576c36ae66ff4c8c9534145a0c23fb0b653873f514e7&quot;
+  },
+  {
+    &quot;path&quot;: &quot;sim/calibrate.py&quot;,
+    &quot;sha256&quot;: &quot;88ec327e4cc396751ad55e0ce610a380c412763c6251995dc58e0ccc718994ab&quot;
+  },
+  {
+    &quot;path&quot;: &quot;sim/ci.py&quot;,
+    &quot;sha256&quot;: &quot;23d4ea7c539ab9942f2f43bcc6ae9fb34d9044894ac0c6e7990b94457e1cf916&quot;
+  },
+  {
+    &quot;path&quot;: &quot;sim/config.py&quot;,
+    &quot;sha256&quot;: &quot;219257fd7d9493eff853d350f8f98a7df5b776d4a2fa152eb744fc78c5b1f101&quot;
+  },
+  {
+    &quot;path&quot;: &quot;sim/contracts.py&quot;,
+    &quot;sha256&quot;: &quot;53ade152339618d9a607beef24a1d3fed629b4dd3350263e2f6f7bfb77a50df0&quot;
+  },
+  {
+    &quot;path&quot;: &quot;sim/controllers.py&quot;,
+    &quot;sha256&quot;: &quot;0f13a809ea89ab2ce7bc983956b665e6700aaceb618b58b12554ac0f9f87903d&quot;
+  },
+  {
+    &quot;path&quot;: &quot;sim/metrics.py&quot;,
+    &quot;sha256&quot;: &quot;f1ed1288abe8405301dbca546fc725fc64d4205a3ddf7f0075df78a138d5be03&quot;
+  },
+  {
+    &quot;path&quot;: &quot;sim/plant.py&quot;,
+    &quot;sha256&quot;: &quot;f45d4be3cb9e57150002e2d3253965d3e162b0190c5b5cf34f8c1abd9248e50b&quot;
+  },
+  {
+    &quot;path&quot;: &quot;sim/plant.xml&quot;,
+    &quot;sha256&quot;: &quot;aef8a51e84742568b0db6271e3ca946dcd345db3f4d426a60a906a75db587fe0&quot;
+  },
+  {
+    &quot;path&quot;: &quot;sim/platform_info.py&quot;,
+    &quot;sha256&quot;: &quot;26450befc3930ce073a7f09e2250e8e866d3a99ef8b9edc90d43a0788bc66dd4&quot;
+  },
+  {
+    &quot;path&quot;: &quot;sim/preview.py&quot;,
+    &quot;sha256&quot;: &quot;4ffe5dc81eb5819f4dbf83c1512d9a5802e02cd44eafed8c5c664d263fe7484a&quot;
+  },
+  {
+    &quot;path&quot;: &quot;sim/reference.py&quot;,
+    &quot;sha256&quot;: &quot;3cfa6f47ec0faf9c63aa0aa8f793211a4fcac8e0be6c77091b817acd8ae25edf&quot;
+  },
+  {
+    &quot;path&quot;: &quot;sim/reproduction_contract.json&quot;,
+    &quot;sha256&quot;: &quot;356f8efa4aa283eba18828b5bf2f2954df8ed332a8746fde60c6251a395e6edf&quot;
+  },
+  {
+    &quot;path&quot;: &quot;sim/run.py&quot;,
+    &quot;sha256&quot;: &quot;7e73c7c8bb7cf53ab1d57d6e65369b6faae872b3427dbc877309a79b8a749d75&quot;
+  },
+  {
+    &quot;path&quot;: &quot;sim/sensors.py&quot;,
+    &quot;sha256&quot;: &quot;cd89f8957f98c699cc10f9e8c7a3d96039ead8e1f1ea5fcb39e43b1e46de5b08&quot;
+  },
+  {
+    &quot;path&quot;: &quot;sim/verdict_contract.json&quot;,
+    &quot;sha256&quot;: &quot;7e917fbac313de750d5ac6de086e6cba97ad9d1876d29b0aada6f6ceb10b8009&quot;
+  },
+  {
+    &quot;path&quot;: &quot;tests/test_compare_traces.py&quot;,
+    &quot;sha256&quot;: &quot;b39565eec5cfe19296ee5198be1e51323369fb8b83c3306cff91e3ce47a9fa5b&quot;
+  },
+  {
+    &quot;path&quot;: &quot;tests/test_delayed_feedback.py&quot;,
+    &quot;sha256&quot;: &quot;734e37178718a5069866018173d03636445b4dabee592898e66a56aed79c418f&quot;
+  },
+  {
+    &quot;path&quot;: &quot;tests/test_determinism.py&quot;,
+    &quot;sha256&quot;: &quot;c347637e3a629944b039382317390f1ec7ed8bcc26e0284aeb2efe233100b71b&quot;
+  },
+  {
+    &quot;path&quot;: &quot;tests/test_isolation.py&quot;,
+    &quot;sha256&quot;: &quot;26fb86cab2b61e4a6e2c6db0d6769aaff6e73d6baa8615360dbff64a95a62b22&quot;
+  },
+  {
+    &quot;path&quot;: &quot;tests/test_offsetfree.py&quot;,
+    &quot;sha256&quot;: &quot;e8618e1a178940bed173906903f1c15cb23b77215523af1c7066cea8aeb97cde&quot;
+  },
+  {
+    &quot;path&quot;: &quot;tests/test_plant.py&quot;,
+    &quot;sha256&quot;: &quot;0bf27572f0a93cf08014af94624ca561246650ee6f086c1df55bb4a3d4f4b202&quot;
+  },
+  {
+    &quot;path&quot;: &quot;tests/test_platform_info.py&quot;,
+    &quot;sha256&quot;: &quot;a98fc00d4917d456631678faf222c422f3915d3bfdb6d257c7adeaf0f4e4105a&quot;
+  },
+  {
+    &quot;path&quot;: &quot;tests/test_preview.py&quot;,
+    &quot;sha256&quot;: &quot;0595a2aadacc7ee85b04d2ded1847a03a13375f260d17449e2b1da5d012fc191&quot;
+  },
+  {
+    &quot;path&quot;: &quot;tests/test_reproduction.py&quot;,
+    &quot;sha256&quot;: &quot;1859bd6a7a36956f109d1a95d9d884e7e29abec4951cae7984c476ada075a534&quot;
+  },
+  {
+    &quot;path&quot;: &quot;tests/test_run.py&quot;,
+    &quot;sha256&quot;: &quot;f8383073a52690e07d6c751ac67db180ab027762e80cc7d42c54bacf84802327&quot;
+  },
+  {
+    &quot;path&quot;: &quot;tests/test_sensors.py&quot;,
+    &quot;sha256&quot;: &quot;ec23dc40bccb957f97fd117ab1129375d6cd067fc555f57f3cd905e101351133&quot;
+  },
+  {
+    &quot;path&quot;: &quot;tests/test_verdict.py&quot;,
+    &quot;sha256&quot;: &quot;4175cf6cbd2416b73372f6ff376f8207b6cea95de91d539324eff791ab26aaa3&quot;
+  }
+]
+</pre></details><details class="block" open><summary>claude-round-2.md</summary><pre># G 审阅（Claude，第 2 轮）
+
+**核验范围：** 我独立读了 `phase-c-sil @ 250ce20` 的源码和 diff，没有运行任何仿真。CI 结果我看不到实时状态，按你说的视为未确认。
+
+## 一、先更正我上一轮的说法
+
+你的纠正成立。no-delay 下 preview 并不是&quot;所有格子必 FAIL&quot;：F3 的抖动围绕 0，在 σ 较大时，四舍五入后的延迟可能 ≥ 15 ms，这些帧能通过 `sim/preview.py:69` 的 guard，而 preview 本来就是按稀疏传感设计的，所以 F3 在 no-delay 下可能 PASS。我上一轮的结论下错了，逐格实测是对的。
+
+F6 那条理由要小心。如果 mailbox 是 latest-wins，在 1 kHz、零延迟的情况下，恢复时交付的是最新一帧，帧龄 0，仍然会被拒收。F6 能不能交付&quot;旧帧&quot;完全取决于 M0 里 mailbox 的精确定义。别依赖这个论证，把定义写死就行。
+
+## 二、G 工具：两处必须修（影响完整性）
+
+**1. 冻结范围漏了&quot;产生基线证据的代码&quot;。**
+`review_gate.py` 只保护 `sim/`、`firmware/`、`tests/`、`harness/contract.json`、`requirements-lock.txt`。但 gate 的核心证据是&quot;Phase A/B CI 绿&quot;，而下面这些决定 CI 怎么判的文件没被冻结：
+
+- `.github/workflows/phase-a.yml`
+- `.github/workflows/phase-b.yml`
+- `tools/compare_traces.py`（Phase A 跨平台比较）
+- `harness/ci.py`
+- `harness/compare.py`
+- `harness/tests/data/protocol_v1.json`
+
+这些文件只要被改动，CI 就可能在基线已经变了的情况下照样绿。修法：把它们加进 protected 列表。Phase C 的代码和 CI 一律放新文件、新 workflow。M1 需要扩展的 Rust runner 等共享模块可以改，但比较器和 CI 定义不能动。
+
+**2. M3 &quot;不重跑&quot;规则和存储规模冲突。**
+每个 run 的 trace 加 truth 是每 tick 两行 canonical JSON，粗估每 run 4–5 MB，3615 个 run 是 15 GB 量级（M1 实测后修正）。而交互热图要求点每个格子都能看曲线。建议规则：
+
+- M2 为每个 run 保存降采样曲线（10 ms 一点：e、gap、needle/tissue、command、fresh），集中放进一个压缩文件，供热图使用。
+- 完整 trace 只记录 SHA-256，不进 git。
+- M3 需要完整 trace（视频）时，**允许重新生成，但生成结果的 SHA-256 必须等于封存值**，否则判 INVALID。这不是新结果，只是可证明相同的复现。
+- `REVIEW_PROTOCOL.md` 里&quot;no simulation reruns for art&quot;改成这条。
+
+## 三、M0 必须写进去的规则（否则预测没法判）
+
+**3. 预测原文不改，但每条要注册判定方法。** 现在的写法跑完会有歧义：
+
+| 预测 | 需要定义 |
+|---|---|
+| 1. F4 @ 25 Hz → FAIL | 4 个注入时刻是&quot;全部 FAIL&quot;还是&quot;任一 FAIL&quot;；只看 preview，还是 c32 也算 |
+| 2. F5 ≥ 1.6 Hz → FAIL | 1.6 和 1.8 两档都要 FAIL 才算成立？ |
+| 3. F1 ≥ 60 tick → FAIL | 同预测 1 的注入时刻规则 |
+| 4. 瞬态故障在 2.4 s 最差 | &quot;最差&quot;按 contact RMS 还是 FAIL 数；F1/F2/F3/F6 是&quot;全部&quot;还是&quot;多数&quot;满足；平局怎么算 |
+| 5. no-delay 翻转最多 | 计数单位（seed 聚合后的格子）；对照组（同控制器 baseline 消融）；preview 和 c32 分开算还是合算；平局 |
+
+建议默认：
+- 只按 preview 判，c32 单独报告一致性。
+- 预测 1、3：4 个注入时刻全部 FAIL 才算成立。
+- 预测 4：按 contact RMS，4 种瞬态故障里至少 3 种的最大值出现在 2.4 s。
+- 预测 5：按 seed 聚合后格子的 verdict 翻转数，严格最多才算成立，平局算不成立。
+
+具体规则你们定，关键是 M0 提交前写死。
+
+**4. 恒等格子要做成自动检查，不只是&quot;透明报告&quot;。**
+按构造等于无故障的格子必须满足：trace SHA 等于同控制器、同消融的无故障 run，不相等就判 INVALID（说明注入器有 bug）。这类格子包括：no-noise 全部、no-jitter-model × F3、no-quantization × F8、no-dropped-frame-model × F2、F7 100%，以及 F4 1000 Hz 和 F8 24 bit（如果按构造恒等的话；F8 24 bit 不一定逐 bit 相同，先算清楚再归类）。这是全矩阵里最便宜的正确性证据。
+
+**5. 跨语言注入器等价测试放进 M1 验收。**
+&quot;Python 和 Rust 读同一份 YAML&quot;不等于两边注入结果相同。每种故障至少取一档，在同一个 plant 上比较两边**注入后的传感帧序列逐字节相同**，而不是只比较 verdict。否则 c32 和 preview 的差异会把注入器差异和控制器差异混在一起。
+
+## 四、次要
+
+- `phase-c.yml` 跑了 `render_reviews.py`，但没检查提交的 `index.html` 是不是最新，建议在后面加 `git diff --exit-code reviews/index.html`。
+- `review_gate.py` 里第一次给 `required` 赋的字面量是死代码，删掉。
+- 冻结文件被删除时，`git hash-object` 会直接抛异常，建议改成报 `missing`，输出更清楚。
+
+## 五、设计决定
+
+其余全部接受：F5 走 plant、单次 2 s 起点；N-tick burst 和 300 ms 窗口分开；F1 值冻结、元数据递增；机制消融；c32 跑全部六种消融（3564 + 51 = 3615 我核对过）；F7 按同控制器、同消融的无故障峰值；F8 只量化 surface。这些都是正常的工程选择，不需要升级。
+
+**结论：** BLOCK 只针对第 1、2 条，都是小改动，可以并进 M0 的提交里；M0 文档可以并行写。第 3–5 条必须进 M0 注册文件。
+
+```json
+{
+  &quot;verdict&quot;: &quot;BLOCK&quot;,
+  &quot;issues&quot;: [
+    {&quot;severity&quot;: &quot;blocker&quot;, &quot;where&quot;: &quot;tools/review_gate.py frozen_check()&quot;, &quot;what&quot;: &quot;冻结范围漏了产生基线证据的 CI 定义和比较器：phase-a.yml、phase-b.yml、tools/compare_traces.py、harness/ci.py、harness/compare.py、harness/tests/data/protocol_v1.json；CI 绿不能证明基线未变&quot;, &quot;touches_frozen_or_registered&quot;: true},
+    {&quot;severity&quot;: &quot;major&quot;, &quot;where&quot;: &quot;docs/REVIEW_PROTOCOL.md &#x27;no simulation reruns for art&#x27;; M2/M3 产物设计&quot;, &quot;what&quot;: &quot;全量 trace 约 15 GB 量级；改为 M2 存降采样曲线 + 完整 trace 只存 SHA，M3 重生成必须 SHA 等于封存值，否则 INVALID&quot;, &quot;touches_frozen_or_registered&quot;: false},
+    {&quot;severity&quot;: &quot;blocker&quot;, &quot;where&quot;: &quot;M0 docs/C1_PREREG.md（HANDOFF §5.6）&quot;, &quot;what&quot;: &quot;5 条预测原文保留，但必须在 M0 注册判定方法：注入时刻全部/任一、判定控制器、&#x27;最差&#x27;和&#x27;翻转&#x27;的计数单位与平局规则&quot;, &quot;touches_frozen_or_registered&quot;: true},
+    {&quot;severity&quot;: &quot;major&quot;, &quot;where&quot;: &quot;M0/M2 恒等格子&quot;, &quot;what&quot;: &quot;按构造恒等的格子必须 trace SHA 等于对应无故障 run，不等则 INVALID，作为注入器正确性检查&quot;, &quot;touches_frozen_or_registered&quot;: false},
+    {&quot;severity&quot;: &quot;major&quot;, &quot;where&quot;: &quot;M1 验收&quot;, &quot;what&quot;: &quot;Python 与 Rust 注入器须做逐字节的注入后传感帧等价测试，不能只比较 verdict&quot;, &quot;touches_frozen_or_registered&quot;: false},
+    {&quot;severity&quot;: &quot;minor&quot;, &quot;where&quot;: &quot;M0 F6 定义&quot;, &quot;what&quot;: &quot;mailbox 语义要精确写死；latest-wins 在零延迟下不会交付 ≥15 ms 的旧帧，不要依赖该论证&quot;, &quot;touches_frozen_or_registered&quot;: false},
+    {&quot;severity&quot;: &quot;minor&quot;, &quot;where&quot;: &quot;.github/workflows/phase-c.yml&quot;, &quot;what&quot;: &quot;渲染后加 git diff --exit-code reviews/index.html&quot;, &quot;touches_frozen_or_registered&quot;: false},
+    {&quot;severity&quot;: &quot;minor&quot;, &quot;where&quot;: &quot;tools/review_gate.py&quot;, &quot;what&quot;: &quot;删除 required 的死代码赋值；冻结文件缺失时报 missing 而不是抛异常&quot;, &quot;touches_frozen_or_registered&quot;: false}
+  ]
+}
+```
+</pre></details><details class="escalate" open><summary>claude.md</summary><pre>我先自己克隆仓库核对这 5 个问题，再给启动审阅。
+
+# G 启动审阅（Claude）
+
+**核验范围：** 我独立克隆了公开仓库，HEAD = `e8cb4ee7ac1420c945dbcb2ba86adfe1afa63338`，只读了源码，没有运行任何仿真。下面的结论都基于我自己读到的代码，不依赖你的摘要。
+
+## 一、你的 5 条：全部核实成立
+
+1. **F5 注入层错了。** `PROJECT_BRIEF.md` §7 明确 F5 是 plant 参数。真实组织运动由 `sim/config.py:104 tissue_target()` 生成，`sim/plant.py:85` 每个 physics tick 都调用它。只改传感器，测到的就是&quot;传感器欺骗&quot;，不是心率漂移。交接里&quot;其余在传感器模型层&quot;这句是我写交接时加的，写错了，以 brief 为准。
+2. **F5 和注入时刻有冲突。** 固定 2–5 s 的 ramp 与 {0.2, 1.5, 2.4, 5.0} s 注入在语义上冲突。
+3. **几处定义缺失。**
+   - F1/F6 的&quot;连续 N tick&quot;与 300 ms 持续时间冲突。
+   - seed 没有给具体值。
+   - F7 的&quot;标称峰值力&quot;在全仓库都没有定义（grep 不到任何力限幅）。
+   - 图 4 用哪个档位没有指定。
+4. **多数消融是空操作。** `sim/config.py:29-30` 中噪声和丢帧默认都是 0，`sim/sensors.py` 只有采样、固定延迟、噪声、丢帧四项，没有 jitter 和量化。所以 no-noise 和 no-dropped-frame-model 在基线上是恒等变换，no-jitter-model 和 no-quantization 在基线里没有对应项。
+5. **规模计算正确。** 单控制器、单消融 308 run 的算法没错。
+
+## 二、我额外发现的（按严重度）
+
+**N1【阻塞】no-delay 消融对 preview 是退化的。**
+`sim/preview.py:69` 要求 `sampled + self.delay_us &lt;= sensors.time_us`，而估计器的 `delay_us` 被 `Config.validate` 固定为 15 ms。把传感延迟设成 0 后，每帧到达时 `sampled == time_us`，全部被拒收，estimator 一直返回 (0, 0)，preview 等于瞎了。结果是所有格子结构性 FAIL，预测 5 会因为这个 guard 而&quot;成立&quot;，不能作为&quot;延迟建模必要&quot;的证据。
+
+**N2【解释】F3 下早到的帧会被 preview 永久丢弃。**
+原因同上：延迟不足 15 ms 的帧在到达那个 tick 被拒收，之后 `fresh` 不再为真。所以对 preview 来说，F3 实际上是&quot;抖动 + 部分丢帧&quot;。这是冻结控制器的真实行为，不需要改设计，但报告解释 F3 时必须写出来。
+
+**N3【阻塞】F1 的语义必须先定。**
+`sim/controllers.py:49` 和 `sim/preview.py:71` 都会拒收序号不递增的帧：
+- 如果&quot;原样重发旧帧&quot;，控制器会直接忽略，等价于短时丢帧。
+- 如果&quot;值冻结、序号和采样时间照常递增&quot;，才是欺骗控制器。
+
+两种结果会完全不同。
+
+**N4【信息】计分窗口是 3.0–8.0 s**（`sim/verdict_contract.json:6`）。
+在 0.2、1.5、2.4 s 注入的 300 ms 内瞬态故障，都在计分开始前就结束了，只能通过残留影响导致 FAIL。不需要改预测，但报告必须说明。
+
+**其他代码事实（用于定实现约定）：**
+- `sim/config.py:63` 只允许采样率 ∈ {25, 1000}，所以 F4 必须在注入层做降采样，不能改 cfg。
+- `tissue_target` 用的是 `sin(2πft)` 加绝对时间。直接把 f 换成 f(t)，瞬时频率会变成 f + t·f′，所以 F5 必须对相位积分。
+- `sim/controllers.py:90` 的观测器每次调用固定按 1 ms 推进。F6 跳 tick 会让它的预测落后，这是 F6 要测的真实行为。
+- `sim/run.py` 每个 run 都会跑两遍做复现校验（verdict 要求 `require_verified_reproducibility`），所以确定性复跑已经内置了。
+
+## 三、M0 前可直接补充的实现约定
+
+这些写进 `C1_PREREG.md` 的&quot;实现约定&quot;一节，不改任何预测和阈值。
+
+- **Seed：** F2/F3 用 {42, 43, 44, 45, 46}。注入器用独立的 RNG（`SeedSequence([seed, fault_index])`），不消耗 Phase A 传感器的 RNG，保证无故障 run 的 trace 逐 bit 不变。
+- **F3：** 延迟 = 15 ms + N(0, σ)，四舍五入到整 tick，截到 ≥ 0。按 FIFO 投递（投递时间不递减），按采样时间判断是否落在窗口内。σ = 0.5 ms 时受 tick 量化影响很大，报告里要注明。
+- **F4：** 从注入时刻起只保留采样时间是周期整数倍的帧，其余不投递。M1 加一项对照：从 t=0 开始注入 F4@25 Hz，与现有 Phase A 25 Hz 路径对比，除序号编号外应一致。
+- **F5：** 在新模块里写 plant 子类实现，不改冻结文件。
+  - φ(t) = 2π∫f dt，二次谐波用 2φ，呼吸分量不变。
+  - ramp 开始前直接调用原来的 `tissue_target`，保证前缀逐 bit 一致。
+  - Rust 路径的 plant 来自 `harness/plant_server.py`（`MujocoPlant`），所以只需实现一次，两条路径共用。
+- **F6：** 跳过的 tick 不调用 `controller.command`，保持上一条指令。跳过期间到达的帧采用 latest-wins mailbox：恢复的那个 tick，如果期间有帧到达，就交付最新一帧并标记 `fresh`。
+- **F7：** 限幅 = p% × 同一控制器、同一消融、seed 42 的无故障 run 在全 8 s 内的 max|force|，对称限幅。这个峰值在 M2 里、跑 F7 之前算出。100% 档必须与无故障 run 逐 bit 相同。
+- **F8：** q(x) = clamp(round(x/LSB)·LSB)，LSB = 2 mm / 2^bits：
+
+  | 位数 | LSB |
+  |---|---|
+  | 10 bit | 1.953 µm |
+  | 12 bit | 0.488 µm |
+  | 16 bit | 30.5 nm |
+  | 24 bit | 0.119 nm |
+
+- **图 4 档位规则：** 每种故障取 preview 在 baseline 消融、2.4 s 注入下的 flip-point 档位；没有翻转就取最重档。
+- **精确矩阵（按第四节批准的版本）：**
+  - 每个控制器 × 每个消融：F1 24 + F2 100 + F3 100 + F4 20 + F5 4 + F6 16 + F7 16 + F8 16 + 无故障 1 = **297**
+  - preview × 6 个消融 = 1782
+  - c32 = 297
+  - 图 4 另外 3 个控制器共 51
+  - 合计 **2130 run**，每个 run 内部跑两遍
+- **记录方式：** `REVIEW_PROTOCOL.md` 写明，当前的审阅传递方式是用户指定的&quot;聊天中转&quot;，CLI 方案作废。我每次的回复原文存到 `reviews/&lt;M&gt;/claude.md`。
+
+## 四、必须由用户决定：最小修正文案（可直接批准）
+
+```
+【C1 注册修正 v1 — 用户批准后写入 C1_PREREG.md】
+1. F5 注入层 = plant（组织运动），与 PROJECT_BRIEF §7 一致。F5 固定为 2.0–5.0 s 线性 ramp，之后保持目标频率到 8 s；注入时刻轴对 F5 不适用（每档 1 个 run）。
+2. 时间定义：F1、F6 = 从注入时刻起的单次连续 N tick；F2、F3 = 从注入时刻起的 300 ms 窗口；F4、F7、F8 从注入时刻起持续到 8 s。
+3. F1 = 传感器卡死：帧照常到达、序号和采样时间照常递增，但 surface 值冻结在起点的值。
+4. 消融 = 关掉 sim 对该机制的建模，包括标称项和对应的注入故障：no-delay → 标称延迟 0（F3 抖动围绕 0，截到 ≥0）；no-jitter-model → F3 无效；no-quantization → F8 无效；no-dropped-frame-model → F2 无效；no-noise → 无变化。被测控制器不变。按构造应与无故障相同的格子，必须逐 bit 相同。
+5. 预测 5 原文不改，加注：preview 拒收采样后不满 15 ms 到达的帧（sim/preview.py:69），因此 no-delay 下 preview 收不到任何测量、结构性全部 FAIL；本条结果不作为&quot;延迟建模必要&quot;的证据。
+6. preview_c32 只跑 baseline 消融的完整矩阵（297 run）。
+7. F8 只量化 surface 测量，不量化 needle encoder。
+```
+
+可选（不在最小修正里，默认不做）：如果想让 no-delay 消融有信息量，可以额外把 `delayed_feedback_offsetfree` 作为第二个消融对象。它的 guard 是 `sampled &lt;= time_us`，不会因为延迟为 0 而变瞎。
+
+## 五、对 G 的结论
+
+这些问题只阻塞 M0，不阻塞 G。G 可以照常做：保存原始 handoff、搭记录机制。**用户批准第四节之前，不要提交 `C1_PREREG.md`。** 这份审阅只是咨询意见，不等于用户批准。
+
+```json
+{
+  &quot;verdict&quot;: &quot;ESCALATE&quot;,
+  &quot;issues&quot;: [
+    {&quot;severity&quot;: &quot;blocker&quot;, &quot;where&quot;: &quot;HANDOFF §5.1-5.2 注入点表; PROJECT_BRIEF.md §7; sim/config.py:104; sim/plant.py:85&quot;, &quot;what&quot;: &quot;F5 必须在 plant 层注入（交接里的注入点表写错了）；固定 2–5 s ramp 与注入时刻轴冲突&quot;, &quot;touches_frozen_or_registered&quot;: true},
+    {&quot;severity&quot;: &quot;blocker&quot;, &quot;where&quot;: &quot;sim/preview.py:69; HANDOFF §5.4, §5.6&quot;, &quot;what&quot;: &quot;no-delay 下 preview 拒收全部帧、结构性 FAIL；预测 5 因 guard 而成立，不能作为证据&quot;, &quot;touches_frozen_or_registered&quot;: true},
+    {&quot;severity&quot;: &quot;blocker&quot;, &quot;where&quot;: &quot;sim/config.py:29-30; sim/sensors.py; HANDOFF §5.4&quot;, &quot;what&quot;: &quot;消融语义未定义；基线没有噪声/丢帧/抖动/量化项，4 个消融在当前定义下是恒等变换&quot;, &quot;touches_frozen_or_registered&quot;: true},
+    {&quot;severity&quot;: &quot;blocker&quot;, &quot;where&quot;: &quot;sim/controllers.py:49; sim/preview.py:71; HANDOFF §5.1 F1&quot;, &quot;what&quot;: &quot;F1 是&#x27;原样重发&#x27;还是&#x27;值冻结、元数据递增&#x27;：前者被序号 guard 拒收，等价于丢帧&quot;, &quot;touches_frozen_or_registered&quot;: true},
+    {&quot;severity&quot;: &quot;blocker&quot;, &quot;where&quot;: &quot;HANDOFF §5.2&quot;, &quot;what&quot;: &quot;F1/F6 的 N tick 与 300 ms 持续时间冲突；持续性故障的起止时间未定义&quot;, &quot;touches_frozen_or_registered&quot;: true},
+    {&quot;severity&quot;: &quot;minor&quot;, &quot;where&quot;: &quot;HANDOFF §5.5&quot;, &quot;what&quot;: &quot;preview_c32 &#x27;完整矩阵&#x27;的范围不明确，建议只跑 baseline 消融（297 run）&quot;, &quot;touches_frozen_or_registered&quot;: true},
+    {&quot;severity&quot;: &quot;minor&quot;, &quot;where&quot;: &quot;HANDOFF §5.1 F8&quot;, &quot;what&quot;: &quot;量化对象不明确，建议只量化 surface 测量&quot;, &quot;touches_frozen_or_registered&quot;: true},
+    {&quot;severity&quot;: &quot;minor&quot;, &quot;where&quot;: &quot;全仓库无力限幅定义; HANDOFF §5.1 F7&quot;, &quot;what&quot;: &quot;标称峰值力未定义，按程序化规则定义：同控制器、同消融、无故障 run 的 max|force|&quot;, &quot;touches_frozen_or_registered&quot;: false},
+    {&quot;severity&quot;: &quot;minor&quot;, &quot;where&quot;: &quot;HANDOFF §5.3, §5.5&quot;, &quot;what&quot;: &quot;seed 具体值和图 4 档位未指定，按实现约定补充&quot;, &quot;touches_frozen_or_registered&quot;: false},
+    {&quot;severity&quot;: &quot;minor&quot;, &quot;where&quot;: &quot;sim/config.py:63&quot;, &quot;what&quot;: &quot;Config 只允许 25/1000 Hz，F4 必须在注入层降采样，并与 Phase A 25 Hz 路径对照&quot;, &quot;touches_frozen_or_registered&quot;: false},
+    {&quot;severity&quot;: &quot;minor&quot;, &quot;where&quot;: &quot;sim/preview.py:69&quot;, &quot;what&quot;: &quot;F3 下早到的帧被 preview 永久丢弃（真实行为），报告必须解释&quot;, &quot;touches_frozen_or_registered&quot;: false},
+    {&quot;severity&quot;: &quot;minor&quot;, &quot;where&quot;: &quot;sim/verdict_contract.json:6&quot;, &quot;what&quot;: &quot;计分窗口 3.0–8.0 s，0.2/1.5/2.4 s 的瞬态注入在计分前结束，只能通过残留影响 FAIL&quot;, &quot;touches_frozen_or_registered&quot;: false},
+    {&quot;severity&quot;: &quot;minor&quot;, &quot;where&quot;: &quot;HANDOFF §10&quot;, &quot;what&quot;: &quot;按修正后的精确矩阵为 2130 run（每个 run 内部双跑），替换原来 600–1300 的估计&quot;, &quot;touches_frozen_or_registered&quot;: false}
+  ]
+}
+```
+</pre></details><details class="record"><summary>evidence.json</summary><pre>{
+  &quot;commit&quot;: &quot;250ce20f0628570c7a83eea96660d4b69d85555e&quot;,
+  &quot;ci_green&quot;: true,
+  &quot;required_workflows&quot;: [
+    &quot;Phase A SIL&quot;,
+    &quot;Phase B C32&quot;,
+    &quot;Phase C integrity&quot;
+  ],
+  &quot;runs&quot;: [
+    {
+      &quot;conclusion&quot;: &quot;success&quot;,
+      &quot;databaseId&quot;: 38342884902,
+      &quot;headSha&quot;: &quot;250ce20f0628570c7a83eea96660d4b69d85555e&quot;,
+      &quot;name&quot;: &quot;Phase C integrity&quot;,
+      &quot;status&quot;: &quot;completed&quot;,
+      &quot;url&quot;: &quot;https://github.com/Jeffaaay/insertion-vv/actions/runs/38342884902&quot;
+    },
+    {
+      &quot;conclusion&quot;: &quot;success&quot;,
+      &quot;databaseId&quot;: 38342885033,
+      &quot;headSha&quot;: &quot;250ce20f0628570c7a83eea96660d4b69d85555e&quot;,
+      &quot;name&quot;: &quot;Phase A SIL&quot;,
+      &quot;status&quot;: &quot;completed&quot;,
+      &quot;url&quot;: &quot;https://github.com/Jeffaaay/insertion-vv/actions/runs/38342885033&quot;
+    },
+    {
+      &quot;conclusion&quot;: &quot;success&quot;,
+      &quot;databaseId&quot;: 38342885028,
+      &quot;headSha&quot;: &quot;250ce20f0628570c7a83eea96660d4b69d85555e&quot;,
+      &quot;name&quot;: &quot;Phase B C32&quot;,
+      &quot;status&quot;: &quot;completed&quot;,
+      &quot;url&quot;: &quot;https://github.com/Jeffaaay/insertion-vv/actions/runs/38342885028&quot;
+    }
+  ],
+  &quot;frozen_checks&quot;: [
+    {
+      &quot;path&quot;: &quot;firmware/README.md&quot;,
+      &quot;baseline_sha256&quot;: &quot;ba0e7ecc0212ad71077af1ad739e1f109a3dc669c170158239a6336d3562f117&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/ctrl/README.md&quot;,
+      &quot;baseline_sha256&quot;: &quot;8806e298f34a0901ac104766870e7836e97a65f407bbe40dcacb87d11088a381&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/ctrl/controller.c&quot;,
+      &quot;baseline_sha256&quot;: &quot;2f05b0fe65f763f9dec75a0d9bd366364b361b3d3710b61991d632b1f4347747&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/ctrl/controller.h&quot;,
+      &quot;baseline_sha256&quot;: &quot;f515f64ab8f5ff47030186f01e6b361aa6bce20a86f887ccba130f137b27551a&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/ctrl/test_controller.c&quot;,
+      &quot;baseline_sha256&quot;: &quot;e840fc879f60762249a46a76d5d98ce06c9fca365ca3d3dcfbb0876d9d2b2902&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/deps.lock.json&quot;,
+      &quot;baseline_sha256&quot;: &quot;073b61b0a9c1abdec0bfb7492d0a239d276b5cea7e75c472bbc89325197fd515&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/h723/README.md&quot;,
+      &quot;baseline_sha256&quot;: &quot;879a40328e0133304026c77a4ee54f0d569ed30e6997bb04dea47f9a810e37c6&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/h723/linker.ld&quot;,
+      &quot;baseline_sha256&quot;: &quot;984e7ca21a51fe1800eeb085e07ab2277c8d5288467c028bb2f2171e9e9ab46f&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/h723/main.c&quot;,
+      &quot;baseline_sha256&quot;: &quot;8276b8d7300211b81612ef0fa92424edde2ad5cfe5cbced46ae4475e969b6dcc&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/h723/stm32h7xx_hal_conf.h&quot;,
+      &quot;baseline_sha256&quot;: &quot;0c31d9983d9c0c6d95143cad71027613c0cf60369e79ac76f2cc118e9af8a1e2&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/protocol/protocol.c&quot;,
+      &quot;baseline_sha256&quot;: &quot;f2452d348038e2232339c1aaf21ccef84c4df205c8225d57d76cab9fbc460691&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/protocol/protocol.h&quot;,
+      &quot;baseline_sha256&quot;: &quot;43744dffae4d91fc790c9cbc20cf54dc2aad37577f43c1d2d77b852b76a9c045&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/protocol/replay.c&quot;,
+      &quot;baseline_sha256&quot;: &quot;977ff8a7ab99e74c8f52034d5f3351d363f91567fd78e17165c2d2aa5c98469f&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/protocol/replay.h&quot;,
+      &quot;baseline_sha256&quot;: &quot;f8f80c6a76c63395de3daaf921611520e7c2ecd118c22c3a6e3d66e5a2755d91&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/protocol/test_protocol.c&quot;,
+      &quot;baseline_sha256&quot;: &quot;9e25cae6dd8d74122a8ba0a3bd2307d01d1435b9be900b8d0fb2432a408c0758&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/protocol/test_replay.c&quot;,
+      &quot;baseline_sha256&quot;: &quot;8c118143e5371b08809aa391e5f5f0da2e98f5b511a5b84939c2d6091ef5f17c&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/virtual_board/main.c&quot;,
+      &quot;baseline_sha256&quot;: &quot;1d723680b90d527905282793196c876be5464152047e103643648f1e2621213c&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/contract.json&quot;,
+      &quot;baseline_sha256&quot;: &quot;a9488e7cbbfea5ccb22ab4054cfb7e7a445cdf0fdf281d9f14272a3ed473d789&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;requirements-lock.txt&quot;,
+      &quot;baseline_sha256&quot;: &quot;713bc031c33c42271a06011de11e5ad0b2cce3c151aa7910adcfb7a0908a4a52&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/__init__.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;c4b8da5b7a024762dbf8576c36ae66ff4c8c9534145a0c23fb0b653873f514e7&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/calibrate.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;88ec327e4cc396751ad55e0ce610a380c412763c6251995dc58e0ccc718994ab&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/ci.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;23d4ea7c539ab9942f2f43bcc6ae9fb34d9044894ac0c6e7990b94457e1cf916&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/config.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;219257fd7d9493eff853d350f8f98a7df5b776d4a2fa152eb744fc78c5b1f101&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/contracts.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;53ade152339618d9a607beef24a1d3fed629b4dd3350263e2f6f7bfb77a50df0&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/controllers.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;0f13a809ea89ab2ce7bc983956b665e6700aaceb618b58b12554ac0f9f87903d&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/metrics.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;f1ed1288abe8405301dbca546fc725fc64d4205a3ddf7f0075df78a138d5be03&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/plant.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;f45d4be3cb9e57150002e2d3253965d3e162b0190c5b5cf34f8c1abd9248e50b&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/plant.xml&quot;,
+      &quot;baseline_sha256&quot;: &quot;aef8a51e84742568b0db6271e3ca946dcd345db3f4d426a60a906a75db587fe0&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/platform_info.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;26450befc3930ce073a7f09e2250e8e866d3a99ef8b9edc90d43a0788bc66dd4&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/preview.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;4ffe5dc81eb5819f4dbf83c1512d9a5802e02cd44eafed8c5c664d263fe7484a&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/reference.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;3cfa6f47ec0faf9c63aa0aa8f793211a4fcac8e0be6c77091b817acd8ae25edf&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/reproduction_contract.json&quot;,
+      &quot;baseline_sha256&quot;: &quot;356f8efa4aa283eba18828b5bf2f2954df8ed332a8746fde60c6251a395e6edf&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/run.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;7e73c7c8bb7cf53ab1d57d6e65369b6faae872b3427dbc877309a79b8a749d75&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/sensors.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;cd89f8957f98c699cc10f9e8c7a3d96039ead8e1f1ea5fcb39e43b1e46de5b08&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/verdict_contract.json&quot;,
+      &quot;baseline_sha256&quot;: &quot;7e917fbac313de750d5ac6de086e6cba97ad9d1876d29b0aada6f6ceb10b8009&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tests/test_compare_traces.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;b39565eec5cfe19296ee5198be1e51323369fb8b83c3306cff91e3ce47a9fa5b&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tests/test_delayed_feedback.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;734e37178718a5069866018173d03636445b4dabee592898e66a56aed79c418f&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tests/test_determinism.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;c347637e3a629944b039382317390f1ec7ed8bcc26e0284aeb2efe233100b71b&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tests/test_isolation.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;26fb86cab2b61e4a6e2c6db0d6769aaff6e73d6baa8615360dbff64a95a62b22&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tests/test_offsetfree.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;e8618e1a178940bed173906903f1c15cb23b77215523af1c7066cea8aeb97cde&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tests/test_plant.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;0bf27572f0a93cf08014af94624ca561246650ee6f086c1df55bb4a3d4f4b202&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tests/test_platform_info.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;a98fc00d4917d456631678faf222c422f3915d3bfdb6d257c7adeaf0f4e4105a&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tests/test_preview.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;0595a2aadacc7ee85b04d2ded1847a03a13375f260d17449e2b1da5d012fc191&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tests/test_reproduction.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;1859bd6a7a36956f109d1a95d9d884e7e29abec4951cae7984c476ada075a534&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tests/test_run.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;f8383073a52690e07d6c751ac67db180ab027762e80cc7d42c54bacf84802327&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tests/test_sensors.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;ec23dc40bccb957f97fd117ab1129375d6cd067fc555f57f3cd905e101351133&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tests/test_verdict.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;4175cf6cbd2416b73372f6ff376f8207b6cea95de91d539324eff791ab26aaa3&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;docs/FINDINGS.md&quot;,
+      &quot;historical_prefix_unchanged&quot;: true
+    }
+  ]
+}
+</pre></details><details class="record"><summary>local-checks.json</summary><pre>{
+  &quot;baseline_commit&quot;: &quot;e8cb4ee7ac1420c945dbcb2ba86adfe1afa63338&quot;,
+  &quot;phase_c_runs&quot;: 0,
+  &quot;handoff_copy_equal&quot;: true,
+  &quot;frozen_file_mismatches&quot;: [],
+  &quot;milestone_passed&quot;: false
+}
+</pre></details><details class="record" open><summary>packet.md</summary><pre># G review packet
+
+Implementation commit: `250ce20f0628570c7a83eea96660d4b69d85555e`
+
+Exact-commit hosted CI green: True
+
+Frozen checks: 48 PASS
+
+```text
+ .github/workflows/phase-c.yml |  16 ++
+ docs/C1_DESIGN_DECISIONS.md   |  24 ++
+ docs/HANDOFF_PHASE_C_SIL.md   | 174 ++++++++++++
+ docs/REVIEWER_PROMPT.md       |  14 +
+ docs/REVIEW_PROTOCOL.md       |  49 ++++
+ reviews/G/ESCALATION.md       |  80 ++++++
+ reviews/G/baseline-ci.json    |   1 +
+ reviews/G/baseline-files.json | 338 +++++++++++++++++++++++
+ reviews/G/claude.md           | 112 ++++++++
+ reviews/G/local-checks.json   |   7 +
+ reviews/G/packet.md           |  52 ++++
+ reviews/G/sessions.md         |  12 +
+ reviews/index.html            | 613 ++++++++++++++++++++++++++++++++++++++++++
+ tools/render_reviews.py       |  52 ++++
+ tools/review_gate.py          | 119 ++++++++
+ 15 files changed, 1663 insertions(+)
+```
+
+- Phase C integrity: completed/success — https://github.com/Jeffaaay/insertion-vv/actions/runs/38342884902
+- Phase A SIL: completed/success — https://github.com/Jeffaaay/insertion-vv/actions/runs/38342885033
+- Phase B C32: completed/success — https://github.com/Jeffaaay/insertion-vv/actions/runs/38342885028
+
+See round notes for acceptance criteria, artifacts and limitations.
+</pre></details><details class="record"><summary>reply-integrity.json</summary><pre>{
+  &quot;transport&quot;: &quot;user-authorized existing Claude browser conversation&quot;,
+  &quot;conversation_url&quot;: &quot;https://claude.ai/chat/88a45c0b-4051-4fea-8c12-bdfa77bd4de1&quot;,
+  &quot;archive_manifest_created_utc&quot;: &quot;2026-10-13T04:29:29.475097+00:00&quot;,
+  &quot;records&quot;: {
+    &quot;claude-round-2.md&quot;: &quot;ec777c932efe1a432c7b7bd9650624ee33886f72d7ffee2ca05c41a40893a3f2&quot;,
+    &quot;claude.md&quot;: &quot;b2905a94c439fbf256a79195ac4532631e8059f22382070b03d3cf796adf3b17&quot;
+  }
+}
+</pre></details><details class="record" open><summary>round-2.md</summary><pre># G review response and closure criteria
+
+Reviewed commit 250ce20: all three hosted CI workflows succeeded (evidence.json).
+Reviewer BLOCK concerns are addressed prospectively in the next commit:
+- Freeze all 104 baseline tracked files, with FINDINGS append-only; no missing CI
+  or comparator coverage. Add clear missing-file error; remove dead assignment.
+- Keep complete gzip traces: measured prior nominal run is 1.075 MB compressed,
+  with 699 GiB available. No need to relax M3&#x27;s read-only rule. Estimated 3.62 GiB.
+- Register prediction quantifiers/ties, binary Python/Rust equivalence and identity
+  checks. Correct reviewer&#x27;s identity wording: no-noise matches SAME FAULT baseline,
+  not nominal. 24-bit quantization is not byte-identical to unquantized data.
+- Specify latest-wins resumption; zero-delay fresh frame wins. No F6 old-frame claim.
+- CI enforces generated review-page freshness.
+No Phase C simulation has run. M0 registration is being committed with these G
+repairs, as the reviewer explicitly recommended; both go back for review.
+</pre></details><details class="record" open><summary>sessions.md</summary><pre># Sessions
+
+- Local task: projectless Codex workspace, branch `phase-c-sil`.
+- Claude web review: existing **Neuralink project** conversation.
+  Reopen: https://claude.ai/chat/88a45c0b-4051-4fea-8c12-bdfa77bd4de1
+- Message: G startup design review, following the original 10-message history.
+- Transport: user-authorized browser interaction. No Claude CLI session or
+  CLI stream-json transcript exists for this review.
+- GPT CLI review: not started; G implementation and design decisions pending.
+
+The browser response must be preserved verbatim when complete; quotations remain
+reviewer claims rather than verification performed by the local agent.
+</pre></details></section><section><h2>M0</h2><details class="block" open><summary>claude-round-1.md</summary><pre># G 复核 + M0 审阅（Claude，第 3 轮）
+
+**核验范围：** 我独立读了 `dcd86f5` 的 `C1_PREREG.md`、`round-2.md`、`review_gate.py`、`phase-c.yml`，并核对了 `controller.c` 和 `h723/main.c`。我用 `random.Random(1000·fault+seed)` 独立重算了 `faults/random-v1.json`：F2 seed 42 的 300 个 uint32 完全一致，F3 五档 σ 在 base=15 下也完全一致（含 ties-even，σ=10 的范围是 0–47）。没有运行任何仿真。
+
+**G：通过。** 104 个基线文件全部冻结、缺失文件会明确报错、死代码已删、CI 会检查 review 页是否最新，这几项都已落实。
+
+你们的两处更正我接受：
+- no-noise 应该对照**同一故障**的 baseline 结果，我上一轮写成&quot;对照无故障&quot;是错的。
+- 我的 15 GB 是未压缩的估算。gzip 后约 3.6 GiB，完整保留在本地是可行的，M3 维持只读即可。
+
+## M0 剩余缺陷
+
+**1.【阻塞】F1 差一位（off-by-one）。**
+现在写的是&quot;在 onset 冻结当前捕获值&quot;，窗口是 [onset, onset+N)。问题在于 onset 那一帧本来就等于它自己的值，所以：
+- N=1 按构造就是恒等，第一档 F1 实际上没有注入任何故障；
+- 其余每一档实际只有 N−1 帧是旧值。
+
+P3 的判定（≥60 tick）正好依赖这个档位定义。
+
+修法：冻结值改为 **onset 之前最后一次捕获的值**（即 onset−1 tick 的捕获），窗口 [onset, onset+N) 内 N 帧全部携带这个值。M1 的边界测试里加一条断言：N=1 不是恒等，且只有第 onset 帧的值被替换。这是在任何 run 之前的前瞻性修正，补一个 commit 即可，不需要重写注册。
+
+**2.【次要】F6 那句解释和你们自己的规则矛盾。**
+`C1_PREREG.md` 写着&quot;F3/F6 can deliver older frames even at base=0&quot;，但 `round-2.md` 已经说了&quot;No F6 old-frame claim&quot;。实际情况是：在注册的 1 kHz 调度下，无论 base=15（t ≥ 15 ms 后）还是 base=0，每个 tick 都有一帧新的 fresh 帧，所以 latest-wins mailbox 在整个矩阵里**从来不会被触发**。F6 的真实语义是&quot;跳过期间的帧丢失，恢复时用当前帧&quot;。
+
+修法：把这句改成&quot;F3 可以；F6 的 mailbox 在本矩阵的调度下不会被触发&quot;。
+
+**3.【次要】P5 的平局还没定义算不算成立。**
+现在只写了&quot;report ties&quot;。
+
+修法：写死规则，比如&quot;no-delay 严格最大才算成立；并列最大记为&#x27;不成立（共享最大）&#x27;&quot;。同时写明 no-fault 行是否计入翻转数。
+
+**4.【次要，但关系到项目结论】C32 的 F6 会按构造产生 96 个 INVALID。**
+16 个格子 × 6 种消融，全部会因为 `controller.c:150` 拒绝跳号而无效。你们的处理（照跑、记 INVALID、单独醒目报告）是对的。建议再注册一句预期：
+
+&gt; 在 replay 固件路径里，`tim6_body` 每个 UIF 处理一个连续 tick。overrun 表现为 ISR 晚执行，而 C 核心拒绝跳号，所以 HIL 上的 deadline miss 大概率是&quot;晚执行、tick 号连续&quot;，而不是 Python 模拟的&quot;跳过并保持指令&quot;。
+
+这样 Python F6 和 HIL F6 预期就是两种不同的失效语义，是事先就能写下的一个 sim/HIL 分歧点。另外，c32 与 preview 的一致率统计要把 F6 从分母里拿出来单独报告。
+
+**5.【次要，M1 规划】冻结全部 104 个文件后，Rust 侧无法在原 crate 里加模块。**
+`harness/src/lib.rs` 和 `harness/Cargo.toml` 都被冻结，`mod fault;` 加不进去。M1 的 Rust FaultInjector 需要放在一个新 crate 里，通过 path 依赖 `../harness`，并配自己的 `Cargo.toml` 和 `Cargo.lock`。同理，Python 侧放新包。另外，冻结的 `faults/README.md` 里&quot;没有 Phase C 实现&quot;这句会过时，在新文档里注明即可，不要改它。
+
+其余注册内容我逐条核过，没有发现影响正确性的问题：F5 相位积分公式正确且连续；F3 用 FIFO 加预生成表，绕开了跨语言 libm 差异；F4 的除数都是整数；F7 的 100% 档是恒等；F8 用有符号码加饱和；恒等格子是对同 seed 的 nominal 做对照；聚合规则和 P1–P4 的量词都已经定死。
+
+```json
+{
+  &quot;verdict&quot;: &quot;BLOCK&quot;,
+  &quot;issues&quot;: [
+    {&quot;severity&quot;: &quot;blocker&quot;, &quot;where&quot;: &quot;docs/C1_PREREG.md Injection semantics F1&quot;, &quot;what&quot;: &quot;冻结 onset 当前捕获值导致 N=1 恒等、各档实际只有 N−1 帧旧值；改为冻结 onset 之前最后一次捕获的值，[onset,onset+N) 内 N 帧全部携带该值，并在 M1 测试 N=1 不是恒等&quot;, &quot;touches_frozen_or_registered&quot;: true},
+    {&quot;severity&quot;: &quot;minor&quot;, &quot;where&quot;: &quot;docs/C1_PREREG.md Ablations and interpretation&quot;, &quot;what&quot;: &quot;&#x27;F3/F6 can deliver older frames at base=0&#x27; 中 F6 部分错误：1 kHz 下每个 tick 都有 fresh 帧，mailbox 在本矩阵中从不触发；与 round-2 的说法矛盾，需改正&quot;, &quot;touches_frozen_or_registered&quot;: true},
+    {&quot;severity&quot;: &quot;minor&quot;, &quot;where&quot;: &quot;docs/C1_PREREG.md P5&quot;, &quot;what&quot;: &quot;定义平局是否算成立（建议严格最大才算），并写明 no-fault 行是否计入翻转数&quot;, &quot;touches_frozen_or_registered&quot;: true},
+    {&quot;severity&quot;: &quot;minor&quot;, &quot;where&quot;: &quot;docs/C1_PREREG.md Frozen C32 tick-gap boundary; firmware/h723/main.c tim6_body; firmware/ctrl/controller.c:150&quot;, &quot;what&quot;: &quot;C32 F6 按构造产生 96 个 INVALID；注册预期：HIL 上的 miss 大概率是晚执行、tick 连续，与 Python 的跳过语义不同；c32/preview 一致率统计中 F6 单独报告&quot;, &quot;touches_frozen_or_registered&quot;: false},
+    {&quot;severity&quot;: &quot;minor&quot;, &quot;where&quot;: &quot;M1 规划: harness/src/lib.rs, harness/Cargo.toml（已冻结）&quot;, &quot;what&quot;: &quot;Rust FaultInjector 需放在新 crate 中，通过 path 依赖 harness；冻结的 faults/README.md 会过时，在新文档中说明，不要修改&quot;, &quot;touches_frozen_or_registered&quot;: false}
+  ]
+}
+```
+</pre></details><details class="pass" open><summary>claude-round-2.md</summary><pre>A1 的五项都已落实，原文保留：F1 改为冻结 onset−1 的捕获值；F6 的旧帧论证已撤回；P5 定为严格最多才成立，并排除 no-fault 行和图 4 的 run；C32 F6 的 96 个 INVALID 单独列出，一致率完整披露分母；新 Rust crate 与冻结的 harness 隔离。按文件名排序在两个平台上一致。
+
+可以进入 M1。建议 M1 测试先锁定两条：F1 N=1 只替换 onset 那一帧；Python/Rust 注入后的帧逐字节相同。
+
+```json
+{&quot;verdict&quot;:&quot;PASS&quot;,&quot;issues&quot;:[]}
+```
+</pre></details><details class="record"><summary>evidence.json</summary><pre>{
+  &quot;commit&quot;: &quot;62b82ad7413c27fbf400fd9b5d1281e149349de1&quot;,
+  &quot;ci_green&quot;: true,
+  &quot;required_workflows&quot;: [
+    &quot;Phase A SIL&quot;,
+    &quot;Phase B C32&quot;,
+    &quot;Phase C integrity&quot;
+  ],
+  &quot;runs&quot;: [
+    {
+      &quot;conclusion&quot;: &quot;success&quot;,
+      &quot;databaseId&quot;: 38343712516,
+      &quot;headSha&quot;: &quot;62b82ad7413c27fbf400fd9b5d1281e149349de1&quot;,
+      &quot;name&quot;: &quot;Phase C integrity&quot;,
+      &quot;status&quot;: &quot;completed&quot;,
+      &quot;url&quot;: &quot;https://github.com/Jeffaaay/insertion-vv/actions/runs/38343712516&quot;
+    },
+    {
+      &quot;conclusion&quot;: &quot;success&quot;,
+      &quot;databaseId&quot;: 38343712579,
+      &quot;headSha&quot;: &quot;62b82ad7413c27fbf400fd9b5d1281e149349de1&quot;,
+      &quot;name&quot;: &quot;Phase A SIL&quot;,
+      &quot;status&quot;: &quot;completed&quot;,
+      &quot;url&quot;: &quot;https://github.com/Jeffaaay/insertion-vv/actions/runs/38343712579&quot;
+    },
+    {
+      &quot;conclusion&quot;: &quot;success&quot;,
+      &quot;databaseId&quot;: 38343712542,
+      &quot;headSha&quot;: &quot;62b82ad7413c27fbf400fd9b5d1281e149349de1&quot;,
+      &quot;name&quot;: &quot;Phase B C32&quot;,
+      &quot;status&quot;: &quot;completed&quot;,
+      &quot;url&quot;: &quot;https://github.com/Jeffaaay/insertion-vv/actions/runs/38343712542&quot;
+    }
+  ],
+  &quot;frozen_checks&quot;: [
+    {
+      &quot;path&quot;: &quot;.gitattributes&quot;,
+      &quot;baseline_sha256&quot;: &quot;2b81c62ebf08a104d54ff5d051366d508cddf442c721ac3979add216e0777dae&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;.github/workflows/phase-a.yml&quot;,
+      &quot;baseline_sha256&quot;: &quot;50c8ace15d80e06482e2a9f3b243d3e73c754752dbd1089c15afd461c3b23fa4&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;.github/workflows/phase-b.yml&quot;,
+      &quot;baseline_sha256&quot;: &quot;2719cd0480ff87e62f41b6b2059b2f4cbd264bbb972ad173b161e65e0a688025&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;.gitignore&quot;,
+      &quot;baseline_sha256&quot;: &quot;9d7cf46e65385acf244acf6f00501bc7344884e9dd88be3a5a5d9931dc5b24a6&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;PROJECT_BRIEF.md&quot;,
+      &quot;baseline_sha256&quot;: &quot;f207a296e2897416abf6b86e4b2c59e2e577d78962c8b6ec5d347ec531600928&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;README.md&quot;,
+      &quot;baseline_sha256&quot;: &quot;13a5cf090d783d283a5b9c4ee7536e313d7ff4705c850cb8ef66850353d0666d&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;docs/HARDWARE_RUNBOOK.md&quot;,
+      &quot;baseline_sha256&quot;: &quot;39b2a5ca7c39d67c0a3b41b3a4c809e75fcf4af2daac8dd0902fcba2335fbbe2&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;docs/PHASE_A_SUMMARY.md&quot;,
+      &quot;baseline_sha256&quot;: &quot;df9cababb1eb4ece642268580299a34f3341efc465c19259ecea114bd1a0200c&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;docs/PHASE_B_HARDWARE_PLAN.md&quot;,
+      &quot;baseline_sha256&quot;: &quot;d441860404a63d06146f249f3b565576878c675db8c74dc26239363522f59ea0&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;docs/PHASE_B_PLAN.md&quot;,
+      &quot;baseline_sha256&quot;: &quot;601880144b62bbc48d8cdc5f22dd7793fc7c48958ecc8e73bee301f3d720aed2&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;docs/PROTOCOL.md&quot;,
+      &quot;baseline_sha256&quot;: &quot;4f8bdce14371a99b5df2326556d6963c66f3ed552f01d519f2f88411f1de52b8&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;docs/REPLICATION_NOTES.md&quot;,
+      &quot;baseline_sha256&quot;: &quot;271a1b1412913c8c8c686a6a5624691e76474aacc10327b63191ee0571856a31&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;docs/model-and-evaluation.md&quot;,
+      &quot;baseline_sha256&quot;: &quot;82c209213e5c20c01611b10c8fe1eccb74c730646896d1f6ded933348d2570ab&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;faults/README.md&quot;,
+      &quot;baseline_sha256&quot;: &quot;c2d36d39417201be7097dad46b00c3705e6cbe7c98d855e6a79f0c67aff491ed&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/README.md&quot;,
+      &quot;baseline_sha256&quot;: &quot;ba0e7ecc0212ad71077af1ad739e1f109a3dc669c170158239a6336d3562f117&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/ctrl/README.md&quot;,
+      &quot;baseline_sha256&quot;: &quot;8806e298f34a0901ac104766870e7836e97a65f407bbe40dcacb87d11088a381&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/ctrl/controller.c&quot;,
+      &quot;baseline_sha256&quot;: &quot;2f05b0fe65f763f9dec75a0d9bd366364b361b3d3710b61991d632b1f4347747&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/ctrl/controller.h&quot;,
+      &quot;baseline_sha256&quot;: &quot;f515f64ab8f5ff47030186f01e6b361aa6bce20a86f887ccba130f137b27551a&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/ctrl/test_controller.c&quot;,
+      &quot;baseline_sha256&quot;: &quot;e840fc879f60762249a46a76d5d98ce06c9fca365ca3d3dcfbb0876d9d2b2902&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/deps.lock.json&quot;,
+      &quot;baseline_sha256&quot;: &quot;073b61b0a9c1abdec0bfb7492d0a239d276b5cea7e75c472bbc89325197fd515&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/h723/README.md&quot;,
+      &quot;baseline_sha256&quot;: &quot;879a40328e0133304026c77a4ee54f0d569ed30e6997bb04dea47f9a810e37c6&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/h723/linker.ld&quot;,
+      &quot;baseline_sha256&quot;: &quot;984e7ca21a51fe1800eeb085e07ab2277c8d5288467c028bb2f2171e9e9ab46f&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/h723/main.c&quot;,
+      &quot;baseline_sha256&quot;: &quot;8276b8d7300211b81612ef0fa92424edde2ad5cfe5cbced46ae4475e969b6dcc&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/h723/stm32h7xx_hal_conf.h&quot;,
+      &quot;baseline_sha256&quot;: &quot;0c31d9983d9c0c6d95143cad71027613c0cf60369e79ac76f2cc118e9af8a1e2&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/protocol/protocol.c&quot;,
+      &quot;baseline_sha256&quot;: &quot;f2452d348038e2232339c1aaf21ccef84c4df205c8225d57d76cab9fbc460691&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/protocol/protocol.h&quot;,
+      &quot;baseline_sha256&quot;: &quot;43744dffae4d91fc790c9cbc20cf54dc2aad37577f43c1d2d77b852b76a9c045&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/protocol/replay.c&quot;,
+      &quot;baseline_sha256&quot;: &quot;977ff8a7ab99e74c8f52034d5f3351d363f91567fd78e17165c2d2aa5c98469f&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/protocol/replay.h&quot;,
+      &quot;baseline_sha256&quot;: &quot;f8f80c6a76c63395de3daaf921611520e7c2ecd118c22c3a6e3d66e5a2755d91&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/protocol/test_protocol.c&quot;,
+      &quot;baseline_sha256&quot;: &quot;9e25cae6dd8d74122a8ba0a3bd2307d01d1435b9be900b8d0fb2432a408c0758&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/protocol/test_replay.c&quot;,
+      &quot;baseline_sha256&quot;: &quot;8c118143e5371b08809aa391e5f5f0da2e98f5b511a5b84939c2d6091ef5f17c&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/virtual_board/main.c&quot;,
+      &quot;baseline_sha256&quot;: &quot;1d723680b90d527905282793196c876be5464152047e103643648f1e2621213c&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/Cargo.lock&quot;,
+      &quot;baseline_sha256&quot;: &quot;459e0da14a8d9ff21fda33997492d4d4e25f51c7d6716b3a76ee5ca2a202f0a4&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/Cargo.toml&quot;,
+      &quot;baseline_sha256&quot;: &quot;cf12f5c1a0a4272c296fbbc4615e467fe672ba26be4a7e9a2c10ee5e40c77985&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/README.md&quot;,
+      &quot;baseline_sha256&quot;: &quot;e811fc208da9e039d9534b650d18651cc999543db53768660654afd3f5b2f331&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/__init__.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;26efd0f091ee48ee49431b4b82b98fb40272e47d3989222b587d888f9f18b1b7&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/build.rs&quot;,
+      &quot;baseline_sha256&quot;: &quot;404843d036a34a0a73969ef291fab7d8f5c23b21991d27687b283627d758ea6d&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/c32.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;5e4a8699e10ad11c02e5af9009e22703ac6ad59ff31ffc52d0a397432451c525&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/ci.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;4520c14e8d68ec6f3612f0635828edf3ff73ae75aa7c677554427963ea9508f2&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/compare.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;daf8b43ec3d320960c9a15ac5db96b0abfb1aa9940c92a023da1cce289f775d9&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/contract.json&quot;,
+      &quot;baseline_sha256&quot;: &quot;a9488e7cbbfea5ccb22ab4054cfb7e7a445cdf0fdf281d9f14272a3ed473d789&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/hardware.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;bfc4546954e136b8d509cca9efd773f4a682ac6e961281dae6ea713aa1f88347&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/plant_server.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;5a146af06716a167200700d964b9f122e1d2de0dfc3f19741cbd7019eab1a56c&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/replay_report.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;fcf831914ba195c4bfe5b2452e179518c600ca1a28ef47e61b8c00a969cd2a7b&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/run.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;445f79dacf0944db958330bd0b27884881ee2e094426c116ba55c9ce8ba1dcff&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/rust-toolchain.toml&quot;,
+      &quot;baseline_sha256&quot;: &quot;2ad6f15416572b4836585087f1d4abc53b8fa2dbd616f8dacfaa587ed6714228&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/rust_run.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;48cb25499283cac6dcba5ea7e06658b45455a6cd0e6a8f7f9406f99a3a079f8c&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/src/bin/board-link.rs&quot;,
+      &quot;baseline_sha256&quot;: &quot;bdfbcfec9988b34a0a40a89597031e358d756bd54f914ca441d48ccfa53bc040&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/src/ffi.rs&quot;,
+      &quot;baseline_sha256&quot;: &quot;5157559ce0adf8a02ce3eadee83b4d2917c4bc318cbb750b072a760dfe34cd59&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/src/lib.rs&quot;,
+      &quot;baseline_sha256&quot;: &quot;2cdad5269d929deddd7e9b5f4254d2decdfcee42fccc883fbb0b08728ea4ae7a&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/src/main.rs&quot;,
+      &quot;baseline_sha256&quot;: &quot;d8f8cfea21833288148ca3352dc4f4b4a8eea18f80243477746433dc0d3e0aff&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/src/plant.rs&quot;,
+      &quot;baseline_sha256&quot;: &quot;f0d87ee7070ccb9b12b8613a62e7c54d9ea6b88407ebb075ba8aa95b5903b6bb&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/src/protocol.rs&quot;,
+      &quot;baseline_sha256&quot;: &quot;b45da9971d64c69f4d7d5455ae45dbef30eae381dcfdda90f442ed94df244422&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/src/replay.rs&quot;,
+      &quot;baseline_sha256&quot;: &quot;2962e453057f3de60d98c0f88bb44b0b1cb27fbc6c1b8262f56c59c7e9a9d913&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/src/runner.rs&quot;,
+      &quot;baseline_sha256&quot;: &quot;6c6b8239cc7270ef14c81ab9fe472cf7b93599385df21a57f0340fe1b254628d&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/src/serial.rs&quot;,
+      &quot;baseline_sha256&quot;: &quot;4e48ea2d8aa425c4307724289bc6dd802f15c04fc2928cfe99854cde825b9924&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/src/types.rs&quot;,
+      &quot;baseline_sha256&quot;: &quot;44b03c6720b76ef11ef7da77ffb86ba84cbdc5aa0bff0877a96790fee156eece&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/tests/data/protocol_v1.json&quot;,
+      &quot;baseline_sha256&quot;: &quot;02d0b3c8855567183386de471bb20b798d191ef0afb14aab809bb2e5519ad5df&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/tests/test_boundaries.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;dfa36f18a4ddb5fc1ba408139ee6b97458712281a46ef1d29149fa92f143c13c&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/tests/test_c32.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;49871e254df7b71b7c25a9d9ef0947ab5303ea22ecfee4a99f5af7713e9dc81e&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/tests/test_hardware_evidence.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;0bee30e00daf62c1705e0fe661036e18527660331859ae23d84a2eb622f2a16b&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/tests/test_virtual_board.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;92f0038d3329bdedc836ff69782901ec1dac9782460f27ac2e99bddda96be20d&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/virtual_board.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;59d5e55b0ee6644632d5b22fecb19094c784c9a6dbb60922af74609173ebebf2&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;pyproject.toml&quot;,
+      &quot;baseline_sha256&quot;: &quot;cab3cd4c4a68ec0cb790901988ba20de55cbda86ecd632ada155a23ef581c62b&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;requirements-lock.txt&quot;,
+      &quot;baseline_sha256&quot;: &quot;713bc031c33c42271a06011de11e5ad0b2cce3c151aa7910adcfb7a0908a4a52&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;requirements.txt&quot;,
+      &quot;baseline_sha256&quot;: &quot;34a148f661f86e48ed4bd8f2728eccd7a797f8a8963f6b360f6834b1e130a2da&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/__init__.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;c4b8da5b7a024762dbf8576c36ae66ff4c8c9534145a0c23fb0b653873f514e7&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/calibrate.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;88ec327e4cc396751ad55e0ce610a380c412763c6251995dc58e0ccc718994ab&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/ci.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;23d4ea7c539ab9942f2f43bcc6ae9fb34d9044894ac0c6e7990b94457e1cf916&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/config.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;219257fd7d9493eff853d350f8f98a7df5b776d4a2fa152eb744fc78c5b1f101&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/contracts.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;53ade152339618d9a607beef24a1d3fed629b4dd3350263e2f6f7bfb77a50df0&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/controllers.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;0f13a809ea89ab2ce7bc983956b665e6700aaceb618b58b12554ac0f9f87903d&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/metrics.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;f1ed1288abe8405301dbca546fc725fc64d4205a3ddf7f0075df78a138d5be03&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/plant.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;f45d4be3cb9e57150002e2d3253965d3e162b0190c5b5cf34f8c1abd9248e50b&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/plant.xml&quot;,
+      &quot;baseline_sha256&quot;: &quot;aef8a51e84742568b0db6271e3ca946dcd345db3f4d426a60a906a75db587fe0&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/platform_info.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;26450befc3930ce073a7f09e2250e8e866d3a99ef8b9edc90d43a0788bc66dd4&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/preview.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;4ffe5dc81eb5819f4dbf83c1512d9a5802e02cd44eafed8c5c664d263fe7484a&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/reference.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;3cfa6f47ec0faf9c63aa0aa8f793211a4fcac8e0be6c77091b817acd8ae25edf&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/reproduction_contract.json&quot;,
+      &quot;baseline_sha256&quot;: &quot;356f8efa4aa283eba18828b5bf2f2954df8ed332a8746fde60c6251a395e6edf&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/run.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;7e73c7c8bb7cf53ab1d57d6e65369b6faae872b3427dbc877309a79b8a749d75&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/sensors.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;cd89f8957f98c699cc10f9e8c7a3d96039ead8e1f1ea5fcb39e43b1e46de5b08&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/verdict_contract.json&quot;,
+      &quot;baseline_sha256&quot;: &quot;7e917fbac313de750d5ac6de086e6cba97ad9d1876d29b0aada6f6ceb10b8009&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tests/test_compare_traces.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;b39565eec5cfe19296ee5198be1e51323369fb8b83c3306cff91e3ce47a9fa5b&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tests/test_delayed_feedback.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;734e37178718a5069866018173d03636445b4dabee592898e66a56aed79c418f&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tests/test_determinism.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;c347637e3a629944b039382317390f1ec7ed8bcc26e0284aeb2efe233100b71b&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tests/test_isolation.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;26fb86cab2b61e4a6e2c6db0d6769aaff6e73d6baa8615360dbff64a95a62b22&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tests/test_offsetfree.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;e8618e1a178940bed173906903f1c15cb23b77215523af1c7066cea8aeb97cde&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tests/test_plant.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;0bf27572f0a93cf08014af94624ca561246650ee6f086c1df55bb4a3d4f4b202&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tests/test_platform_info.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;a98fc00d4917d456631678faf222c422f3915d3bfdb6d257c7adeaf0f4e4105a&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tests/test_preview.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;0595a2aadacc7ee85b04d2ded1847a03a13375f260d17449e2b1da5d012fc191&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tests/test_reproduction.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;1859bd6a7a36956f109d1a95d9d884e7e29abec4951cae7984c476ada075a534&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tests/test_run.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;f8383073a52690e07d6c751ac67db180ab027762e80cc7d42c54bacf84802327&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tests/test_sensors.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;ec23dc40bccb957f97fd117ab1129375d6cd067fc555f57f3cd905e101351133&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tests/test_verdict.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;4175cf6cbd2416b73372f6ff376f8207b6cea95de91d539324eff791ab26aaa3&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tools/README.md&quot;,
+      &quot;baseline_sha256&quot;: &quot;b07e36efa76a1d90b1ea95bac8f3359f43348e93f0a613fe3b057b4764be0ca5&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tools/_run_artifact.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;60c848b2f8e5c42b37152038e36e3d556b9ab3bd462673e8f94301d5e2d4ab52&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tools/board.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;60343f6b0c3046641388d5f722d02e43b93445e6d37af49f37d0666083df726d&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tools/build_controller.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;02048b59ff478603e22b6ba9f52366b32cc7820fdef33cbdcfbe086bd841cb47&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tools/build_firmware.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;202b52b944331d9eeb13c3e9bda55b2b0e757ef1d8a91fc2c9ac8cca267142f4&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tools/compare_traces.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;0f8ba5c8cf8454fc5cc44545ded4e3b153ee210e74a6235051f21bc515b3894b&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tools/plot_run.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;a99bd6f6fd9c0204cc8e46ebab85838efd94b4587033a19ffda7d33434d54cdf&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tools/plot_timing.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;f9cf7f5287f4f2b0fc6ed3dcf1abd564315fb18e317170bcb37b2ff0cb564b24&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tools/render_video.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;8470099987177a94464879d8277735a815c81665799ffb39fa80daa5e4d36a29&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tools/requirements-viz.txt&quot;,
+      &quot;baseline_sha256&quot;: &quot;69fbf8c8cd3fa9d50da8f002f5c351bb8f7691e0c2a05df21bc041e7f41aaf74&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;docs/FINDINGS.md&quot;,
+      &quot;historical_prefix_unchanged&quot;: true
+    }
+  ]
+}
+</pre></details><details class="record" open><summary>packet.md</summary><pre># M0 review packet
+
+Implementation commit: `62b82ad7413c27fbf400fd9b5d1281e149349de1`
+
+Exact-commit hosted CI green: True
+
+Frozen checks: 104 PASS
+
+```text
+ .github/workflows/phase-c.yml |   1 +
+ docs/C1_PREREG.md             | 228 ++++++++++++++
+ faults/random-v1.json         |   1 +
+ reviews/G/claude-round-2.md   |  85 ++++++
+ reviews/G/evidence.json       | 276 +++++++++++++++++
+ reviews/G/packet.md           |  84 ++----
+ reviews/G/round-2.md          |  15 +
+ reviews/M0/claude-round-1.md  |  55 ++++
+ reviews/M0/round-1.md         |   8 +
+ reviews/index.html            | 669 ++++++++++++++++++++++++++++++++++--------
+ tools/render_reviews.py       |   2 +-
+ tools/review_gate.py          |  10 +-
+ 12 files changed, 1249 insertions(+), 185 deletions(-)
+```
+
+- Phase C integrity: completed/success — https://github.com/Jeffaaay/insertion-vv/actions/runs/38343712516
+- Phase A SIL: completed/success — https://github.com/Jeffaaay/insertion-vv/actions/runs/38343712579
+- Phase B C32: completed/success — https://github.com/Jeffaaay/insertion-vv/actions/runs/38343712542
+
+See round notes for acceptance criteria, artifacts and limitations.
+</pre></details><details class="record"><summary>reply-integrity.json</summary><pre>{
+  &quot;transport&quot;: &quot;user-authorized existing Claude browser conversation&quot;,
+  &quot;conversation_url&quot;: &quot;https://claude.ai/chat/88a45c0b-4051-4fea-8c12-bdfa77bd4de1&quot;,
+  &quot;archive_manifest_created_utc&quot;: &quot;2026-10-13T04:29:29.476097+00:00&quot;,
+  &quot;records&quot;: {
+    &quot;claude-round-1.md&quot;: &quot;8582893ba5110e0dd47cf6ec66cf3b2efd2fc83c8e1a2b957e4c435cc82a900f&quot;,
+    &quot;claude-round-2.md&quot;: &quot;0336f2e1dbe61eb0fb32ad12b09e0e78b09d4cd41826fe5a78aa36e5a12bbfa7&quot;
+  }
+}
+</pre></details><details class="record" open><summary>round-1.md</summary><pre># M0 review fixes (prospective)
+
+All five review items accepted. A1 is appended without rewriting the original
+registration: F1 previous capture, precise F6 fresh-frame behavior, strict P5
+ranking with nominal rows excluded, explicit 96 anticipated C32 invalid attempts
+and separate agreement denominators, standalone Rust crate. No C1 simulations
+have occurred. G was accepted in the full reviewer reply. Review-page ordering
+was separately corrected for Windows/Posix lexical differences at 9ef7f83.
+</pre></details></section><section><h2>M1</h2><details class="pass" open><summary>claude-round-1.md</summary><pre>核验范围：我读了 `faults.py`、`plant.py`、`runner.py`、`rust/src/lib.rs`、测试和 CI，没有运行任何仿真。
+
+注入语义和 A1 一致：F1 取 onset−1 的值，F3 按 FIFO 查表，F4 按绝对 tick 降采样，F8 用 ties-even 加饱和，F5 相位连续且 2 s 前走冻结路径，F6 用 latest-wins，C32 跳号会抛 ValueError 并记为 INVALID。**M1 通过。** M2 开跑前补这 4 处：
+
+1. `measured_run` 先写临时目录，再原子 rename。现在如果中途中断，会留下缺 `metrics.json` 的目录，续跑会直接崩溃。
+2. F7 要校验 nominal 来自同一控制器、同一消融、fault=none、seed 42，并且它本身不是 INVALID。
+3. 注入器拒收未注册的 onset 和 seed，F5 必须是 onset=2000。plant 里写死了 2000，传错 onset 会产生标签错误的重复 run。
+4. 跨语言测试目前只覆盖最重档、seed 42、onset 200。扩到全部档位、F2/F3 的 5 个 seed、两种 base，纯注入器几秒就能跑完。F3 σ=0.5 的键名分支目前完全没测到。
+
+另外，报告里要写明：矩阵中两个控制器都用 Python 注入器，Rust 注入器只做等价验证，留给 HIL。
+
+```json
+{&quot;verdict&quot;:&quot;PASS&quot;,&quot;issues&quot;:[
+{&quot;severity&quot;:&quot;major&quot;,&quot;where&quot;:&quot;c1/runner.py measured_run&quot;,&quot;what&quot;:&quot;改为临时目录写入后原子 rename，避免中断后留下缺 metrics.json 的目录导致续跑崩溃&quot;,&quot;touches_frozen_or_registered&quot;:false},
+{&quot;severity&quot;:&quot;major&quot;,&quot;where&quot;:&quot;c1/runner.py measured_run nominal&quot;,&quot;what&quot;:&quot;校验 F7 nominal 为同 controller、同 ablation、fault=none、seed 42，且非 INVALID&quot;,&quot;touches_frozen_or_registered&quot;:false},
+{&quot;severity&quot;:&quot;major&quot;,&quot;where&quot;:&quot;c1/faults.py FaultInjector.__init__; c1/plant.py&quot;,&quot;what&quot;:&quot;拒收未注册的 onset/seed；F5 必须 onset=2000&quot;,&quot;touches_frozen_or_registered&quot;:false},
+{&quot;severity&quot;:&quot;minor&quot;,&quot;where&quot;:&quot;c1/tests/test_injection.py test_python_rust_binary_equivalence&quot;,&quot;what&quot;:&quot;扩到全部档位、F2/F3 五个 seed、两种 base；覆盖 F3 σ=0.5 键名分支&quot;,&quot;touches_frozen_or_registered&quot;:false},
+{&quot;severity&quot;:&quot;minor&quot;,&quot;where&quot;:&quot;M4 报告&quot;,&quot;what&quot;:&quot;写明矩阵两控制器均用 Python 注入器，Rust 注入器只做等价验证&quot;,&quot;touches_frozen_or_registered&quot;:false}]}
+```
+</pre></details><details class="record"><summary>evidence.json</summary><pre>{
+  &quot;commit&quot;: &quot;890841f5693a94ac388b854c04d4bc03f539e3e2&quot;,
+  &quot;ci_green&quot;: true,
+  &quot;required_workflows&quot;: [
+    &quot;Phase A SIL&quot;,
+    &quot;Phase B C32&quot;,
+    &quot;Phase C integrity&quot;
+  ],
+  &quot;runs&quot;: [
+    {
+      &quot;conclusion&quot;: &quot;success&quot;,
+      &quot;databaseId&quot;: 38344360696,
+      &quot;headSha&quot;: &quot;890841f5693a94ac388b854c04d4bc03f539e3e2&quot;,
+      &quot;name&quot;: &quot;Phase C integrity&quot;,
+      &quot;status&quot;: &quot;completed&quot;,
+      &quot;url&quot;: &quot;https://github.com/Jeffaaay/insertion-vv/actions/runs/38344360696&quot;
+    },
+    {
+      &quot;conclusion&quot;: &quot;success&quot;,
+      &quot;databaseId&quot;: 38344360683,
+      &quot;headSha&quot;: &quot;890841f5693a94ac388b854c04d4bc03f539e3e2&quot;,
+      &quot;name&quot;: &quot;Phase A SIL&quot;,
+      &quot;status&quot;: &quot;completed&quot;,
+      &quot;url&quot;: &quot;https://github.com/Jeffaaay/insertion-vv/actions/runs/38344360683&quot;
+    },
+    {
+      &quot;conclusion&quot;: &quot;success&quot;,
+      &quot;databaseId&quot;: 38344360686,
+      &quot;headSha&quot;: &quot;890841f5693a94ac388b854c04d4bc03f539e3e2&quot;,
+      &quot;name&quot;: &quot;Phase B C32&quot;,
+      &quot;status&quot;: &quot;completed&quot;,
+      &quot;url&quot;: &quot;https://github.com/Jeffaaay/insertion-vv/actions/runs/38344360686&quot;
+    }
+  ],
+  &quot;frozen_checks&quot;: [
+    {
+      &quot;path&quot;: &quot;.gitattributes&quot;,
+      &quot;baseline_sha256&quot;: &quot;2b81c62ebf08a104d54ff5d051366d508cddf442c721ac3979add216e0777dae&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;.github/workflows/phase-a.yml&quot;,
+      &quot;baseline_sha256&quot;: &quot;50c8ace15d80e06482e2a9f3b243d3e73c754752dbd1089c15afd461c3b23fa4&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;.github/workflows/phase-b.yml&quot;,
+      &quot;baseline_sha256&quot;: &quot;2719cd0480ff87e62f41b6b2059b2f4cbd264bbb972ad173b161e65e0a688025&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;.gitignore&quot;,
+      &quot;baseline_sha256&quot;: &quot;9d7cf46e65385acf244acf6f00501bc7344884e9dd88be3a5a5d9931dc5b24a6&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;PROJECT_BRIEF.md&quot;,
+      &quot;baseline_sha256&quot;: &quot;f207a296e2897416abf6b86e4b2c59e2e577d78962c8b6ec5d347ec531600928&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;README.md&quot;,
+      &quot;baseline_sha256&quot;: &quot;13a5cf090d783d283a5b9c4ee7536e313d7ff4705c850cb8ef66850353d0666d&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;docs/HARDWARE_RUNBOOK.md&quot;,
+      &quot;baseline_sha256&quot;: &quot;39b2a5ca7c39d67c0a3b41b3a4c809e75fcf4af2daac8dd0902fcba2335fbbe2&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;docs/PHASE_A_SUMMARY.md&quot;,
+      &quot;baseline_sha256&quot;: &quot;df9cababb1eb4ece642268580299a34f3341efc465c19259ecea114bd1a0200c&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;docs/PHASE_B_HARDWARE_PLAN.md&quot;,
+      &quot;baseline_sha256&quot;: &quot;d441860404a63d06146f249f3b565576878c675db8c74dc26239363522f59ea0&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;docs/PHASE_B_PLAN.md&quot;,
+      &quot;baseline_sha256&quot;: &quot;601880144b62bbc48d8cdc5f22dd7793fc7c48958ecc8e73bee301f3d720aed2&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;docs/PROTOCOL.md&quot;,
+      &quot;baseline_sha256&quot;: &quot;4f8bdce14371a99b5df2326556d6963c66f3ed552f01d519f2f88411f1de52b8&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;docs/REPLICATION_NOTES.md&quot;,
+      &quot;baseline_sha256&quot;: &quot;271a1b1412913c8c8c686a6a5624691e76474aacc10327b63191ee0571856a31&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;docs/model-and-evaluation.md&quot;,
+      &quot;baseline_sha256&quot;: &quot;82c209213e5c20c01611b10c8fe1eccb74c730646896d1f6ded933348d2570ab&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;faults/README.md&quot;,
+      &quot;baseline_sha256&quot;: &quot;c2d36d39417201be7097dad46b00c3705e6cbe7c98d855e6a79f0c67aff491ed&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/README.md&quot;,
+      &quot;baseline_sha256&quot;: &quot;ba0e7ecc0212ad71077af1ad739e1f109a3dc669c170158239a6336d3562f117&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/ctrl/README.md&quot;,
+      &quot;baseline_sha256&quot;: &quot;8806e298f34a0901ac104766870e7836e97a65f407bbe40dcacb87d11088a381&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/ctrl/controller.c&quot;,
+      &quot;baseline_sha256&quot;: &quot;2f05b0fe65f763f9dec75a0d9bd366364b361b3d3710b61991d632b1f4347747&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/ctrl/controller.h&quot;,
+      &quot;baseline_sha256&quot;: &quot;f515f64ab8f5ff47030186f01e6b361aa6bce20a86f887ccba130f137b27551a&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/ctrl/test_controller.c&quot;,
+      &quot;baseline_sha256&quot;: &quot;e840fc879f60762249a46a76d5d98ce06c9fca365ca3d3dcfbb0876d9d2b2902&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/deps.lock.json&quot;,
+      &quot;baseline_sha256&quot;: &quot;073b61b0a9c1abdec0bfb7492d0a239d276b5cea7e75c472bbc89325197fd515&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/h723/README.md&quot;,
+      &quot;baseline_sha256&quot;: &quot;879a40328e0133304026c77a4ee54f0d569ed30e6997bb04dea47f9a810e37c6&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/h723/linker.ld&quot;,
+      &quot;baseline_sha256&quot;: &quot;984e7ca21a51fe1800eeb085e07ab2277c8d5288467c028bb2f2171e9e9ab46f&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/h723/main.c&quot;,
+      &quot;baseline_sha256&quot;: &quot;8276b8d7300211b81612ef0fa92424edde2ad5cfe5cbced46ae4475e969b6dcc&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/h723/stm32h7xx_hal_conf.h&quot;,
+      &quot;baseline_sha256&quot;: &quot;0c31d9983d9c0c6d95143cad71027613c0cf60369e79ac76f2cc118e9af8a1e2&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/protocol/protocol.c&quot;,
+      &quot;baseline_sha256&quot;: &quot;f2452d348038e2232339c1aaf21ccef84c4df205c8225d57d76cab9fbc460691&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/protocol/protocol.h&quot;,
+      &quot;baseline_sha256&quot;: &quot;43744dffae4d91fc790c9cbc20cf54dc2aad37577f43c1d2d77b852b76a9c045&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/protocol/replay.c&quot;,
+      &quot;baseline_sha256&quot;: &quot;977ff8a7ab99e74c8f52034d5f3351d363f91567fd78e17165c2d2aa5c98469f&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/protocol/replay.h&quot;,
+      &quot;baseline_sha256&quot;: &quot;f8f80c6a76c63395de3daaf921611520e7c2ecd118c22c3a6e3d66e5a2755d91&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/protocol/test_protocol.c&quot;,
+      &quot;baseline_sha256&quot;: &quot;9e25cae6dd8d74122a8ba0a3bd2307d01d1435b9be900b8d0fb2432a408c0758&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/protocol/test_replay.c&quot;,
+      &quot;baseline_sha256&quot;: &quot;8c118143e5371b08809aa391e5f5f0da2e98f5b511a5b84939c2d6091ef5f17c&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/virtual_board/main.c&quot;,
+      &quot;baseline_sha256&quot;: &quot;1d723680b90d527905282793196c876be5464152047e103643648f1e2621213c&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/Cargo.lock&quot;,
+      &quot;baseline_sha256&quot;: &quot;459e0da14a8d9ff21fda33997492d4d4e25f51c7d6716b3a76ee5ca2a202f0a4&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/Cargo.toml&quot;,
+      &quot;baseline_sha256&quot;: &quot;cf12f5c1a0a4272c296fbbc4615e467fe672ba26be4a7e9a2c10ee5e40c77985&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/README.md&quot;,
+      &quot;baseline_sha256&quot;: &quot;e811fc208da9e039d9534b650d18651cc999543db53768660654afd3f5b2f331&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/__init__.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;26efd0f091ee48ee49431b4b82b98fb40272e47d3989222b587d888f9f18b1b7&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/build.rs&quot;,
+      &quot;baseline_sha256&quot;: &quot;404843d036a34a0a73969ef291fab7d8f5c23b21991d27687b283627d758ea6d&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/c32.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;5e4a8699e10ad11c02e5af9009e22703ac6ad59ff31ffc52d0a397432451c525&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/ci.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;4520c14e8d68ec6f3612f0635828edf3ff73ae75aa7c677554427963ea9508f2&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/compare.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;daf8b43ec3d320960c9a15ac5db96b0abfb1aa9940c92a023da1cce289f775d9&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/contract.json&quot;,
+      &quot;baseline_sha256&quot;: &quot;a9488e7cbbfea5ccb22ab4054cfb7e7a445cdf0fdf281d9f14272a3ed473d789&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/hardware.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;bfc4546954e136b8d509cca9efd773f4a682ac6e961281dae6ea713aa1f88347&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/plant_server.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;5a146af06716a167200700d964b9f122e1d2de0dfc3f19741cbd7019eab1a56c&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/replay_report.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;fcf831914ba195c4bfe5b2452e179518c600ca1a28ef47e61b8c00a969cd2a7b&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/run.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;445f79dacf0944db958330bd0b27884881ee2e094426c116ba55c9ce8ba1dcff&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/rust-toolchain.toml&quot;,
+      &quot;baseline_sha256&quot;: &quot;2ad6f15416572b4836585087f1d4abc53b8fa2dbd616f8dacfaa587ed6714228&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/rust_run.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;48cb25499283cac6dcba5ea7e06658b45455a6cd0e6a8f7f9406f99a3a079f8c&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/src/bin/board-link.rs&quot;,
+      &quot;baseline_sha256&quot;: &quot;bdfbcfec9988b34a0a40a89597031e358d756bd54f914ca441d48ccfa53bc040&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/src/ffi.rs&quot;,
+      &quot;baseline_sha256&quot;: &quot;5157559ce0adf8a02ce3eadee83b4d2917c4bc318cbb750b072a760dfe34cd59&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/src/lib.rs&quot;,
+      &quot;baseline_sha256&quot;: &quot;2cdad5269d929deddd7e9b5f4254d2decdfcee42fccc883fbb0b08728ea4ae7a&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/src/main.rs&quot;,
+      &quot;baseline_sha256&quot;: &quot;d8f8cfea21833288148ca3352dc4f4b4a8eea18f80243477746433dc0d3e0aff&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/src/plant.rs&quot;,
+      &quot;baseline_sha256&quot;: &quot;f0d87ee7070ccb9b12b8613a62e7c54d9ea6b88407ebb075ba8aa95b5903b6bb&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/src/protocol.rs&quot;,
+      &quot;baseline_sha256&quot;: &quot;b45da9971d64c69f4d7d5455ae45dbef30eae381dcfdda90f442ed94df244422&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/src/replay.rs&quot;,
+      &quot;baseline_sha256&quot;: &quot;2962e453057f3de60d98c0f88bb44b0b1cb27fbc6c1b8262f56c59c7e9a9d913&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/src/runner.rs&quot;,
+      &quot;baseline_sha256&quot;: &quot;6c6b8239cc7270ef14c81ab9fe472cf7b93599385df21a57f0340fe1b254628d&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/src/serial.rs&quot;,
+      &quot;baseline_sha256&quot;: &quot;4e48ea2d8aa425c4307724289bc6dd802f15c04fc2928cfe99854cde825b9924&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/src/types.rs&quot;,
+      &quot;baseline_sha256&quot;: &quot;44b03c6720b76ef11ef7da77ffb86ba84cbdc5aa0bff0877a96790fee156eece&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/tests/data/protocol_v1.json&quot;,
+      &quot;baseline_sha256&quot;: &quot;02d0b3c8855567183386de471bb20b798d191ef0afb14aab809bb2e5519ad5df&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/tests/test_boundaries.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;dfa36f18a4ddb5fc1ba408139ee6b97458712281a46ef1d29149fa92f143c13c&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/tests/test_c32.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;49871e254df7b71b7c25a9d9ef0947ab5303ea22ecfee4a99f5af7713e9dc81e&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/tests/test_hardware_evidence.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;0bee30e00daf62c1705e0fe661036e18527660331859ae23d84a2eb622f2a16b&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/tests/test_virtual_board.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;92f0038d3329bdedc836ff69782901ec1dac9782460f27ac2e99bddda96be20d&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/virtual_board.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;59d5e55b0ee6644632d5b22fecb19094c784c9a6dbb60922af74609173ebebf2&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;pyproject.toml&quot;,
+      &quot;baseline_sha256&quot;: &quot;cab3cd4c4a68ec0cb790901988ba20de55cbda86ecd632ada155a23ef581c62b&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;requirements-lock.txt&quot;,
+      &quot;baseline_sha256&quot;: &quot;713bc031c33c42271a06011de11e5ad0b2cce3c151aa7910adcfb7a0908a4a52&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;requirements.txt&quot;,
+      &quot;baseline_sha256&quot;: &quot;34a148f661f86e48ed4bd8f2728eccd7a797f8a8963f6b360f6834b1e130a2da&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/__init__.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;c4b8da5b7a024762dbf8576c36ae66ff4c8c9534145a0c23fb0b653873f514e7&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/calibrate.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;88ec327e4cc396751ad55e0ce610a380c412763c6251995dc58e0ccc718994ab&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/ci.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;23d4ea7c539ab9942f2f43bcc6ae9fb34d9044894ac0c6e7990b94457e1cf916&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/config.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;219257fd7d9493eff853d350f8f98a7df5b776d4a2fa152eb744fc78c5b1f101&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/contracts.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;53ade152339618d9a607beef24a1d3fed629b4dd3350263e2f6f7bfb77a50df0&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/controllers.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;0f13a809ea89ab2ce7bc983956b665e6700aaceb618b58b12554ac0f9f87903d&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/metrics.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;f1ed1288abe8405301dbca546fc725fc64d4205a3ddf7f0075df78a138d5be03&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/plant.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;f45d4be3cb9e57150002e2d3253965d3e162b0190c5b5cf34f8c1abd9248e50b&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/plant.xml&quot;,
+      &quot;baseline_sha256&quot;: &quot;aef8a51e84742568b0db6271e3ca946dcd345db3f4d426a60a906a75db587fe0&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/platform_info.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;26450befc3930ce073a7f09e2250e8e866d3a99ef8b9edc90d43a0788bc66dd4&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/preview.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;4ffe5dc81eb5819f4dbf83c1512d9a5802e02cd44eafed8c5c664d263fe7484a&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/reference.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;3cfa6f47ec0faf9c63aa0aa8f793211a4fcac8e0be6c77091b817acd8ae25edf&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/reproduction_contract.json&quot;,
+      &quot;baseline_sha256&quot;: &quot;356f8efa4aa283eba18828b5bf2f2954df8ed332a8746fde60c6251a395e6edf&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/run.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;7e73c7c8bb7cf53ab1d57d6e65369b6faae872b3427dbc877309a79b8a749d75&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/sensors.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;cd89f8957f98c699cc10f9e8c7a3d96039ead8e1f1ea5fcb39e43b1e46de5b08&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/verdict_contract.json&quot;,
+      &quot;baseline_sha256&quot;: &quot;7e917fbac313de750d5ac6de086e6cba97ad9d1876d29b0aada6f6ceb10b8009&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tests/test_compare_traces.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;b39565eec5cfe19296ee5198be1e51323369fb8b83c3306cff91e3ce47a9fa5b&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tests/test_delayed_feedback.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;734e37178718a5069866018173d03636445b4dabee592898e66a56aed79c418f&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tests/test_determinism.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;c347637e3a629944b039382317390f1ec7ed8bcc26e0284aeb2efe233100b71b&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tests/test_isolation.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;26fb86cab2b61e4a6e2c6db0d6769aaff6e73d6baa8615360dbff64a95a62b22&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tests/test_offsetfree.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;e8618e1a178940bed173906903f1c15cb23b77215523af1c7066cea8aeb97cde&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tests/test_plant.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;0bf27572f0a93cf08014af94624ca561246650ee6f086c1df55bb4a3d4f4b202&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tests/test_platform_info.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;a98fc00d4917d456631678faf222c422f3915d3bfdb6d257c7adeaf0f4e4105a&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tests/test_preview.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;0595a2aadacc7ee85b04d2ded1847a03a13375f260d17449e2b1da5d012fc191&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tests/test_reproduction.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;1859bd6a7a36956f109d1a95d9d884e7e29abec4951cae7984c476ada075a534&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tests/test_run.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;f8383073a52690e07d6c751ac67db180ab027762e80cc7d42c54bacf84802327&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tests/test_sensors.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;ec23dc40bccb957f97fd117ab1129375d6cd067fc555f57f3cd905e101351133&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tests/test_verdict.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;4175cf6cbd2416b73372f6ff376f8207b6cea95de91d539324eff791ab26aaa3&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tools/README.md&quot;,
+      &quot;baseline_sha256&quot;: &quot;b07e36efa76a1d90b1ea95bac8f3359f43348e93f0a613fe3b057b4764be0ca5&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tools/_run_artifact.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;60c848b2f8e5c42b37152038e36e3d556b9ab3bd462673e8f94301d5e2d4ab52&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tools/board.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;60343f6b0c3046641388d5f722d02e43b93445e6d37af49f37d0666083df726d&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tools/build_controller.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;02048b59ff478603e22b6ba9f52366b32cc7820fdef33cbdcfbe086bd841cb47&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tools/build_firmware.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;202b52b944331d9eeb13c3e9bda55b2b0e757ef1d8a91fc2c9ac8cca267142f4&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tools/compare_traces.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;0f8ba5c8cf8454fc5cc44545ded4e3b153ee210e74a6235051f21bc515b3894b&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tools/plot_run.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;a99bd6f6fd9c0204cc8e46ebab85838efd94b4587033a19ffda7d33434d54cdf&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tools/plot_timing.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;f9cf7f5287f4f2b0fc6ed3dcf1abd564315fb18e317170bcb37b2ff0cb564b24&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tools/render_video.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;8470099987177a94464879d8277735a815c81665799ffb39fa80daa5e4d36a29&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tools/requirements-viz.txt&quot;,
+      &quot;baseline_sha256&quot;: &quot;69fbf8c8cd3fa9d50da8f002f5c351bb8f7691e0c2a05df21bc041e7f41aaf74&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;docs/FINDINGS.md&quot;,
+      &quot;historical_prefix_unchanged&quot;: true
+    }
+  ]
+}
+</pre></details><details class="record"><summary>local-checks.json</summary><pre>{
+  &quot;pytest_passed&quot;: 10,
+  &quot;cross_language_rebuilt_binary&quot;: &quot;PASS&quot;,
+  &quot;ruff&quot;: &quot;PASS&quot;,
+  &quot;clippy&quot;: &quot;PASS&quot;,
+  &quot;frozen_checks&quot;: 104,
+  &quot;scientific_matrix_run&quot;: false
+}
+</pre></details><details class="record" open><summary>packet.md</summary><pre># M1 review packet
+
+Implementation commit: `890841f5693a94ac388b854c04d4bc03f539e3e2`
+
+Exact-commit hosted CI green: True
+
+Frozen checks: 104 PASS
+
+```text
+ .github/workflows/phase-c.yml |  33 +++
+ c1/README.md                  |  27 ++
+ c1/__init__.py                |   1 +
+ c1/faults.py                  | 116 ++++++++
+ c1/plant.py                   |  58 ++++
+ c1/runner.py                  | 206 ++++++++++++++
+ c1/rust/Cargo.lock            | 418 ++++++++++++++++++++++++++++
+ c1/rust/Cargo.toml            |   9 +
+ c1/rust/src/lib.rs            | 171 ++++++++++++
+ c1/rust/src/main.rs           |  31 +++
+ c1/tests/test_injection.py    | 166 +++++++++++
+ faults/F1.yaml                |  25 ++
+ faults/F2.yaml                |  28 ++
+ faults/F3.yaml                |  28 ++
+ faults/F4.yaml                |  24 ++
+ faults/F5.yaml                |  20 ++
+ faults/F6.yaml                |  23 ++
+ faults/F7.yaml                |  23 ++
+ faults/F8.yaml                |  23 ++
+ reviews/M0/claude-round-2.md  |   7 +
+ reviews/M0/evidence.json      | 556 +++++++++++++++++++++++++++++++++++++
+ reviews/M0/packet.md          |  29 ++
+ reviews/M1/local-checks.json  |   8 +
+ reviews/M1/round-1.md         |  19 ++
+ reviews/index.html            | 619 ++++++++++++++++++++++++++++++++++++++++++
+ 25 files changed, 2668 insertions(+)
+```
+
+- Phase C integrity: completed/success — https://github.com/Jeffaaay/insertion-vv/actions/runs/38344360696
+- Phase A SIL: completed/success — https://github.com/Jeffaaay/insertion-vv/actions/runs/38344360683
+- Phase B C32: completed/success — https://github.com/Jeffaaay/insertion-vv/actions/runs/38344360686
+
+See round notes for acceptance criteria, artifacts and limitations.
+</pre></details><details class="record"><summary>reply-integrity.json</summary><pre>{
+  &quot;transport&quot;: &quot;user-authorized existing Claude browser conversation&quot;,
+  &quot;conversation_url&quot;: &quot;https://claude.ai/chat/88a45c0b-4051-4fea-8c12-bdfa77bd4de1&quot;,
+  &quot;archive_manifest_created_utc&quot;: &quot;2026-10-13T04:29:29.476097+00:00&quot;,
+  &quot;records&quot;: {
+    &quot;claude-round-1.md&quot;: &quot;77f6424e3c086a044bfa7c763259dce9bc556ca0e5703750b4087587aba3757b&quot;
+  }
+}
+</pre></details><details class="record" open><summary>round-1.md</summary><pre># M1 injector acceptance
+
+Ten local tests PASS; final rebuilt Rust binary cross-language test PASS.
+Ruff and Rust 1.99 clippy with -D warnings PASS. 104 frozen checks PASS.
+- F1 one-tick stale capture boundary and metadata progression.
+- F4 25Hz equivalence to frozen sensor path apart from sequence numbering.
+- F8 quantization saturation/ties-even; found and fixed Rust negative-zero by
+  materializing the registered integer code before converting back to metres.
+- F6 skip window; F7 force clipping and full-run 100% identity.
+- F5 continuity and frozen prefix.
+- Preview and C32 no-fault trace/truth byte-equality to legacy implementations.
+- Seeded F2 replay, no-noise same-fault identity, disabled-dropout nominal identity.
+- Python/Rust binary equivalence: 8 faults x 2 delay conditions x 8000 frames,
+  real MuJoCo surface recordings, plus skip/clip outputs. F5 uses drifted plant samples.
+- C32 F6 rejection verified at resumed tick 201 for onset=200/N=1.
+
+Acceptance: shared YAML + random tables, isolated Python/Rust extensions, legacy
+hashes preserved, deterministic boundary behavior. Full scientific matrix not run
+in M1; validation runs only. CI now exercises these tests on Linux and Windows.
+</pre></details></section><section><h2>M2</h2><details class="pass" open><summary>claude-round-1.md</summary><pre># M2 审阅（Claude）
+
+**核验范围：** 我独立读了 `d0b8698` 的 `C1_SIL_PREDICTIONS.md`、`matrix.json`、`summary.json` 和五张图，并直接从 `matrix.json` 重算了关键数字。本地 trace 包（3.78 GB）我访问不到，trace 级哈希无法独立核验。
+
+**重算结果：全部与你们一致。**
+- matrix SHA-256 = `cc833c35…98aa9` ✓
+- 2730 PASS / 789 FAIL / 96 INVALID，96 个全是 C32 F6 ✓
+- 重复 run 哈希不一致：0 ✓
+- 3615 个 run_id 唯一 ✓
+- 1106 个 identity 全部通过，我按参考 run 的 trace/truth SHA 逐条复核一致 ✓
+- F7 的 nominal 引用全部正确 ✓
+- 1782 对中 1686 有效且全部一致 ✓
+- P1–P5 判定与图 4 选档规则 ✓
+- 生成 commit 之后只新增了 `analyze.py` 和 `verify_evidence.py`，注入和运行代码没有变动 ✓
+
+**没有阻塞问题，M2 通过。** 以下几条请在 M4 报告里写清楚，否则结论会被读歪：
+
+1. **P5 的&quot;成立&quot;不提供信息。** no-delay 的 297 个 preview run 全部 FAIL（包括 nominal，RMS 在 200 µm 以上），280 次翻转完全来自估计器的 15 ms 帧龄 guard。另外四个消融翻转数为 0，是因为它们关掉的 F2/F3/F8 在 baseline 下本来就没有 FAIL，没有东西可翻。正确的说法是：在注册范围内，jitter、量化、丢帧的建模细节不改变任何 verdict。这本身就是一个发现，但不能作为&quot;延迟建模必要&quot;的证据。
+
+2. **要报告余量，而不只是 PASS/FAIL。** 图 1 一片绿，会让人误读成&quot;故障没有影响&quot;。实际的 contact RMS 最大值：
+   - F1：13.3 µm（达到阈值的 67%，120 tick、5 s 注入）
+   - F4：1.44 µm
+   - F6：1.23 µm
+   - F2、F3、F8：与 nominal（1.1226 µm）相差不到 2 nm
+
+   建议在图 1 每个格子里加上最大 RMS 数值。所有数据都来自已封存的矩阵，不需要新的 run。这也决定了 HIL 对照该看哪里：F2/F3/F8 上 sim 和 HIL 都 PASS 几乎不说明问题，有区分力的是 F1、F5、F7 和 F6 的语义。
+
+3. **P4 的判定只靠 F1。** F2/F3 的&quot;5 s 最差&quot;是由纳米级差异决定的，应写成&quot;基本平坦&quot;。P4 不成立实际上由 F1 一项决定：5 s 注入 13.3 µm，2.4 s 注入 4.76 µm。
+
+4. **F7 失败的本质是静态力不够，不是动态跟踪失效。** 在 0.2、1.5、2.4 s 注入时，RMS 完全相同（264 / 210 / 120 µm），峰值 |ė| 只有 0.009 mm/s，说明针稳定停在了插入深度不足的位置。nominal 的峰值接触力 4.85 mN 约等于指令峰值 5.74 mN 的 85%，所以作为 HIL 假设可以写：限幅低于约 85% 就保持不住深度。不要把它写成插值得出的 flip point。
+
+5. **图 2 有线被盖住了。** F2、F3、F8 三条线重叠，F2 的橙线完全看不见。加直接标注，或者加一句&quot;F2/F3/F8 与 nominal 相差不到 2 nm&quot;。
+
+6. **补充溯源记录。** 在 `C1_SIL_PREDICTIONS.md` 里补上 `summary.json`、五张图、3.78 GB 证据包的 SHA-256，以及 `analyze.py` 所在的 commit，让 M3/M4 能核验派生产物。另外建议公开一小部分可复核的 trace：8 条视频对应的 run 加上它们的 nominal 参考，约十几 MB。
+
+```json
+{&quot;verdict&quot;:&quot;PASS&quot;,&quot;issues&quot;:[
+{&quot;severity&quot;:&quot;major&quot;,&quot;where&quot;:&quot;M4 报告; fig3&quot;,&quot;what&quot;:&quot;P5 成立是结构性的：no-delay 全部 FAIL 来自帧龄 guard，其余消融因目标故障在 baseline 下无 FAIL 而无可翻转；应表述为&#x27;注册范围内 jitter/量化/丢帧建模不改变 verdict&#x27;&quot;,&quot;touches_frozen_or_registered&quot;:false},
+{&quot;severity&quot;:&quot;major&quot;,&quot;where&quot;:&quot;fig1; M4 报告&quot;,&quot;what&quot;:&quot;报告每种故障的最大 RMS 与 |ė| 余量（F1 13.3 µm；F2/F3/F8 相差不到 2 nm），并说明 HIL 对照的区分力集中在 F1/F5/F7/F6&quot;,&quot;touches_frozen_or_registered&quot;:false},
+{&quot;severity&quot;:&quot;minor&quot;,&quot;where&quot;:&quot;C1_SIL_PREDICTIONS.md P4&quot;,&quot;what&quot;:&quot;F2/F3 的最差时刻由纳米级差异决定，应写为基本平坦；P4 不成立由 F1 决定&quot;,&quot;touches_frozen_or_registered&quot;:false},
+{&quot;severity&quot;:&quot;minor&quot;,&quot;where&quot;:&quot;M4 报告 F7&quot;,&quot;what&quot;:&quot;F7 失败是静态保持力不足（RMS 恒定、ė 约 0.009 mm/s；接触力约为指令峰值的 85%），作为 HIL 假设表述，不当作插值得出的 flip point&quot;,&quot;touches_frozen_or_registered&quot;:false},
+{&quot;severity&quot;:&quot;minor&quot;,&quot;where&quot;:&quot;fig2&quot;,&quot;what&quot;:&quot;F2/F3/F8 曲线重叠导致 F2 不可见；加直接标注或说明&quot;,&quot;touches_frozen_or_registered&quot;:false},
+{&quot;severity&quot;:&quot;minor&quot;,&quot;where&quot;:&quot;docs/C1_SIL_PREDICTIONS.md&quot;,&quot;what&quot;:&quot;补充 summary.json、各图、本地证据包的 SHA-256 和 analyze.py 的 commit；建议公开视频对应 run 的 trace 子集&quot;,&quot;touches_frozen_or_registered&quot;:false}]}
+```
+</pre></details><details class="record"><summary>evidence.json</summary><pre>{
+  &quot;commit&quot;: &quot;d0b86986c7677985ccae5d358b3a3c2ba7128672&quot;,
+  &quot;ci_green&quot;: true,
+  &quot;required_workflows&quot;: [
+    &quot;Phase A SIL&quot;,
+    &quot;Phase B C32&quot;,
+    &quot;Phase C integrity&quot;
+  ],
+  &quot;runs&quot;: [
+    {
+      &quot;conclusion&quot;: &quot;success&quot;,
+      &quot;databaseId&quot;: 38346326523,
+      &quot;headSha&quot;: &quot;d0b86986c7677985ccae5d358b3a3c2ba7128672&quot;,
+      &quot;name&quot;: &quot;Phase C integrity&quot;,
+      &quot;status&quot;: &quot;completed&quot;,
+      &quot;url&quot;: &quot;https://github.com/Jeffaaay/insertion-vv/actions/runs/38346326523&quot;
+    },
+    {
+      &quot;conclusion&quot;: &quot;success&quot;,
+      &quot;databaseId&quot;: 38346326501,
+      &quot;headSha&quot;: &quot;d0b86986c7677985ccae5d358b3a3c2ba7128672&quot;,
+      &quot;name&quot;: &quot;Phase A SIL&quot;,
+      &quot;status&quot;: &quot;completed&quot;,
+      &quot;url&quot;: &quot;https://github.com/Jeffaaay/insertion-vv/actions/runs/38346326501&quot;
+    },
+    {
+      &quot;conclusion&quot;: &quot;success&quot;,
+      &quot;databaseId&quot;: 38346326496,
+      &quot;headSha&quot;: &quot;d0b86986c7677985ccae5d358b3a3c2ba7128672&quot;,
+      &quot;name&quot;: &quot;Phase B C32&quot;,
+      &quot;status&quot;: &quot;completed&quot;,
+      &quot;url&quot;: &quot;https://github.com/Jeffaaay/insertion-vv/actions/runs/38346326496&quot;
+    }
+  ],
+  &quot;frozen_checks&quot;: [
+    {
+      &quot;path&quot;: &quot;.gitattributes&quot;,
+      &quot;baseline_sha256&quot;: &quot;2b81c62ebf08a104d54ff5d051366d508cddf442c721ac3979add216e0777dae&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;.github/workflows/phase-a.yml&quot;,
+      &quot;baseline_sha256&quot;: &quot;50c8ace15d80e06482e2a9f3b243d3e73c754752dbd1089c15afd461c3b23fa4&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;.github/workflows/phase-b.yml&quot;,
+      &quot;baseline_sha256&quot;: &quot;2719cd0480ff87e62f41b6b2059b2f4cbd264bbb972ad173b161e65e0a688025&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;.gitignore&quot;,
+      &quot;baseline_sha256&quot;: &quot;9d7cf46e65385acf244acf6f00501bc7344884e9dd88be3a5a5d9931dc5b24a6&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;PROJECT_BRIEF.md&quot;,
+      &quot;baseline_sha256&quot;: &quot;f207a296e2897416abf6b86e4b2c59e2e577d78962c8b6ec5d347ec531600928&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;README.md&quot;,
+      &quot;baseline_sha256&quot;: &quot;13a5cf090d783d283a5b9c4ee7536e313d7ff4705c850cb8ef66850353d0666d&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;docs/HARDWARE_RUNBOOK.md&quot;,
+      &quot;baseline_sha256&quot;: &quot;39b2a5ca7c39d67c0a3b41b3a4c809e75fcf4af2daac8dd0902fcba2335fbbe2&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;docs/PHASE_A_SUMMARY.md&quot;,
+      &quot;baseline_sha256&quot;: &quot;df9cababb1eb4ece642268580299a34f3341efc465c19259ecea114bd1a0200c&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;docs/PHASE_B_HARDWARE_PLAN.md&quot;,
+      &quot;baseline_sha256&quot;: &quot;d441860404a63d06146f249f3b565576878c675db8c74dc26239363522f59ea0&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;docs/PHASE_B_PLAN.md&quot;,
+      &quot;baseline_sha256&quot;: &quot;601880144b62bbc48d8cdc5f22dd7793fc7c48958ecc8e73bee301f3d720aed2&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;docs/PROTOCOL.md&quot;,
+      &quot;baseline_sha256&quot;: &quot;4f8bdce14371a99b5df2326556d6963c66f3ed552f01d519f2f88411f1de52b8&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;docs/REPLICATION_NOTES.md&quot;,
+      &quot;baseline_sha256&quot;: &quot;271a1b1412913c8c8c686a6a5624691e76474aacc10327b63191ee0571856a31&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;docs/model-and-evaluation.md&quot;,
+      &quot;baseline_sha256&quot;: &quot;82c209213e5c20c01611b10c8fe1eccb74c730646896d1f6ded933348d2570ab&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;faults/README.md&quot;,
+      &quot;baseline_sha256&quot;: &quot;c2d36d39417201be7097dad46b00c3705e6cbe7c98d855e6a79f0c67aff491ed&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/README.md&quot;,
+      &quot;baseline_sha256&quot;: &quot;ba0e7ecc0212ad71077af1ad739e1f109a3dc669c170158239a6336d3562f117&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/ctrl/README.md&quot;,
+      &quot;baseline_sha256&quot;: &quot;8806e298f34a0901ac104766870e7836e97a65f407bbe40dcacb87d11088a381&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/ctrl/controller.c&quot;,
+      &quot;baseline_sha256&quot;: &quot;2f05b0fe65f763f9dec75a0d9bd366364b361b3d3710b61991d632b1f4347747&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/ctrl/controller.h&quot;,
+      &quot;baseline_sha256&quot;: &quot;f515f64ab8f5ff47030186f01e6b361aa6bce20a86f887ccba130f137b27551a&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/ctrl/test_controller.c&quot;,
+      &quot;baseline_sha256&quot;: &quot;e840fc879f60762249a46a76d5d98ce06c9fca365ca3d3dcfbb0876d9d2b2902&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/deps.lock.json&quot;,
+      &quot;baseline_sha256&quot;: &quot;073b61b0a9c1abdec0bfb7492d0a239d276b5cea7e75c472bbc89325197fd515&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/h723/README.md&quot;,
+      &quot;baseline_sha256&quot;: &quot;879a40328e0133304026c77a4ee54f0d569ed30e6997bb04dea47f9a810e37c6&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/h723/linker.ld&quot;,
+      &quot;baseline_sha256&quot;: &quot;984e7ca21a51fe1800eeb085e07ab2277c8d5288467c028bb2f2171e9e9ab46f&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/h723/main.c&quot;,
+      &quot;baseline_sha256&quot;: &quot;8276b8d7300211b81612ef0fa92424edde2ad5cfe5cbced46ae4475e969b6dcc&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/h723/stm32h7xx_hal_conf.h&quot;,
+      &quot;baseline_sha256&quot;: &quot;0c31d9983d9c0c6d95143cad71027613c0cf60369e79ac76f2cc118e9af8a1e2&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/protocol/protocol.c&quot;,
+      &quot;baseline_sha256&quot;: &quot;f2452d348038e2232339c1aaf21ccef84c4df205c8225d57d76cab9fbc460691&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/protocol/protocol.h&quot;,
+      &quot;baseline_sha256&quot;: &quot;43744dffae4d91fc790c9cbc20cf54dc2aad37577f43c1d2d77b852b76a9c045&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/protocol/replay.c&quot;,
+      &quot;baseline_sha256&quot;: &quot;977ff8a7ab99e74c8f52034d5f3351d363f91567fd78e17165c2d2aa5c98469f&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/protocol/replay.h&quot;,
+      &quot;baseline_sha256&quot;: &quot;f8f80c6a76c63395de3daaf921611520e7c2ecd118c22c3a6e3d66e5a2755d91&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/protocol/test_protocol.c&quot;,
+      &quot;baseline_sha256&quot;: &quot;9e25cae6dd8d74122a8ba0a3bd2307d01d1435b9be900b8d0fb2432a408c0758&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/protocol/test_replay.c&quot;,
+      &quot;baseline_sha256&quot;: &quot;8c118143e5371b08809aa391e5f5f0da2e98f5b511a5b84939c2d6091ef5f17c&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/virtual_board/main.c&quot;,
+      &quot;baseline_sha256&quot;: &quot;1d723680b90d527905282793196c876be5464152047e103643648f1e2621213c&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/Cargo.lock&quot;,
+      &quot;baseline_sha256&quot;: &quot;459e0da14a8d9ff21fda33997492d4d4e25f51c7d6716b3a76ee5ca2a202f0a4&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/Cargo.toml&quot;,
+      &quot;baseline_sha256&quot;: &quot;cf12f5c1a0a4272c296fbbc4615e467fe672ba26be4a7e9a2c10ee5e40c77985&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/README.md&quot;,
+      &quot;baseline_sha256&quot;: &quot;e811fc208da9e039d9534b650d18651cc999543db53768660654afd3f5b2f331&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/__init__.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;26efd0f091ee48ee49431b4b82b98fb40272e47d3989222b587d888f9f18b1b7&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/build.rs&quot;,
+      &quot;baseline_sha256&quot;: &quot;404843d036a34a0a73969ef291fab7d8f5c23b21991d27687b283627d758ea6d&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/c32.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;5e4a8699e10ad11c02e5af9009e22703ac6ad59ff31ffc52d0a397432451c525&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/ci.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;4520c14e8d68ec6f3612f0635828edf3ff73ae75aa7c677554427963ea9508f2&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/compare.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;daf8b43ec3d320960c9a15ac5db96b0abfb1aa9940c92a023da1cce289f775d9&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/contract.json&quot;,
+      &quot;baseline_sha256&quot;: &quot;a9488e7cbbfea5ccb22ab4054cfb7e7a445cdf0fdf281d9f14272a3ed473d789&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/hardware.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;bfc4546954e136b8d509cca9efd773f4a682ac6e961281dae6ea713aa1f88347&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/plant_server.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;5a146af06716a167200700d964b9f122e1d2de0dfc3f19741cbd7019eab1a56c&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/replay_report.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;fcf831914ba195c4bfe5b2452e179518c600ca1a28ef47e61b8c00a969cd2a7b&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/run.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;445f79dacf0944db958330bd0b27884881ee2e094426c116ba55c9ce8ba1dcff&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/rust-toolchain.toml&quot;,
+      &quot;baseline_sha256&quot;: &quot;2ad6f15416572b4836585087f1d4abc53b8fa2dbd616f8dacfaa587ed6714228&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/rust_run.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;48cb25499283cac6dcba5ea7e06658b45455a6cd0e6a8f7f9406f99a3a079f8c&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/src/bin/board-link.rs&quot;,
+      &quot;baseline_sha256&quot;: &quot;bdfbcfec9988b34a0a40a89597031e358d756bd54f914ca441d48ccfa53bc040&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/src/ffi.rs&quot;,
+      &quot;baseline_sha256&quot;: &quot;5157559ce0adf8a02ce3eadee83b4d2917c4bc318cbb750b072a760dfe34cd59&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/src/lib.rs&quot;,
+      &quot;baseline_sha256&quot;: &quot;2cdad5269d929deddd7e9b5f4254d2decdfcee42fccc883fbb0b08728ea4ae7a&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/src/main.rs&quot;,
+      &quot;baseline_sha256&quot;: &quot;d8f8cfea21833288148ca3352dc4f4b4a8eea18f80243477746433dc0d3e0aff&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/src/plant.rs&quot;,
+      &quot;baseline_sha256&quot;: &quot;f0d87ee7070ccb9b12b8613a62e7c54d9ea6b88407ebb075ba8aa95b5903b6bb&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/src/protocol.rs&quot;,
+      &quot;baseline_sha256&quot;: &quot;b45da9971d64c69f4d7d5455ae45dbef30eae381dcfdda90f442ed94df244422&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/src/replay.rs&quot;,
+      &quot;baseline_sha256&quot;: &quot;2962e453057f3de60d98c0f88bb44b0b1cb27fbc6c1b8262f56c59c7e9a9d913&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/src/runner.rs&quot;,
+      &quot;baseline_sha256&quot;: &quot;6c6b8239cc7270ef14c81ab9fe472cf7b93599385df21a57f0340fe1b254628d&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/src/serial.rs&quot;,
+      &quot;baseline_sha256&quot;: &quot;4e48ea2d8aa425c4307724289bc6dd802f15c04fc2928cfe99854cde825b9924&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/src/types.rs&quot;,
+      &quot;baseline_sha256&quot;: &quot;44b03c6720b76ef11ef7da77ffb86ba84cbdc5aa0bff0877a96790fee156eece&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/tests/data/protocol_v1.json&quot;,
+      &quot;baseline_sha256&quot;: &quot;02d0b3c8855567183386de471bb20b798d191ef0afb14aab809bb2e5519ad5df&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/tests/test_boundaries.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;dfa36f18a4ddb5fc1ba408139ee6b97458712281a46ef1d29149fa92f143c13c&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/tests/test_c32.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;49871e254df7b71b7c25a9d9ef0947ab5303ea22ecfee4a99f5af7713e9dc81e&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/tests/test_hardware_evidence.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;0bee30e00daf62c1705e0fe661036e18527660331859ae23d84a2eb622f2a16b&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/tests/test_virtual_board.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;92f0038d3329bdedc836ff69782901ec1dac9782460f27ac2e99bddda96be20d&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/virtual_board.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;59d5e55b0ee6644632d5b22fecb19094c784c9a6dbb60922af74609173ebebf2&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;pyproject.toml&quot;,
+      &quot;baseline_sha256&quot;: &quot;cab3cd4c4a68ec0cb790901988ba20de55cbda86ecd632ada155a23ef581c62b&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;requirements-lock.txt&quot;,
+      &quot;baseline_sha256&quot;: &quot;713bc031c33c42271a06011de11e5ad0b2cce3c151aa7910adcfb7a0908a4a52&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;requirements.txt&quot;,
+      &quot;baseline_sha256&quot;: &quot;34a148f661f86e48ed4bd8f2728eccd7a797f8a8963f6b360f6834b1e130a2da&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/__init__.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;c4b8da5b7a024762dbf8576c36ae66ff4c8c9534145a0c23fb0b653873f514e7&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/calibrate.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;88ec327e4cc396751ad55e0ce610a380c412763c6251995dc58e0ccc718994ab&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/ci.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;23d4ea7c539ab9942f2f43bcc6ae9fb34d9044894ac0c6e7990b94457e1cf916&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/config.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;219257fd7d9493eff853d350f8f98a7df5b776d4a2fa152eb744fc78c5b1f101&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/contracts.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;53ade152339618d9a607beef24a1d3fed629b4dd3350263e2f6f7bfb77a50df0&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/controllers.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;0f13a809ea89ab2ce7bc983956b665e6700aaceb618b58b12554ac0f9f87903d&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/metrics.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;f1ed1288abe8405301dbca546fc725fc64d4205a3ddf7f0075df78a138d5be03&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/plant.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;f45d4be3cb9e57150002e2d3253965d3e162b0190c5b5cf34f8c1abd9248e50b&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/plant.xml&quot;,
+      &quot;baseline_sha256&quot;: &quot;aef8a51e84742568b0db6271e3ca946dcd345db3f4d426a60a906a75db587fe0&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/platform_info.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;26450befc3930ce073a7f09e2250e8e866d3a99ef8b9edc90d43a0788bc66dd4&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/preview.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;4ffe5dc81eb5819f4dbf83c1512d9a5802e02cd44eafed8c5c664d263fe7484a&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/reference.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;3cfa6f47ec0faf9c63aa0aa8f793211a4fcac8e0be6c77091b817acd8ae25edf&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/reproduction_contract.json&quot;,
+      &quot;baseline_sha256&quot;: &quot;356f8efa4aa283eba18828b5bf2f2954df8ed332a8746fde60c6251a395e6edf&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/run.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;7e73c7c8bb7cf53ab1d57d6e65369b6faae872b3427dbc877309a79b8a749d75&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/sensors.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;cd89f8957f98c699cc10f9e8c7a3d96039ead8e1f1ea5fcb39e43b1e46de5b08&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/verdict_contract.json&quot;,
+      &quot;baseline_sha256&quot;: &quot;7e917fbac313de750d5ac6de086e6cba97ad9d1876d29b0aada6f6ceb10b8009&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tests/test_compare_traces.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;b39565eec5cfe19296ee5198be1e51323369fb8b83c3306cff91e3ce47a9fa5b&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tests/test_delayed_feedback.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;734e37178718a5069866018173d03636445b4dabee592898e66a56aed79c418f&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tests/test_determinism.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;c347637e3a629944b039382317390f1ec7ed8bcc26e0284aeb2efe233100b71b&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tests/test_isolation.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;26fb86cab2b61e4a6e2c6db0d6769aaff6e73d6baa8615360dbff64a95a62b22&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tests/test_offsetfree.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;e8618e1a178940bed173906903f1c15cb23b77215523af1c7066cea8aeb97cde&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tests/test_plant.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;0bf27572f0a93cf08014af94624ca561246650ee6f086c1df55bb4a3d4f4b202&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tests/test_platform_info.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;a98fc00d4917d456631678faf222c422f3915d3bfdb6d257c7adeaf0f4e4105a&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tests/test_preview.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;0595a2aadacc7ee85b04d2ded1847a03a13375f260d17449e2b1da5d012fc191&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tests/test_reproduction.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;1859bd6a7a36956f109d1a95d9d884e7e29abec4951cae7984c476ada075a534&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tests/test_run.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;f8383073a52690e07d6c751ac67db180ab027762e80cc7d42c54bacf84802327&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tests/test_sensors.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;ec23dc40bccb957f97fd117ab1129375d6cd067fc555f57f3cd905e101351133&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tests/test_verdict.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;4175cf6cbd2416b73372f6ff376f8207b6cea95de91d539324eff791ab26aaa3&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tools/README.md&quot;,
+      &quot;baseline_sha256&quot;: &quot;b07e36efa76a1d90b1ea95bac8f3359f43348e93f0a613fe3b057b4764be0ca5&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tools/_run_artifact.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;60c848b2f8e5c42b37152038e36e3d556b9ab3bd462673e8f94301d5e2d4ab52&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tools/board.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;60343f6b0c3046641388d5f722d02e43b93445e6d37af49f37d0666083df726d&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tools/build_controller.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;02048b59ff478603e22b6ba9f52366b32cc7820fdef33cbdcfbe086bd841cb47&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tools/build_firmware.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;202b52b944331d9eeb13c3e9bda55b2b0e757ef1d8a91fc2c9ac8cca267142f4&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tools/compare_traces.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;0f8ba5c8cf8454fc5cc44545ded4e3b153ee210e74a6235051f21bc515b3894b&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tools/plot_run.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;a99bd6f6fd9c0204cc8e46ebab85838efd94b4587033a19ffda7d33434d54cdf&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tools/plot_timing.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;f9cf7f5287f4f2b0fc6ed3dcf1abd564315fb18e317170bcb37b2ff0cb564b24&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tools/render_video.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;8470099987177a94464879d8277735a815c81665799ffb39fa80daa5e4d36a29&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tools/requirements-viz.txt&quot;,
+      &quot;baseline_sha256&quot;: &quot;69fbf8c8cd3fa9d50da8f002f5c351bb8f7691e0c2a05df21bc041e7f41aaf74&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;docs/FINDINGS.md&quot;,
+      &quot;historical_prefix_unchanged&quot;: true
+    }
+  ]
+}
+</pre></details><details class="record" open><summary>packet.md</summary><pre># M2 review packet
+
+Implementation commit: `d0b86986c7677985ccae5d358b3a3c2ba7128672`
+
+Exact-commit hosted CI green: True
+
+Frozen checks: 104 PASS
+
+```text
+ artifacts/c1/evidence-audit.json                  |    7 +
+ artifacts/c1/execution-manifest.json              |    1 +
+ artifacts/c1/figs/fig1_fault_severity_heatmap.png |  Bin 0 -&gt; 318398 bytes
+ artifacts/c1/figs/fig1_fault_severity_heatmap.svg |  594 ++++++++++
+ artifacts/c1/figs/fig2_rms_vs_inject_time.png     |  Bin 0 -&gt; 230577 bytes
+ artifacts/c1/figs/fig2_rms_vs_inject_time.svg     |  680 ++++++++++++
+ artifacts/c1/figs/fig3_ablation_flips.png         |  Bin 0 -&gt; 255241 bytes
+ artifacts/c1/figs/fig3_ablation_flips.svg         |  687 ++++++++++++
+ artifacts/c1/figs/fig4_controllers_vs_faults.png  |  Bin 0 -&gt; 205325 bytes
+ artifacts/c1/figs/fig4_controllers_vs_faults.svg  |  555 ++++++++++
+ artifacts/c1/figs/fig5_hil_only.png               |  Bin 0 -&gt; 277090 bytes
+ artifacts/c1/figs/fig5_hil_only.svg               |   66 ++
+ artifacts/c1/matrix.json                          |    1 +
+ artifacts/c1/matrix.sha256                        |    1 +
+ artifacts/c1/summary.json                         | 1206 +++++++++++++++++++++
+ c1/analyze.py                                     |  460 ++++++++
+ c1/faults.py                                      |    4 +
+ c1/matrix.py                                      |  220 ++++
+ c1/runner.py                                      |   18 +-
+ c1/rust/.gitignore                                |    1 +
+ c1/rust/src/lib.rs                                |    9 +
+ c1/tests/test_injection.py                        |   60 +-
+ c1/verify_evidence.py                             |   58 +
+ docs/C1_SIL_PREDICTIONS.md                        |   68 ++
+ reviews/M1/claude-round-1.md                      |   19 +
+ reviews/M1/evidence.json                          |  556 ++++++++++
+ reviews/M1/packet.md                              |   42 +
+ reviews/M2/round-1.md                             |   24 +
+ reviews/index.html                                |  655 ++++++++++-
+ tools/render_reviews.py                           |    8 +-
+ 30 files changed, 5980 insertions(+), 20 deletions(-)
+```
+
+- Phase C integrity: completed/success — https://github.com/Jeffaaay/insertion-vv/actions/runs/38346326523
+- Phase A SIL: completed/success — https://github.com/Jeffaaay/insertion-vv/actions/runs/38346326501
+- Phase B C32: completed/success — https://github.com/Jeffaaay/insertion-vv/actions/runs/38346326496
+
+See round notes for acceptance criteria, artifacts and limitations.
+</pre></details><details class="record"><summary>reply-integrity.json</summary><pre>{
+  &quot;conversation_url&quot;: &quot;https://claude.ai/chat/88a45c0b-4051-4fea-8c12-bdfa77bd4de1&quot;,
+  &quot;reviewed_commit&quot;: &quot;d0b86986c7677985ccae5d358b3a3c2ba7128672&quot;,
+  &quot;response_sha256&quot;: &quot;f3da7e7aca66a793b861c70419c9b1d6b4ef439c60cd6817160c9b025dcca429&quot;,
+  &quot;transport&quot;: &quot;browser Copy response, copied verbatim&quot;
+}
+</pre></details><details class="record" open><summary>response-actions.md</summary><pre># Response to M2 PASS review
+
+The full browser response is preserved in claude-round-1.md. Claude independently
+recomputed the public matrix hash, counts, IDs, identity references, calibration
+references, pairing and prediction rules. It could not access local 3.78 GB traces;
+their verification is local, not claimed as an independent reviewer verification.
+
+Accepted: add maximum RMS per severity to Figure 1, quantitative RMS/velocity
+margins, overlapping-curve annotations, derived-artifact hashes and public selected
+traces. Report P5 as a structural interface result; removing jitter/quantization/
+dropout does not change verdicts in this registered range. These are read-only
+analyses of the sealed matrix, not reruns or preregistration changes.
+
+Independently checked and corrected two proposed interpretations:
+- &quot;F2/F3/F8 differ from nominal by less than 2 nm&quot; is not correct over all registered
+  baseline rows. Maximum absolute differences in CONTACT RMS are respectively
+  2.5176579 / 8.2104241 / 3.3150814 nm. They are not instantaneous trajectory errors.
+  F8 maximum RMS is 1.125878688 µm. The plots/report use these actual values.
+- Early F7 clipping has steady depth bias and very small velocity error, consistent
+  with inadequate holding force. Late 5 s clipping can also cause large transient
+  velocity error. Do not call every F7 failure exclusively static. The ~85% ratio
+  of nominal peak contact force to peak command is only a HIL hypothesis, never an
+  interpolated flip point; the registered observed boundary remains 50%.
+
+P4 retains its exact preregistered numerical test. Its clearest material counterexample
+is F1 (13.318 µm at 5 s versus 4.763 µm at 2.4 s); F2/F3 timing differences are tiny.
+M2 is PASS; M3 uses unchanged retained data and implements these presentation fixes.
+</pre></details><details class="record" open><summary>round-1.md</summary><pre># M2 acceptance and evidence
+
+Acceptance: registered full matrix and ablations, C32 coverage accounting, five
+PNG-300dpi/SVG figures, sealed matrix SHA and generating commit. M1 feedback was
+implemented before this matrix: atomic run directories, validated F7 calibration,
+registered onset/seed rejection, all-severity/all-seed Python/Rust equivalence.
+Local acceptance: 13 tests passed; generating commit has all three hosted workflows
+green. Milestone commit CI and frozen-source evidence are recorded in packet.md.
+
+Outputs: artifacts/c1/{matrix.json,matrix.sha256,execution-manifest.json,summary.json,
+evidence-audit.json,figs/*}. Seal and result interpretation: docs/C1_SIL_PREDICTIONS.md.
+All 7,230 compressed evidence files were decompressed and their hashes/line counts
+verified. Identity checks: 1,106/1,106. Five figures were visually inspected.
+
+3,615 rows; 2,730 PASS, 789 FAIL, 96 INVALID. Repeat hashes match for every row;
+96 incomplete rows remain INVALID, not reproducible successes. All are expected
+C32 F6 ABI rejections. Valid pairs 1,686/1,782; 1,686 agree and none disagree.
+P1/P3/P4 unsupported; P2/P5 supported under unchanged registered operational rules.
+
+No Phase A/controller/firmware/verdict changes. All baseline files remain frozen.
+Large lossless traces stay local (3.78 GB compressed), while matrix and scientific
+figures are committed. M3 visualization source is drafted but its artifacts have
+not been generated and it has not run any simulation. External reply will be
+copied verbatim from the user-selected Claude conversation.
+</pre></details></section><section><h2>M3</h2><details class="pass" open><summary>claude-round-1.md</summary><pre># M3 审阅（Claude）
+
+**核验范围：** 我独立读了 `d0fd911` 的 `visualize.py`、`heatmap-template.html`、`verify_public.py` 和各份清单，并实际解码了视频、抽帧查看。
+
+**核验结果：全部一致。**
+- matrix 仍是 `cc833c35…98aa9`。
+- 8 条视频全部解码为 h264、1280×720、24 fps、192 帧、8.000 s，文件 SHA 与清单一致。
+- `derived-artifacts.json` 列出的 33 个文件，哈希全部吻合。
+- `selected-traces.zip` 里 9 个 run 的 18 份 trace/truth 解压后，SHA 与 matrix 逐条一致。
+- 我按注册规则独立重算了视频选档（取边界档，没有 FAIL 就取最强档 → 在该档选 RMS 最差的 onset → 平局取最小 seed），8/8 与清单一致。
+- 抽帧检查：F7（0.2 s 注入，4.0 s 处）画面显示针停在约 −0.405 mm，nominal 是 −0.525 mm，深度差约 120 µm，与 RMS 120.48 µm 吻合；F1 的误差曲线在 5.0–5.2 s 出现与冻结窗口对应的鼓包，标注清楚。
+
+你们两处更正我接受：F2/F3/F8 我只看了每个注入时刻的最大值，没有看全部 run 的绝对偏差，所以&quot;均 &lt;2 nm&quot;不准确；F7 在 5 s 注入时 |ė| 达到 1.6–3.5 mm/s，确实有瞬态，不应该统称为静态偏差。
+
+**没有阻塞问题，M3 通过。** 三处小问题：
+
+1. **视频选档里的 onset 平局规则没有注册过。** F7 50% 档在 200 ms 和 1500 ms 两个注入时刻的 RMS 完全相同（都是 120.48480974445947），实际选了 200 ms，等于用了&quot;取最早 onset&quot;规则，但注册文件只写了 seed 平局怎么处理。在清单和 `C1_SIL_PREDICTIONS.md` 里注明这是事后的展示规则，不影响任何 verdict。
+2. **`verify_public.py` 全部用 `assert` 做校验。** 在 `python -O` 下这些检查会被删掉，校验会静默通过。改成显式的 `if …: raise`。
+3. **视频底部时间轴的 &quot;8&quot; 和单位 &quot;s&quot; 重叠了**，纯外观问题。
+
+```json
+{&quot;verdict&quot;:&quot;PASS&quot;,&quot;issues&quot;:[
+{&quot;severity&quot;:&quot;minor&quot;,&quot;where&quot;:&quot;visualization-manifest.json; docs/C1_SIL_PREDICTIONS.md&quot;,&quot;what&quot;:&quot;F7 50% 档在 200/1500 ms 的 RMS 完全相同，实际按&#x27;最早 onset&#x27;选取；注明这是事后展示规则，不影响 verdict&quot;,&quot;touches_frozen_or_registered&quot;:false},
+{&quot;severity&quot;:&quot;minor&quot;,&quot;where&quot;:&quot;c1/verify_public.py&quot;,&quot;what&quot;:&quot;assert 在 python -O 下会被移除，改为显式 if/raise&quot;,&quot;touches_frozen_or_registered&quot;:false},
+{&quot;severity&quot;:&quot;minor&quot;,&quot;where&quot;:&quot;c1/visualize.py 视频误差曲线 x 轴&quot;,&quot;what&quot;:&quot;刻度 &#x27;8&#x27; 与单位 &#x27;s&#x27; 重叠&quot;,&quot;touches_frozen_or_registered&quot;:false}]}
+```
+</pre></details><details class="record"><summary>evidence.json</summary><pre>{
+  &quot;commit&quot;: &quot;d0fd911badbd7abf3bac4ffc47dac84701b885d0&quot;,
+  &quot;ci_green&quot;: true,
+  &quot;required_workflows&quot;: [
+    &quot;Phase A SIL&quot;,
+    &quot;Phase B C32&quot;,
+    &quot;Phase C integrity&quot;
+  ],
+  &quot;runs&quot;: [
+    {
+      &quot;conclusion&quot;: &quot;success&quot;,
+      &quot;databaseId&quot;: 38347971450,
+      &quot;headSha&quot;: &quot;d0fd911badbd7abf3bac4ffc47dac84701b885d0&quot;,
+      &quot;name&quot;: &quot;Phase A SIL&quot;,
+      &quot;status&quot;: &quot;completed&quot;,
+      &quot;url&quot;: &quot;https://github.com/Jeffaaay/insertion-vv/actions/runs/38347971450&quot;
+    },
+    {
+      &quot;conclusion&quot;: &quot;success&quot;,
+      &quot;databaseId&quot;: 38347971541,
+      &quot;headSha&quot;: &quot;d0fd911badbd7abf3bac4ffc47dac84701b885d0&quot;,
+      &quot;name&quot;: &quot;Phase C integrity&quot;,
+      &quot;status&quot;: &quot;completed&quot;,
+      &quot;url&quot;: &quot;https://github.com/Jeffaaay/insertion-vv/actions/runs/38347971541&quot;
+    },
+    {
+      &quot;conclusion&quot;: &quot;success&quot;,
+      &quot;databaseId&quot;: 38347971470,
+      &quot;headSha&quot;: &quot;d0fd911badbd7abf3bac4ffc47dac84701b885d0&quot;,
+      &quot;name&quot;: &quot;Phase B C32&quot;,
+      &quot;status&quot;: &quot;completed&quot;,
+      &quot;url&quot;: &quot;https://github.com/Jeffaaay/insertion-vv/actions/runs/38347971470&quot;
+    }
+  ],
+  &quot;frozen_checks&quot;: [
+    {
+      &quot;path&quot;: &quot;.gitattributes&quot;,
+      &quot;baseline_sha256&quot;: &quot;2b81c62ebf08a104d54ff5d051366d508cddf442c721ac3979add216e0777dae&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;.github/workflows/phase-a.yml&quot;,
+      &quot;baseline_sha256&quot;: &quot;50c8ace15d80e06482e2a9f3b243d3e73c754752dbd1089c15afd461c3b23fa4&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;.github/workflows/phase-b.yml&quot;,
+      &quot;baseline_sha256&quot;: &quot;2719cd0480ff87e62f41b6b2059b2f4cbd264bbb972ad173b161e65e0a688025&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;.gitignore&quot;,
+      &quot;baseline_sha256&quot;: &quot;9d7cf46e65385acf244acf6f00501bc7344884e9dd88be3a5a5d9931dc5b24a6&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;PROJECT_BRIEF.md&quot;,
+      &quot;baseline_sha256&quot;: &quot;f207a296e2897416abf6b86e4b2c59e2e577d78962c8b6ec5d347ec531600928&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;README.md&quot;,
+      &quot;baseline_sha256&quot;: &quot;13a5cf090d783d283a5b9c4ee7536e313d7ff4705c850cb8ef66850353d0666d&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;docs/HARDWARE_RUNBOOK.md&quot;,
+      &quot;baseline_sha256&quot;: &quot;39b2a5ca7c39d67c0a3b41b3a4c809e75fcf4af2daac8dd0902fcba2335fbbe2&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;docs/PHASE_A_SUMMARY.md&quot;,
+      &quot;baseline_sha256&quot;: &quot;df9cababb1eb4ece642268580299a34f3341efc465c19259ecea114bd1a0200c&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;docs/PHASE_B_HARDWARE_PLAN.md&quot;,
+      &quot;baseline_sha256&quot;: &quot;d441860404a63d06146f249f3b565576878c675db8c74dc26239363522f59ea0&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;docs/PHASE_B_PLAN.md&quot;,
+      &quot;baseline_sha256&quot;: &quot;601880144b62bbc48d8cdc5f22dd7793fc7c48958ecc8e73bee301f3d720aed2&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;docs/PROTOCOL.md&quot;,
+      &quot;baseline_sha256&quot;: &quot;4f8bdce14371a99b5df2326556d6963c66f3ed552f01d519f2f88411f1de52b8&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;docs/REPLICATION_NOTES.md&quot;,
+      &quot;baseline_sha256&quot;: &quot;271a1b1412913c8c8c686a6a5624691e76474aacc10327b63191ee0571856a31&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;docs/model-and-evaluation.md&quot;,
+      &quot;baseline_sha256&quot;: &quot;82c209213e5c20c01611b10c8fe1eccb74c730646896d1f6ded933348d2570ab&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;faults/README.md&quot;,
+      &quot;baseline_sha256&quot;: &quot;c2d36d39417201be7097dad46b00c3705e6cbe7c98d855e6a79f0c67aff491ed&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/README.md&quot;,
+      &quot;baseline_sha256&quot;: &quot;ba0e7ecc0212ad71077af1ad739e1f109a3dc669c170158239a6336d3562f117&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/ctrl/README.md&quot;,
+      &quot;baseline_sha256&quot;: &quot;8806e298f34a0901ac104766870e7836e97a65f407bbe40dcacb87d11088a381&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/ctrl/controller.c&quot;,
+      &quot;baseline_sha256&quot;: &quot;2f05b0fe65f763f9dec75a0d9bd366364b361b3d3710b61991d632b1f4347747&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/ctrl/controller.h&quot;,
+      &quot;baseline_sha256&quot;: &quot;f515f64ab8f5ff47030186f01e6b361aa6bce20a86f887ccba130f137b27551a&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/ctrl/test_controller.c&quot;,
+      &quot;baseline_sha256&quot;: &quot;e840fc879f60762249a46a76d5d98ce06c9fca365ca3d3dcfbb0876d9d2b2902&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/deps.lock.json&quot;,
+      &quot;baseline_sha256&quot;: &quot;073b61b0a9c1abdec0bfb7492d0a239d276b5cea7e75c472bbc89325197fd515&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/h723/README.md&quot;,
+      &quot;baseline_sha256&quot;: &quot;879a40328e0133304026c77a4ee54f0d569ed30e6997bb04dea47f9a810e37c6&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/h723/linker.ld&quot;,
+      &quot;baseline_sha256&quot;: &quot;984e7ca21a51fe1800eeb085e07ab2277c8d5288467c028bb2f2171e9e9ab46f&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/h723/main.c&quot;,
+      &quot;baseline_sha256&quot;: &quot;8276b8d7300211b81612ef0fa92424edde2ad5cfe5cbced46ae4475e969b6dcc&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/h723/stm32h7xx_hal_conf.h&quot;,
+      &quot;baseline_sha256&quot;: &quot;0c31d9983d9c0c6d95143cad71027613c0cf60369e79ac76f2cc118e9af8a1e2&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/protocol/protocol.c&quot;,
+      &quot;baseline_sha256&quot;: &quot;f2452d348038e2232339c1aaf21ccef84c4df205c8225d57d76cab9fbc460691&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/protocol/protocol.h&quot;,
+      &quot;baseline_sha256&quot;: &quot;43744dffae4d91fc790c9cbc20cf54dc2aad37577f43c1d2d77b852b76a9c045&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/protocol/replay.c&quot;,
+      &quot;baseline_sha256&quot;: &quot;977ff8a7ab99e74c8f52034d5f3351d363f91567fd78e17165c2d2aa5c98469f&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/protocol/replay.h&quot;,
+      &quot;baseline_sha256&quot;: &quot;f8f80c6a76c63395de3daaf921611520e7c2ecd118c22c3a6e3d66e5a2755d91&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/protocol/test_protocol.c&quot;,
+      &quot;baseline_sha256&quot;: &quot;9e25cae6dd8d74122a8ba0a3bd2307d01d1435b9be900b8d0fb2432a408c0758&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/protocol/test_replay.c&quot;,
+      &quot;baseline_sha256&quot;: &quot;8c118143e5371b08809aa391e5f5f0da2e98f5b511a5b84939c2d6091ef5f17c&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;firmware/virtual_board/main.c&quot;,
+      &quot;baseline_sha256&quot;: &quot;1d723680b90d527905282793196c876be5464152047e103643648f1e2621213c&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/Cargo.lock&quot;,
+      &quot;baseline_sha256&quot;: &quot;459e0da14a8d9ff21fda33997492d4d4e25f51c7d6716b3a76ee5ca2a202f0a4&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/Cargo.toml&quot;,
+      &quot;baseline_sha256&quot;: &quot;cf12f5c1a0a4272c296fbbc4615e467fe672ba26be4a7e9a2c10ee5e40c77985&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/README.md&quot;,
+      &quot;baseline_sha256&quot;: &quot;e811fc208da9e039d9534b650d18651cc999543db53768660654afd3f5b2f331&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/__init__.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;26efd0f091ee48ee49431b4b82b98fb40272e47d3989222b587d888f9f18b1b7&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/build.rs&quot;,
+      &quot;baseline_sha256&quot;: &quot;404843d036a34a0a73969ef291fab7d8f5c23b21991d27687b283627d758ea6d&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/c32.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;5e4a8699e10ad11c02e5af9009e22703ac6ad59ff31ffc52d0a397432451c525&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/ci.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;4520c14e8d68ec6f3612f0635828edf3ff73ae75aa7c677554427963ea9508f2&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/compare.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;daf8b43ec3d320960c9a15ac5db96b0abfb1aa9940c92a023da1cce289f775d9&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/contract.json&quot;,
+      &quot;baseline_sha256&quot;: &quot;a9488e7cbbfea5ccb22ab4054cfb7e7a445cdf0fdf281d9f14272a3ed473d789&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/hardware.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;bfc4546954e136b8d509cca9efd773f4a682ac6e961281dae6ea713aa1f88347&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/plant_server.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;5a146af06716a167200700d964b9f122e1d2de0dfc3f19741cbd7019eab1a56c&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/replay_report.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;fcf831914ba195c4bfe5b2452e179518c600ca1a28ef47e61b8c00a969cd2a7b&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/run.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;445f79dacf0944db958330bd0b27884881ee2e094426c116ba55c9ce8ba1dcff&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/rust-toolchain.toml&quot;,
+      &quot;baseline_sha256&quot;: &quot;2ad6f15416572b4836585087f1d4abc53b8fa2dbd616f8dacfaa587ed6714228&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/rust_run.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;48cb25499283cac6dcba5ea7e06658b45455a6cd0e6a8f7f9406f99a3a079f8c&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/src/bin/board-link.rs&quot;,
+      &quot;baseline_sha256&quot;: &quot;bdfbcfec9988b34a0a40a89597031e358d756bd54f914ca441d48ccfa53bc040&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/src/ffi.rs&quot;,
+      &quot;baseline_sha256&quot;: &quot;5157559ce0adf8a02ce3eadee83b4d2917c4bc318cbb750b072a760dfe34cd59&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/src/lib.rs&quot;,
+      &quot;baseline_sha256&quot;: &quot;2cdad5269d929deddd7e9b5f4254d2decdfcee42fccc883fbb0b08728ea4ae7a&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/src/main.rs&quot;,
+      &quot;baseline_sha256&quot;: &quot;d8f8cfea21833288148ca3352dc4f4b4a8eea18f80243477746433dc0d3e0aff&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/src/plant.rs&quot;,
+      &quot;baseline_sha256&quot;: &quot;f0d87ee7070ccb9b12b8613a62e7c54d9ea6b88407ebb075ba8aa95b5903b6bb&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/src/protocol.rs&quot;,
+      &quot;baseline_sha256&quot;: &quot;b45da9971d64c69f4d7d5455ae45dbef30eae381dcfdda90f442ed94df244422&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/src/replay.rs&quot;,
+      &quot;baseline_sha256&quot;: &quot;2962e453057f3de60d98c0f88bb44b0b1cb27fbc6c1b8262f56c59c7e9a9d913&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/src/runner.rs&quot;,
+      &quot;baseline_sha256&quot;: &quot;6c6b8239cc7270ef14c81ab9fe472cf7b93599385df21a57f0340fe1b254628d&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/src/serial.rs&quot;,
+      &quot;baseline_sha256&quot;: &quot;4e48ea2d8aa425c4307724289bc6dd802f15c04fc2928cfe99854cde825b9924&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/src/types.rs&quot;,
+      &quot;baseline_sha256&quot;: &quot;44b03c6720b76ef11ef7da77ffb86ba84cbdc5aa0bff0877a96790fee156eece&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/tests/data/protocol_v1.json&quot;,
+      &quot;baseline_sha256&quot;: &quot;02d0b3c8855567183386de471bb20b798d191ef0afb14aab809bb2e5519ad5df&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/tests/test_boundaries.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;dfa36f18a4ddb5fc1ba408139ee6b97458712281a46ef1d29149fa92f143c13c&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/tests/test_c32.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;49871e254df7b71b7c25a9d9ef0947ab5303ea22ecfee4a99f5af7713e9dc81e&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/tests/test_hardware_evidence.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;0bee30e00daf62c1705e0fe661036e18527660331859ae23d84a2eb622f2a16b&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/tests/test_virtual_board.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;92f0038d3329bdedc836ff69782901ec1dac9782460f27ac2e99bddda96be20d&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;harness/virtual_board.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;59d5e55b0ee6644632d5b22fecb19094c784c9a6dbb60922af74609173ebebf2&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;pyproject.toml&quot;,
+      &quot;baseline_sha256&quot;: &quot;cab3cd4c4a68ec0cb790901988ba20de55cbda86ecd632ada155a23ef581c62b&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;requirements-lock.txt&quot;,
+      &quot;baseline_sha256&quot;: &quot;713bc031c33c42271a06011de11e5ad0b2cce3c151aa7910adcfb7a0908a4a52&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;requirements.txt&quot;,
+      &quot;baseline_sha256&quot;: &quot;34a148f661f86e48ed4bd8f2728eccd7a797f8a8963f6b360f6834b1e130a2da&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/__init__.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;c4b8da5b7a024762dbf8576c36ae66ff4c8c9534145a0c23fb0b653873f514e7&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/calibrate.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;88ec327e4cc396751ad55e0ce610a380c412763c6251995dc58e0ccc718994ab&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/ci.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;23d4ea7c539ab9942f2f43bcc6ae9fb34d9044894ac0c6e7990b94457e1cf916&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/config.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;219257fd7d9493eff853d350f8f98a7df5b776d4a2fa152eb744fc78c5b1f101&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/contracts.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;53ade152339618d9a607beef24a1d3fed629b4dd3350263e2f6f7bfb77a50df0&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/controllers.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;0f13a809ea89ab2ce7bc983956b665e6700aaceb618b58b12554ac0f9f87903d&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/metrics.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;f1ed1288abe8405301dbca546fc725fc64d4205a3ddf7f0075df78a138d5be03&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/plant.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;f45d4be3cb9e57150002e2d3253965d3e162b0190c5b5cf34f8c1abd9248e50b&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/plant.xml&quot;,
+      &quot;baseline_sha256&quot;: &quot;aef8a51e84742568b0db6271e3ca946dcd345db3f4d426a60a906a75db587fe0&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/platform_info.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;26450befc3930ce073a7f09e2250e8e866d3a99ef8b9edc90d43a0788bc66dd4&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/preview.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;4ffe5dc81eb5819f4dbf83c1512d9a5802e02cd44eafed8c5c664d263fe7484a&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/reference.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;3cfa6f47ec0faf9c63aa0aa8f793211a4fcac8e0be6c77091b817acd8ae25edf&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/reproduction_contract.json&quot;,
+      &quot;baseline_sha256&quot;: &quot;356f8efa4aa283eba18828b5bf2f2954df8ed332a8746fde60c6251a395e6edf&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/run.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;7e73c7c8bb7cf53ab1d57d6e65369b6faae872b3427dbc877309a79b8a749d75&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/sensors.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;cd89f8957f98c699cc10f9e8c7a3d96039ead8e1f1ea5fcb39e43b1e46de5b08&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;sim/verdict_contract.json&quot;,
+      &quot;baseline_sha256&quot;: &quot;7e917fbac313de750d5ac6de086e6cba97ad9d1876d29b0aada6f6ceb10b8009&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tests/test_compare_traces.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;b39565eec5cfe19296ee5198be1e51323369fb8b83c3306cff91e3ce47a9fa5b&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tests/test_delayed_feedback.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;734e37178718a5069866018173d03636445b4dabee592898e66a56aed79c418f&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tests/test_determinism.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;c347637e3a629944b039382317390f1ec7ed8bcc26e0284aeb2efe233100b71b&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tests/test_isolation.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;26fb86cab2b61e4a6e2c6db0d6769aaff6e73d6baa8615360dbff64a95a62b22&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tests/test_offsetfree.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;e8618e1a178940bed173906903f1c15cb23b77215523af1c7066cea8aeb97cde&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tests/test_plant.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;0bf27572f0a93cf08014af94624ca561246650ee6f086c1df55bb4a3d4f4b202&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tests/test_platform_info.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;a98fc00d4917d456631678faf222c422f3915d3bfdb6d257c7adeaf0f4e4105a&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tests/test_preview.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;0595a2aadacc7ee85b04d2ded1847a03a13375f260d17449e2b1da5d012fc191&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tests/test_reproduction.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;1859bd6a7a36956f109d1a95d9d884e7e29abec4951cae7984c476ada075a534&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tests/test_run.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;f8383073a52690e07d6c751ac67db180ab027762e80cc7d42c54bacf84802327&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tests/test_sensors.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;ec23dc40bccb957f97fd117ab1129375d6cd067fc555f57f3cd905e101351133&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tests/test_verdict.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;4175cf6cbd2416b73372f6ff376f8207b6cea95de91d539324eff791ab26aaa3&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tools/README.md&quot;,
+      &quot;baseline_sha256&quot;: &quot;b07e36efa76a1d90b1ea95bac8f3359f43348e93f0a613fe3b057b4764be0ca5&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tools/_run_artifact.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;60c848b2f8e5c42b37152038e36e3d556b9ab3bd462673e8f94301d5e2d4ab52&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tools/board.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;60343f6b0c3046641388d5f722d02e43b93445e6d37af49f37d0666083df726d&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tools/build_controller.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;02048b59ff478603e22b6ba9f52366b32cc7820fdef33cbdcfbe086bd841cb47&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tools/build_firmware.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;202b52b944331d9eeb13c3e9bda55b2b0e757ef1d8a91fc2c9ac8cca267142f4&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tools/compare_traces.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;0f8ba5c8cf8454fc5cc44545ded4e3b153ee210e74a6235051f21bc515b3894b&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tools/plot_run.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;a99bd6f6fd9c0204cc8e46ebab85838efd94b4587033a19ffda7d33434d54cdf&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tools/plot_timing.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;f9cf7f5287f4f2b0fc6ed3dcf1abd564315fb18e317170bcb37b2ff0cb564b24&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tools/render_video.py&quot;,
+      &quot;baseline_sha256&quot;: &quot;8470099987177a94464879d8277735a815c81665799ffb39fa80daa5e4d36a29&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;tools/requirements-viz.txt&quot;,
+      &quot;baseline_sha256&quot;: &quot;69fbf8c8cd3fa9d50da8f002f5c351bb8f7691e0c2a05df21bc041e7f41aaf74&quot;,
+      &quot;unchanged&quot;: true
+    },
+    {
+      &quot;path&quot;: &quot;docs/FINDINGS.md&quot;,
+      &quot;historical_prefix_unchanged&quot;: true
+    }
+  ]
+}
+</pre></details><details class="record" open><summary>packet.md</summary><pre># M3 review packet
+
+Implementation commit: `d0fd911badbd7abf3bac4ffc47dac84701b885d0`
+
+Exact-commit hosted CI green: True
+
+Frozen checks: 104 PASS
+
+```text
+ .github/workflows/phase-c.yml                     |   1 +
+ artifacts/c1/derived-artifacts.json               | 152 +++++
+ artifacts/c1/figs/fig1_fault_severity_heatmap.png | Bin 318398 -&gt; 410412 bytes
+ artifacts/c1/figs/fig1_fault_severity_heatmap.svg | 281 +++++----
+ artifacts/c1/figs/fig2_rms_vs_inject_time.png     | Bin 230577 -&gt; 273649 bytes
+ artifacts/c1/figs/fig2_rms_vs_inject_time.svg     | 235 +++----
+ artifacts/c1/figs/fig3_ablation_flips.svg         | 114 ++--
+ artifacts/c1/figs/fig4_controllers_vs_faults.svg  |  96 +--
+ artifacts/c1/figs/fig5_hil_only.svg               |   2 +-
+ artifacts/c1/heatmap.html                         |  23 +
+ artifacts/c1/selected-traces.zip                  | Bin 0 -&gt; 9493167 bytes
+ artifacts/c1/summary.json                         | 118 +++-
+ artifacts/c1/videos/F1-preview.png                | Bin 0 -&gt; 54597 bytes
+ artifacts/c1/videos/F1.mp4                        | Bin 0 -&gt; 425085 bytes
+ artifacts/c1/videos/F2-preview.png                | Bin 0 -&gt; 53341 bytes
+ artifacts/c1/videos/F2.mp4                        | Bin 0 -&gt; 396381 bytes
+ artifacts/c1/videos/F3-preview.png                | Bin 0 -&gt; 52145 bytes
+ artifacts/c1/videos/F3.mp4                        | Bin 0 -&gt; 395939 bytes
+ artifacts/c1/videos/F4-preview.png                | Bin 0 -&gt; 55101 bytes
+ artifacts/c1/videos/F4.mp4                        | Bin 0 -&gt; 449238 bytes
+ artifacts/c1/videos/F5-preview.png                | Bin 0 -&gt; 53291 bytes
+ artifacts/c1/videos/F5.mp4                        | Bin 0 -&gt; 488885 bytes
+ artifacts/c1/videos/F6-preview.png                | Bin 0 -&gt; 57432 bytes
+ artifacts/c1/videos/F6.mp4                        | Bin 0 -&gt; 411880 bytes
+ artifacts/c1/videos/F7-preview.png                | Bin 0 -&gt; 54243 bytes
+ artifacts/c1/videos/F7.mp4                        | Bin 0 -&gt; 423462 bytes
+ artifacts/c1/videos/F8-preview.png                | Bin 0 -&gt; 54091 bytes
+ artifacts/c1/videos/F8.mp4                        | Bin 0 -&gt; 403318 bytes
+ artifacts/c1/visualization-manifest.json          | 115 ++++
+ c1/README.md                                      |  25 +
+ c1/analyze.py                                     |  64 +-
+ c1/heatmap-template.html                          |  23 +
+ c1/seal_derived.py                                |  84 +++
+ c1/verify_public.py                               |  39 ++
+ c1/visualize.py                                   | 268 ++++++++
+ docs/C1_SIL_PREDICTIONS.md                        |  23 +
+ reviews/G/reply-integrity.json                    |   9 +
+ reviews/M0/reply-integrity.json                   |   9 +
+ reviews/M1/reply-integrity.json                   |   8 +
+ reviews/M2/claude-round-1.md                      |  44 ++
+ reviews/M2/evidence.json                          | 556 ++++++++++++++++
+ reviews/M2/packet.md                              |  47 ++
+ reviews/M2/reply-integrity.json                   |   6 +
+ reviews/M2/response-actions.md                    |  27 +
+ reviews/M3/round-1.md                             |  27 +
+ reviews/index.html                                | 735 +++++++++++++++++++++-
+ 46 files changed, 2784 insertions(+), 347 deletions(-)
+```
+
+- Phase A SIL: completed/success — https://github.com/Jeffaaay/insertion-vv/actions/runs/38347971450
+- Phase C integrity: completed/success — https://github.com/Jeffaaay/insertion-vv/actions/runs/38347971541
+- Phase B C32: completed/success — https://github.com/Jeffaaay/insertion-vv/actions/runs/38347971470
+
+See round notes for acceptance criteria, artifacts and limitations.
+</pre></details><details class="record"><summary>reply-integrity.json</summary><pre>{
+  &quot;conversation_url&quot;: &quot;https://claude.ai/chat/88a45c0b-4051-4fea-8c12-bdfa77bd4de1&quot;,
+  &quot;reviewed_commit&quot;: &quot;d0fd911badbd7abf3bac4ffc47dac84701b885d0&quot;,
+  &quot;response_sha256&quot;: &quot;1a85f603c93336111eff80934e6d17b8f2a3c50c26ab960d1b944a5b4861795d&quot;,
+  &quot;transport&quot;: &quot;browser Copy response, copied verbatim&quot;
+}
+</pre></details><details class="record" open><summary>response-actions.md</summary><pre># M3 PASS follow-up
+
+Claude independently decoded all videos, checked all 33 public file hashes,
+decompressed the 9-run subset, reproduced all video selections and inspected frames.
+The full reply is copied verbatim in claude-round-1.md.
+
+All three minor issues are addressed with the final report commit:
+1. Earliest-onset choice after equal RMS and equal lowest seed is explicitly a
+   post-hoc display convention, not a preregistration amendment. F7 50% is tied at
+   200/1500 ms and shows 200 ms. No case or verdict is removed or changed.
+2. Public checks and matrix-seal loading now use explicit exceptions, including
+   under python -O. A tampered copied artifact is rejected in optimized mode.
+3. Move the video x-axis unit right of the last tick; re-render from original traces.
+
+An interim M3 CI run caught formatting in the new public verifier; it was fixed
+before the reviewed d0fd911 commit, whose three workflows all passed. Public text
+artifacts were canonicalized to LF to keep local and Git bytes identical. No old
+source, tolerance, prediction or sealed matrix bytes changed.
+</pre></details><details class="record" open><summary>round-1.md</summary><pre># M3 trace-only visualization acceptance
+
+M2 external result: PASS. Its full reply and independent corrections are archived
+under reviews/M2. Presentation feedback was applied without any simulation rerun.
+Matrix SHA remains cc833c35864f0f8cfa4d67671bf605a129c2b18a5f59710be41ee11e2eb98aa9.
+
+- Eight videos F1–F8: 8 s, 192 frames, 24 fps, 1280x720; all decoded and checked.
+  Three panels: nominal, faulty, difference times 100 on an explicitly separate
+  labeled axis; lower plot is time-dependent error with normal/fault legend and
+  contact-window shading. Schematics use measured traces, not a new plant render.
+  Selected IDs match the preregistered pooled boundary/strongest-level policy.
+- Offline heatmap: 37 preview-baseline severity cells, pooled verdict separate from
+  representative verdict and run ID. All three curves update on click; full/contact
+  window selection tested in Chrome. No JavaScript console errors observed.
+  Display decimation is labeled; metrics remain full-rate.
+- Five figures now show maximum RMS per cell, overlapping-curve explanation and
+  pre-existing nominal failures. No-delay interpretation and exact nanometre-scale
+  RMS differences are documented. RMS/velocity margins and C32 metric differences
+  were derived from the sealed matrix.
+- Public selected-traces.zip contains 9 original runs (video cases + shared nominal).
+  Complete 3.78 GB evidence archive stays in local deliverables. Every derived file
+  is hashed in derived-artifacts.json, including render-source normalized-LF hashes.
+
+Visual QA: inspected all video preview frames in a contact sheet, figure layouts,
+heatmap grid and updated three-curve detail view (F7=50%, then contact window).
+Source compile/lint passed. Final CI/frozen checks are in packet.md/evidence.json.
+No HIL claim; F6 hardware semantics, F9 CRC and F10 drift remain unverified.
+</pre></details></section><section><h2>M4</h2><details class="record"><summary>local-checks.json</summary><pre>{
+  &quot;optimized_valid_package&quot;: &quot;PASS&quot;,
+  &quot;optimized_corrupt_copy_rejected&quot;: &quot;PASS&quot;,
+  &quot;corrupted_file&quot;: &quot;figs/fig1_fault_severity_heatmap.png&quot;,
+  &quot;original_sealed_files_changed&quot;: false,
+  &quot;browser_media&quot;: &quot;8 videos, duration 8, readyState 4, 1280x720, no media errors&quot;
+}
+</pre></details><details class="record" open><summary>round-1.md</summary><pre># M4 report and blog acceptance
+
+Artifacts: docs/PHASE_C_SIL_SUMMARY.md; artifacts/c1/report.html (one-page print
+layout), blog.html (short Chinese blog), index.html (all deliverables). Append-only
+findings #5–#9 preserve the original #1–#4 exactly. M3 minor review issues are fixed.
+
+The report lists unsupported P1/P3/P4 first, then supported P2/P5 with the structural
+no-delay caveat. All eight sampled boundaries, independent RMS/velocity extrema and
+margins, mechanism ablations, valid-pair C32 agreement/differences, 96 invalid F6
+pairs and the HIL-only list are present. F7 steady bias versus late transients is
+explicit. No hardware, universal precision or interpolated-threshold claim is made.
+
+Visual QA: report table/content fit within one A4 page of content, no horizontal
+overflow; blog and hub inspected in Chrome. All eight videos decode in the browser
+at 8 s / 1280x720 with no media errors. Heatmap interactions tested in M3.
+Public artifact/source checks run in normal and optimized Python; a corrupted
+copied figure is rejected in optimized mode. Local archive and Git blob hashes
+are checked separately. Full-matrix seal remains unchanged.
+
+The current milestone commit and exact hosted CI are in packet.md/evidence.json.
+External final review will be copied back verbatim. The deliverable needs no release
+tag; no tag or hardware action is being taken as part of this software completion.
+</pre></details></section></html>

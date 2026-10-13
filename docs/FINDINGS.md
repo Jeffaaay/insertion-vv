@@ -173,3 +173,62 @@ bound**: the port also changes QR arithmetic order and libm calls, and different
 inputs/conditioning/compilers can change accumulated rounding. A later hardware
 gap above 0.02 µm cannot, by itself, rule out precision. Phase C must compare the
 same inputs and build against this measured reference and the preregistered budget.
+
+
+## Finding #5 — Registered sensor disruptions can pass with very different margins
+
+Local Windows Phase C preview baseline keeps PASS for F1 through 120 frozen ticks,
+F2 through 50% probabilistic loss, F3 through sigma=10 ms, F4 down to 25 Hz, F6
+through 50 skipped Python calls, and F8 down to 10 bits. This contradicts registered
+P1/P3 and does not imply that the faults have no effect. F1 reaches 13.3184649 µm
+contact RMS, leaving 6.6815351 µm to the strict 20 µm limit. Its maximum is at 5 s
+injection, versus 4.7631422 µm at 2.4 s, a material counterexample to P4. F2/F3 timing
+maxima are formally at 5 s but nearly flat. Maximum absolute changes in contact RMS
+from nominal across F2/F3/F8 are 2.5177/8.2104/3.3151 nm. These are metric changes,
+not instantaneous position bounds or evidence of universal fault tolerance.
+
+## Finding #6 — Frequency mismatch fails at the mildest registered drift
+
+With the predictor frozen at its original frequencies, phase-continuous actual
+cardiac drift from 1.2 to 1.3 Hz already produces FAIL (52.6838745 µm contact RMS).
+All larger registered drift targets also FAIL, supporting P2. The experiment
+identifies the first tested failing drift, not a continuous physical threshold:
+there is no preceding tested drift level that passes. The nominal run passes.
+This is evidence within the specified periodic plant and scoring window, pending
+comparison with hardware using the same registered inputs and unchanged controller.
+
+## Finding #7 — A structurally supported ablation prediction has limited information
+
+No-delay produces 280 PASS-to-FAIL flips and no reverse flips versus matched preview
+baseline. Its 297 runs, including nominal, all FAIL. The original estimator checks
+sample_time+15 ms <= current_time; zero-age frames violate that interface contract.
+Thus P5 is supported under its exact counting rule, but cannot establish that delay
+modeling is necessary or that lower physical latency is harmful. Removing injected
+jitter, quantization or dropout changes no verdict in this registered range, where
+their baseline cases already PASS. No-noise is an intentional identity because the
+registered nominal noise is zero. All 1,106 expected trace/truth identities pass.
+
+## Finding #8 — C32 agreement has a measured F6 coverage gap
+
+Among 1,782 Python/C32 pairs, 1,686 valid pairs agree and none disagree. All other
+96 pairs are attempted C32 F6 cases rejected by the frozen ABI on nonconsecutive
+tick numbers; they remain INVALID with partial traces, never relabeled as task FAIL.
+C32 F6 has 0/96 valid coverage. Firmware ISR lateness with successive tick numbering
+is a different mechanism and needs HIL measurement. Maximum valid-pair contact RMS
+absolute difference is 0.0022464752 µm; maximum relative difference is 0.0733611%
+(in a different case). These statistics do not extend the older nominal position
+comparison into a universal precision bound. Both full-matrix controllers use the
+Python injector; Rust has independent byte-level injector checks, not a closed-loop
+hardware or Rust-matrix result.
+
+## Finding #9 — Clipping can leave a quiet but large insertion-depth error
+
+F7 at 50% nominal peak first FAILS after a passing 100% level. For early onsets
+(0.2/1.5/2.4 s), 50/25/10% clipping yields contact RMS about 120/210/264 µm while peak
+absolute error velocity is only 0.0090917 mm/s. The retained trajectories show a
+persistent depth bias, consistent with inadequate static holding force. Late 5 s
+clipping also causes transients, so not every F7 failure is exclusively static.
+Nominal peak contact force is 4.853382 mN versus peak applied command 5.744376 mN
+(about 84.5%). This suggests a holding-force question for HIL; it is not a tested
+85% boundary or justification to interpolate the registered 100/50/25/10% grid.
+All Phase C findings refer to matrix cc833c35864f0f8cfa4d67671bf605a129c2b18a5f59710be41ee11e2eb98aa9.

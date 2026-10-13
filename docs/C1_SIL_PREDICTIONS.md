@@ -69,6 +69,12 @@ M3 must verify this seal and use retained traces without new simulation runs.
 
 ## Post-review presentation and derived-evidence seal
 
+Post-hoc display convention only: when maximum RMS and the lowest seed are both
+tied, choose the earliest onset for the displayed video/representative curve.
+F7=50% has identical maximum RMS at 200 and 1500 ms; 200 ms is shown. This onset
+tie-break was not preregistered, changes no verdict/prediction, and is not added to
+the prospective registration. It is also recorded in visualization-manifest.json.
+
 Matrix bytes are unchanged. Analysis was introduced at `d0b86986c7677985ccae5d358b3a3c2ba7128672`; margin annotations were added at `ca5e99a8721c8eb721d0b321c64db99c1d7b1c07`. Final render source files (including later label/legend polish) are pinned by normalized-LF SHA-256 in `artifacts/c1/derived-artifacts.json`. The manifest records every figure, summary, video, HTML and public trace subset. It contains no self-hash.
 
 Full portable evidence archive SHA-256: `950046966e5a014df08d60c6eb5a9bc62110fd4c606280c0a819e76e9cf97e8f` (3,788,172,075 bytes). It contains all 3,615 trace/truth/metrics triplets. `selected-traces.zip` publicly includes the eight video runs plus their shared nominal reference (9 runs).
@@ -76,15 +82,15 @@ Full portable evidence archive SHA-256: `950046966e5a014df08d60c6eb5a9bc62110fd4
 | Derived artifact | SHA-256 |
 |---|---|
 | `figs/fig1_fault_severity_heatmap.png` | `92e2173c020bfe6a911c27f5349c8a8646c167a18094719e22e0a9387ba31a40` |
-| `figs/fig1_fault_severity_heatmap.svg` | `187cf7b223ed96ec528f49f35a8deb2ed5c6ff20cb071bef35f7fa6ed2947eb7` |
+| `figs/fig1_fault_severity_heatmap.svg` | `81e2b9f3ba81a9205cd9649ce7cd618c564141669566663f0923e2279139f976` |
 | `figs/fig2_rms_vs_inject_time.png` | `4361c727d45ea8150d201fb7cf95d3c265bfeb338c29ff9832f47d034e496dc8` |
-| `figs/fig2_rms_vs_inject_time.svg` | `d533a96ff8e57ccad3425a3bfa4ad34f8177d3c2afc5a755ca228759de3323a2` |
+| `figs/fig2_rms_vs_inject_time.svg` | `11d605b103c796af601ac1347306ed6b1d614ba8bdb3d12486f009cf343ea68b` |
 | `figs/fig3_ablation_flips.png` | `e80b684f84379f4d8b15e570bf933f508451a78e33aaa6fa9c62c28fde1cf23c` |
-| `figs/fig3_ablation_flips.svg` | `03e45a0443fc951de9bc787a790a376e33d7e97bd4f8d9a9e2c6fbe9e801f6f2` |
+| `figs/fig3_ablation_flips.svg` | `b9241ad344123e39ccaaa76e9400614e89ad2956db3bef898af00b82c46caab8` |
 | `figs/fig4_controllers_vs_faults.png` | `c8184c9e4be77f61e7c3d1ddcb04b09db33abc781a72c22c6451c8f8c9e5ce10` |
-| `figs/fig4_controllers_vs_faults.svg` | `9902b4f3036fee4869ca6162b4f14546bf8e7251b7b6e8c6b27083a040450f7c` |
+| `figs/fig4_controllers_vs_faults.svg` | `f074e5d0635cec1aac741ed4bbd27987c6f98e5af120e5a163fa22640c0c9223` |
 | `figs/fig5_hil_only.png` | `f063605b8a0e19c71dc47de5f5a54ffd938b13ee5c429eee03f29533085cb510` |
-| `figs/fig5_hil_only.svg` | `dc86eb6353398a9ad4409b2eec28da00d524e6ab5f89207487948e0a52c981d6` |
+| `figs/fig5_hil_only.svg` | `b881a61b4ad57516f639b98ccc44100bff1febc39055bae8258a3ade3907e80d` |
 | `selected-traces.zip` | `8ba5d81c618037113a51480bed930558bae084ca5f857c0e4321c4d0683ea1ae` |
 | `summary.json` | `a3b506fc31800dc1ab40019aa890c515d4111d4fcf548cae919665c4dd1bbcca` |
 

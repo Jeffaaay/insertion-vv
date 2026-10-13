@@ -1,0 +1,7 @@
+{
+  "optimized_valid_package": "PASS",
+  "optimized_corrupt_copy_rejected": "PASS",
+  "corrupted_file": "figs/fig1_fault_severity_heatmap.png",
+  "original_sealed_files_changed": false,
+  "browser_media": "8 videos, duration 8, readyState 4, 1280x720, no media errors"
+}

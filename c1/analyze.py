@@ -29,7 +29,8 @@ def specs():
 def load_sealed(root):
     data = (root / "matrix.json").read_bytes()
     digest = hashlib.sha256(data).hexdigest()
-    assert digest == (root / "matrix.sha256").read_text().split()[0], "matrix seal mismatch"
+    if digest != (root / "matrix.sha256").read_text().split()[0]:
+        raise ValueError("matrix seal mismatch")
     return json.loads(data), digest
 
 

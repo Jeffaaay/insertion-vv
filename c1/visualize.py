@@ -153,7 +153,7 @@ def videos(matrix, summary, root):
             d.text((ex(t) - 4, 639), str(t), font=small, fill="#525e62")
         for val in (emin, (emin + emax) / 2, emax):
             d.text((10, ey(val) - 8), f"{val:.1f}", font=small, fill="#525e62")
-        d.text((1165, 640), "s", font=small, fill="#525e62")
+        d.text((1200, 640), "s", font=small, fill="#525e62")
         d.text(
             (40, 680),
             "Schematic from sealed measured traces • Windows SIL • "
@@ -248,6 +248,11 @@ def main():
     record = {
         "matrix_sha256": digest,
         "simulations_executed": 0,
+        "posthoc_display_tie_break": (
+            "After equal maximum RMS and equal lowest seed, select earliest onset. "
+            "Display-only convention, not preregistered; no verdict or prediction changes. "
+            "F7 50% has exact RMS ties at 200 and 1500 ms; 200 ms is displayed."
+        ),
         "heatmap_cells": cells,
         "videos": video_records,
         "display_sampling": {"heatmap_ms": 10, "video_curve_ms": 8, "metrics_ms": 1},

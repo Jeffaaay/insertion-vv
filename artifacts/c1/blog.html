@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>五个预测，三个被实验推翻</title>
+<style>*{box-sizing:border-box}body{margin:0;background:#f3f3eb;color:#273c40;font:17px/1.95 'Microsoft YaHei',sans-serif}article{max-width:780px;margin:60px auto;padding:0 28px}.eyebrow{font:12px/1.5 Arial;letter-spacing:2px;color:#638178}h1{font-size:38px;line-height:1.3;letter-spacing:-1px;margin:22px 0 16px}.dek{font-size:20px;color:#607471;margin-bottom:35px}p{margin:24px 0}.number{color:#176d60;font-weight:700}blockquote{margin:34px 0;padding:12px 24px;border-left:3px solid #478b78;font-size:22px;line-height:1.65}footer{font-size:13px;border-top:1px solid #cad5cd;margin-top:36px;padding-top:20px;color:#5f726e}a{color:#226d69}img{width:100%;background:white;border-radius:8px}@media(max-width:600px){article{margin:30px auto}h1{font-size:30px}body{font-size:16px}}</style>
+<article><div class="eyebrow">FIELD NOTES / ROBOTICS VERIFICATION / PHASE C SIL</div>
+<h1>五个预测，三个被实验推翻</h1>
+<div class="dek">一次故障注入实验，最有用的产物是让原来的猜测接受检验。</div>
+<p>在针与运动组织相互作用的仿真中，preview 控制器的标称接触 RMS 约为 <span class="number">1.12 µm</span>。接下来想知道的是：传感器变慢、连续缺帧、心率漂移，或者执行器出不了足够的力时，它还会不会通过原来的判定？</p>
+<p>我们先固定故障定义、档位、时刻、随机种子和五条预测，随后保持控制器与判定阈值不变，完成了 <span class="number">3,615 个场景</span>，每个都执行两次。结果是 2,730 PASS、789 FAIL、96 INVALID；全部重复轨迹哈希一致。96 个 INVALID 是 C32 接口拒绝跳号 tick 的明确覆盖缺口，不能混进有效配对的一致率。</p>
+<blockquote>预期中的脆弱处没有越线，模型失配和力的限制却很快暴露了问题。</blockquote>
+<p>25 Hz 采样、60 或 120 tick 的冻结仍然 PASS，推翻了两条预测。“2.4 秒注入最差”也不成立：冻结在 5 秒发生时，接触 RMS 达到 13.32 µm，比 2.4 秒时的 4.76 µm 大得多。PASS 依然成立，但距离 20 µm 阈值的余量已经明显缩小。</p>
+<p>心率从 1.2 Hz 漂移到最轻的测试档位 1.3 Hz，就出现 FAIL；力指令限幅到标称峰值的 50% 也失败了。早期限幅留下稳定的深度偏差，说明只看运动是否“平稳”会漏掉问题。这些是离散档位中的观察，不能插值成精确的物理失效边界。</p>
+<p>还有一条预测虽然形式上成立，解释却需要克制：no-delay 确实产生最多的 280 次翻转，但零延迟标称场景本身就违反了冻结估计器的帧龄检查，已经 FAIL。它无法证明“低延迟有害”。审阅也帮助我们修正了一个过度简化的数字：F2、F3、F8 相对标称的接触 RMS 最大绝对变化分别是 2.52、8.21、3.32 nm，而非全部低于 2 nm。</p>
+<p>软件阶段留下了五张图、八段轨迹视频、可点选的热图和完整的校验证据。下一次有硬件时，应优先对照冻结、心率漂移、限幅和真实 deadline miss；CRC 与板子—PC 时钟漂移仍是 HIL-only。有效的 1,686 对 Python/C32 场景判定一致，给出了明确的软件基线，也留下了边界清楚的待验证问题。</p>
+<img src="figs/fig1_fault_severity_heatmap.png" alt="八类故障的注册档位、判定与最大接触 RMS；F5 和 F7 出现 FAIL">
+<footer>本篇只讨论当前注册范围内的本地 Windows SIL 结果。矩阵 SHA-256：cc833c35864f0f8cfa4d67671bf605a129c2b18a5f59710be41ee11e2eb98aa9。<br><a href="report.html">一页报告</a> · <a href="heatmap.html">交互热图</a> · <a href="index.html">全部交付物</a></footer></article></html>

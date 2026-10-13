@@ -1,6 +1,7 @@
 {
   "matrix_sha256": "cc833c35864f0f8cfa4d67671bf605a129c2b18a5f59710be41ee11e2eb98aa9",
   "simulations_executed": 0,
+  "posthoc_display_tie_break": "After equal maximum RMS and equal lowest seed, select earliest onset. Display-only convention, not preregistered; no verdict or prediction changes. F7 50% has exact RMS ties at 200 and 1500 ms; 200 ms is displayed.",
   "heatmap_cells": 37,
   "videos": [
     {
@@ -12,7 +13,7 @@
       "frames": 192,
       "fps": 24,
       "duration_s": 8,
-      "file_sha256": "2b67213cb79c9be096a441d89518c0cab8525bb282e2886c8df216dec56759f6",
+      "file_sha256": "76276fdcce3c6ecbe656183ffc14c5ead9e91926ba1a88911f4711715518fbe4",
       "decoded_verification": "192 frames / 24 fps / 1280x720 / 8 seconds"
     },
     {
@@ -24,7 +25,7 @@
       "frames": 192,
       "fps": 24,
       "duration_s": 8,
-      "file_sha256": "fb7abb153b4c6a6953c119227043c8643ed80d9502a780bc17a60f92a8218206",
+      "file_sha256": "000b26626c632c2489a1dfed18afa9cfc3146b2aaf7cbcb63a78a4a72a37fb97",
       "decoded_verification": "192 frames / 24 fps / 1280x720 / 8 seconds"
     },
     {
@@ -36,7 +37,7 @@
       "frames": 192,
       "fps": 24,
       "duration_s": 8,
-      "file_sha256": "52596b617332a2a3a331f729bc0426147bf926dc698404c6863483ac50ba8ab4",
+      "file_sha256": "bd42cfe09183945399445d3a03afff238c7da8112c70f315889c948028087066",
       "decoded_verification": "192 frames / 24 fps / 1280x720 / 8 seconds"
     },
     {
@@ -48,7 +49,7 @@
       "frames": 192,
       "fps": 24,
       "duration_s": 8,
-      "file_sha256": "d3f88e4d842e70c58727f1fc89cefcc5489c15a0b61a361a74303756df4e838a",
+      "file_sha256": "af5a80d3043424bb803db75ecf7c7d0c197ea6bca02fd5851273011cf86d3801",
       "decoded_verification": "192 frames / 24 fps / 1280x720 / 8 seconds"
     },
     {
@@ -60,7 +61,7 @@
       "frames": 192,
       "fps": 24,
       "duration_s": 8,
-      "file_sha256": "5730b94cb03e9859cb5b499d79e39d418fc157e52207ca4b3a9dc41c72e25ca8",
+      "file_sha256": "833a240458ca534d76d9ac344e2354169eaae3acc14b561064537e996788a901",
       "decoded_verification": "192 frames / 24 fps / 1280x720 / 8 seconds"
     },
     {
@@ -72,7 +73,7 @@
       "frames": 192,
       "fps": 24,
       "duration_s": 8,
-      "file_sha256": "52137fb1298d77030a702e2d2971ae22bb2e0b90b9c338113c0fb4e6e0c4f58a",
+      "file_sha256": "f0d8487f8a1fa60fefd330a108d03cd2fa4b62588698a45e1994e24045988078",
       "decoded_verification": "192 frames / 24 fps / 1280x720 / 8 seconds"
     },
     {
@@ -84,7 +85,7 @@
       "frames": 192,
       "fps": 24,
       "duration_s": 8,
-      "file_sha256": "6beecbd615ed243537ea17cb8b1a29229360c3d5c40de06653a1274734c957f7",
+      "file_sha256": "11b06db6a04cc31055e82e2244864dcfb5e1cae3115ffc044df25bdc4d84c993",
       "decoded_verification": "192 frames / 24 fps / 1280x720 / 8 seconds"
     },
     {
@@ -96,7 +97,7 @@
       "frames": 192,
       "fps": 24,
       "duration_s": 8,
-      "file_sha256": "56250f8fce27448d3488f6f1e9208e4d566ec07065eda4708d58535fd63a458b",
+      "file_sha256": "ae8e0811b1e22e40a31911a5bfc768ae7275fe4cb96cf6dac33f8ac467cd8104",
       "decoded_verification": "192 frames / 24 fps / 1280x720 / 8 seconds"
     }
   ],
@@ -111,5 +112,5 @@
     "imageio": "2.37.0",
     "imageio-ffmpeg": "0.6.0"
   },
-  "visualize_source_sha256_lf": "00f6cd07b5973f486d81ce10aba7575219422449fec64315dbac542e3ec9ea0f"
+  "visualize_source_sha256_lf": "591bf7aae4e7ae190e0ada3fa16e21a34fcd660c437dbb1be8cdbde7e81248ac"
 }

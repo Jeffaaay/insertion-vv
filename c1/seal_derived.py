@@ -44,6 +44,16 @@ def main():
         Path("c1") / name
         for name in ("analyze.py", "visualize.py", "heatmap-template.html", "seal_derived.py")
     ]
+    sources += [
+        p
+        for p in (
+            Path("c1/build_report.py"),
+            Path("c1/hub-template.html"),
+            Path("docs/PHASE_C_SIL_SUMMARY.md"),
+            Path("docs/FINDINGS.md"),
+        )
+        if p.is_file()
+    ]
     manifest = {
         "matrix_sha256": digest,
         "analysis_introduced_commit": "d0b86986c7677985ccae5d358b3a3c2ba7128672",
