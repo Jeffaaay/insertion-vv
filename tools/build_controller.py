@@ -73,6 +73,71 @@ def build(output, cc=None, arm_cc=None):
     report["controller_source_sha256"] = hashlib.sha256(
         (CTRL / "controller.c").read_bytes() + b"\0" + (CTRL / "controller.h").read_bytes()
     ).hexdigest()
+    identity = {
+        "git_commit": subprocess.check_output(
+            ["git", "rev-parse", "HEAD"], cwd=ROOT, text=True
+        ).strip(),
+        "controller_source_sha256": report["controller_source_sha256"],
+    }
+    (output / "build_identity.h").write_text(
+        '#define VV_BUILD_GIT "' + identity["git_commit"] + '"\n'
+        '#define VV_CONTROLLER_SOURCE_SHA256 "' + identity["controller_source_sha256"] + '"\n',
+        encoding="ascii",
+    )
+    protocol = ROOT / "firmware/protocol/protocol.c"
+    protocol_test = output / ("protocol_test.exe" if os.name == "nt" else "protocol_test")
+    subprocess.run(
+        [
+            cc,
+            *FLAGS,
+            str(CTRL / "controller.c"),
+            str(protocol),
+            str(protocol.with_name("test_protocol.c")),
+            "-o",
+            str(protocol_test),
+            "-lm",
+        ],
+        check=True,
+    )
+    golden = json.loads((ROOT / "harness/tests/data/protocol_v1.json").read_text())
+    subprocess.run(
+        [str(protocol_test), *(row["frame_hex"] for row in golden["frames"])], check=True
+    )
+    virtual = output / ("virtual_board.exe" if os.name == "nt" else "virtual_board")
+    virtual_flags = FLAGS + ([] if os.name == "nt" else ["-fPIC"])
+    subprocess.run(
+        [
+            cc,
+            *virtual_flags,
+            "-I",
+            str(output),
+            str(CTRL / "controller.c"),
+            str(protocol),
+            str(ROOT / "firmware/virtual_board/main.c"),
+            "-o",
+            str(virtual),
+            "-lm",
+            *(["-lws2_32"] if os.name == "nt" else []),
+        ],
+        check=True,
+    )
+    report["virtual"] = {
+        **identity,
+        "executable": virtual.name,
+        "sha256": digest(virtual),
+        "compiler": compiler,
+        "flags": virtual_flags,
+        "numerical_build_sha256": report["numerical_build_sha256"],
+        "sources": {
+            p.relative_to(ROOT).as_posix(): digest(p)
+            for p in (
+                protocol,
+                protocol.with_name("protocol.h"),
+                ROOT / "firmware/virtual_board/main.c",
+            )
+        },
+        "protocol_tests": "PASS",
+    }
     if arm_cc:
         obj = output / "controller-cortex-m7.o"
         subprocess.run(
@@ -84,6 +149,12 @@ def build(output, cc=None, arm_cc=None):
             "flags": FLAGS + ARM_FLAGS,
             "object_sha256": digest(obj),
         }
+        protocol_obj = output / "protocol-cortex-m7.o"
+        subprocess.run(
+            [arm_cc, *FLAGS, *ARM_FLAGS, "-c", str(protocol), "-o", str(protocol_obj)],
+            check=True,
+        )
+        report["arm"]["protocol_object_sha256"] = digest(protocol_obj)
     (output / "build.json").write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
     return report
 

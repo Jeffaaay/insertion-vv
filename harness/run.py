@@ -30,6 +30,9 @@ def phase_b_source_hash():
         REPO / "harness/build.rs",
     ]
     paths += sorted((REPO / "harness/src").glob("*.rs"))
+    paths += sorted((REPO / "firmware/protocol").glob("*.c"))
+    paths += sorted((REPO / "firmware/protocol").glob("*.h"))
+    paths += [REPO / "firmware/virtual_board/main.c"]
     return sha256(
         source_hash().encode()
         + b"".join(

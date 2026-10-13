@@ -71,6 +71,10 @@ jobs:
         run: python -m harness.compare artifacts/linux/primary/rust_ffi artifacts/windows/primary/rust_ffi --output artifacts/comparison/rust-primary.json
       - name: Compare Rust FFI diagnostic across platforms
         run: python -m harness.compare artifacts/linux/paper_effective/rust_ffi artifacts/windows/paper_effective/rust_ffi --output artifacts/comparison/rust-paper_effective.json
+      - name: Compare virtual-board primary across platforms
+        run: python -m harness.compare artifacts/linux/primary/rust_virtual artifacts/windows/primary/rust_virtual --output artifacts/comparison/virtual-primary.json
+      - name: Compare virtual-board diagnostic across platforms
+        run: python -m harness.compare artifacts/linux/paper_effective/rust_virtual artifacts/windows/paper_effective/rust_virtual --output artifacts/comparison/virtual-paper_effective.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:

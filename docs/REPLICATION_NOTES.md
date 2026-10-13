@@ -821,7 +821,7 @@ Local trace SHA-256: primary
 `b867cb2ac0af7ab4ebde29fecc8df2f293aeaf334143481891f40d3038018e87`.
 These are local provenance, not replacements for canonical Linux numbers.
 Evidence: `artifacts/b1-rust-local/ci_report.json` and
-`artifacts/b1-rust-phase-a/ci_summary.json` (plus individual metrics/traces).
+`artifacts/b1-rust-phase-a/ci_report.json` (plus individual metrics/traces).
 
 Rust compiler/target/executable hash and C numerical-build hash are explicit.
 Local Windows Rust uses gnullvm with llvm-mingw; hosted Windows uses MSVC Rust.
@@ -831,3 +831,38 @@ or oversized packets, incorrect sessions/ticks, nonfinite commands, timeouts,
 missing FINISH acknowledgements and malformed metric/sample metadata. Failed
 transport yields INVALID with partial evidence. The serial backend is not yet
 hardware-validated; protocol loopback unit tests do not measure UART timing.
+
+B1.4 commit `0b89210` is confirmed by green [Phase B CI 38326025235](https://github.com/Jeffaaay/insertion-vv/actions/runs/38326025235)
+and [Phase A CI 38326025255](https://github.com/Jeffaaay/insertion-vv/actions/runs/38326025255).
+Downloaded Linux/Windows C32 artifacts retain B1.2 trace/truth bytes exactly,
+and Rust FFI equals ctypes on both hosts. All sixteen historical Phase A
+comparisons pass, with the old three-controller hashes exact. Canonical Linux C32
+metrics and both `d10c9a26…` / `47126e3b…` trace hashes are unchanged.
+
+## B1.5 C virtual board through the framed transport
+
+A portable C codec/session handler is shared by the loopback board and the next
+STM32 build. The host C process uses the same controller source, compiler, strict
+arithmetic flags and libm as the C32 adapter; compiler/flags/source identity and
+executable digest are recorded. IEEE binary32 wire values use memcpy/bit encoding,
+never decimal formatting. The handler requires HELLO/RESET, exact ticks/session,
+complete input fields, and a successful 8000-tick FINISH acknowledgement.
+
+The first complete local run (`artifacts/b1-virtual-local/ci_report.json`) passes:
+both profiles and repeats are byte-identical to Rust FFI and ctypes. Contact RMS
+remains 1.121992453479 / 7.349675690702 µm, PASS/PASS. Raw transport records retain
+actual request/reply bytes and host timestamps. Virtual entry/computation cycles
+are explicitly zero; loopback does not stand in for UART or board timing.
+
+C tests consume the same independently generated protocol fixtures as Rust and
+reject every single-bit corruption and truncation. Two live-process tests reject
+bad CRC and duplicate ticks; Python tests total 22, Rust tests remain 10. Arm GNU
+caught a signed-promotion warning in CRC shifting; explicit uint32 shifts resolve
+it without changing the CRC or controller arithmetic. The codec and controller
+both cross-compile for Cortex-M7 under the existing warnings-as-errors flags.
+
+The final local rerun after that CRC fix is
+`artifacts/b1-virtual-verified/ci_report.json`: all ctypes/FFI/TCP trace and truth
+bytes still match B1.2 for both profiles. Rust checks and the ARM core/protocol
+compile pass; `artifacts/b1-virtual-phase-a/ci_report.json` confirms the separate
+170-test Phase A job and eight experiments. Hosted confirmation follows this commit.

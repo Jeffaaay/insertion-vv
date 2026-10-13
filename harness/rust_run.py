@@ -5,6 +5,7 @@ import csv
 import json
 import subprocess
 import sys
+from contextlib import ExitStack
 from pathlib import Path
 
 from sim.config import Config
@@ -12,13 +13,14 @@ from sim.run import REPO, Execution, sha256
 
 from .c32 import ControllerC32
 from .run import publish
+from .virtual_board import launch
 
 
-def capture_rust(cfg, executable, build, raw_directory):
+def capture_rust(cfg, executable, build, raw_directory, backend="ffi"):
     command = [
         str(Path(executable).resolve()),
         "--backend",
-        "ffi",
+        "tcp" if backend == "virtual" else backend,
         "--python",
         sys.executable,
         "--build",
@@ -32,20 +34,37 @@ def capture_rust(cfg, executable, build, raw_directory):
     # Individual pipe requests have bounded deadlines; this is a final process
     # guard. A timeout remains INVALID and cannot publish a completed metrics run.
     try:
-        result = subprocess.run(command, cwd=REPO, capture_output=True, timeout=180)
+        with ExitStack() as stack:
+            if backend == "virtual":
+                address, virtual_metadata = stack.enter_context(
+                    launch(build, raw_directory.with_name(raw_directory.name + "_board"))
+                )
+                command.extend(["--address", address])
+            result = subprocess.run(command, cwd=REPO, capture_output=True, timeout=180)
+            (raw_directory / "stdout.log").write_bytes(result.stdout)
+            (raw_directory / "stderr.log").write_bytes(result.stderr)
+            if result.returncode:
+                raise ValueError(f"Rust run INVALID; see {raw_directory}")
     except subprocess.TimeoutExpired as exc:
         (raw_directory / "failure.json").write_text(
             json.dumps({"status": "INVALID", "error": "Rust process timeout"}) + "\n"
         )
         raise ValueError("Rust process timeout; partial evidence retained") from exc
-    (raw_directory / "stdout.log").write_bytes(result.stdout)
-    (raw_directory / "stderr.log").write_bytes(result.stderr)
-    if result.returncode:
+    except (ValueError, OSError) as exc:
         (raw_directory / "failure.json").write_text(
-            json.dumps({"status": "INVALID", "exit_code": result.returncode}) + "\n"
+            json.dumps({"status": "INVALID", "error": str(exc)}) + "\n"
         )
-        raise ValueError(f"Rust run INVALID; see {raw_directory}")
+        raise
     completion = json.loads((raw_directory / "completion.json").read_text())
+    if backend == "virtual":
+        if (
+            completion["controller"]["info"]["controller_source_sha256"]
+            != virtual_metadata["controller_source_sha256"]
+        ):
+            raise ValueError("virtual-board source identity mismatch")
+        if completion["controller"]["info"]["git_commit"] != virtual_metadata["git_commit"]:
+            raise ValueError("virtual-board commit identity mismatch")
+        completion["virtual_build"] = virtual_metadata
     if completion["status"] != "COMPLETE" or completion["completed_ticks"] != 8000:
         raise ValueError("incomplete Rust run")
     trace = (raw_directory / "trace.jsonl").read_bytes()
@@ -63,7 +82,9 @@ def capture_rust(cfg, executable, build, raw_directory):
     return Execution(trace, truth, rows, wall, 8000, True, False, None), completion
 
 
-def run(cfg, output, build, executable):
+def run(cfg, output, build, executable, backend="ffi"):
+    if backend not in ("ffi", "virtual"):
+        raise ValueError("unsupported repeatable host backend")
     if cfg != Config(controller="preview", contact_profile=cfg.contact_profile):
         raise ValueError("Rust runs require nominal seed-42 configuration")
     output = Path(output).resolve()
@@ -71,24 +92,33 @@ def run(cfg, output, build, executable):
         raise ValueError("output directory must be empty")
     raw = output.with_name(output.name + "_raw")
     raw.mkdir(parents=True, exist_ok=False)
-    first, first_report = capture_rust(cfg, executable, build, raw / "first")
-    second, second_report = capture_rust(cfg, executable, build, raw / "repeat")
+    first, first_report = capture_rust(cfg, executable, build, raw / "first", backend)
+    second, second_report = capture_rust(cfg, executable, build, raw / "repeat", backend)
     controller = ControllerC32(build)
     if (
-        any(
+        backend == "ffi"
+        and any(
             report["controller"]["controller_build"] != controller.build
             for report in (first_report, second_report)
         )
-        or first_report["runtime"] != second_report["runtime"]
-    ):
+    ) or first_report["runtime"] != second_report["runtime"]:
         raise ValueError("Rust/ctypes C build or repeat Rust executable mismatch")
+    if backend == "virtual" and any(
+        report["virtual_build"] != controller.build["virtual"]
+        for report in (first_report, second_report)
+    ):
+        raise ValueError("virtual-board build changed between repetitions")
     return publish(
         cfg,
         output,
         first,
         second,
         controller,
-        runtime_provenance={"backend": "rust-ffi", "runtime": first_report["runtime"]},
+        runtime_provenance={
+            "backend": "rust-" + backend,
+            "runtime": first_report["runtime"],
+            "virtual_build": first_report.get("virtual_build"),
+        },
         wall_scope=first_report["wall_time_scope"],
     )
 
@@ -98,6 +128,7 @@ if __name__ == "__main__":
     parser.add_argument("--build", type=Path, required=True)
     parser.add_argument("--executable", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--backend", choices=("ffi", "virtual"), default="ffi")
     parser.add_argument(
         "--contact-profile", choices=("primary", "paper_effective"), default="primary"
     )
@@ -109,6 +140,7 @@ if __name__ == "__main__":
                 args.output,
                 args.build,
                 args.executable,
+                args.backend,
             ),
             indent=2,
         )

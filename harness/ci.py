@@ -56,6 +56,20 @@ def main():
             report["status"] = "FAIL"
         if comparison["status"] != "PASS":
             report["status"] = "FAIL"
+        virtual = run_rust(
+            cfg,
+            root / profile / "rust_virtual",
+            root / "controller-build",
+            executable,
+            backend="virtual",
+        )
+        virtual_comparison = compare(root / profile / "rust_ffi", root / profile / "rust_virtual")
+        report["profiles"][profile].update(virtual=virtual, virtual_comparison=virtual_comparison)
+        if (
+            virtual_comparison["comparison"] != "same-build-bitwise"
+            or virtual_comparison["status"] != "PASS"
+        ):
+            report["status"] = "FAIL"
     (root / "ci_report.json").write_text(
         json.dumps(report, indent=2, allow_nan=False) + "\n", encoding="utf-8"
     )

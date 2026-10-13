@@ -27,8 +27,10 @@ The float32 choice is experimental; H723 has a double-precision FPU too. The
 Rust `Plant`/`Controller` traits separate simulation/evaluation from control.
 `PlantPython` invokes `harness.plant_server`, which uses the unchanged MuJoCo plant
 and evaluator. `ControllerInProcessC` and `ControllerSerial` consume only Sensors.
-The serial backend is implemented at this checkpoint; C virtual-board and actual
-USART validation are subsequent checkpoints, not claimed by the FFI results.
+The C virtual board exercises the serial client's frame codec over loopback TCP.
+It compiles the identical C core with the same arithmetic flags and host libm,
+reports zero board timing/identity, and must match ctypes/FFI trace/truth exactly.
+Actual USART validation remains a subsequent checkpoint.
 
 Run a single backend from the repository root (Windows executable adds `.exe`):
 
@@ -37,7 +39,7 @@ harness/target/release/insertion-harness --backend ffi --python /path/to/python 
 ```
 
 `--backend serial --port COM5` uses the registered 460800 8N1 protocol;
-`--backend tcp --address 127.0.0.1:46081` uses identical frames for the future C
+`--backend tcp --address 127.0.0.1:46081` uses identical frames for the C
 virtual board. Both require the same `--build` source identity and HELLO/RESET/
 FINISH acknowledgements. No automatic port selection, retry or flashing occurs.
 Partial artifacts and `completion.json` are retained as INVALID on failure.
@@ -46,3 +48,10 @@ Rust is pinned to 1.99.0, edition 2024; Cargo.lock pins all transitive packages.
 Local Windows uses the gnullvm target with installed llvm-mingw; CI Windows uses
 the runner's MSVC Rust target. Both load that host's exact ctypes C library.
 Compiler/target/executable digest and the C numerical-build digest are recorded.
+
+`harness.ci` also runs `rust_virtual` twice per profile. The managed C process binds
+only 127.0.0.1 at an ephemeral port and exits after the required FINISH handshake.
+For a standalone repeated virtual run, use `python -m harness.rust_run` with
+`--backend virtual --executable ... --build ... --output ... --contact-profile ...`.
+Raw TX/RX bytes, host monotonic timestamps, completion metadata and partial-failure
+evidence are retained beside published runs. They do not enter trace SHA-256.
