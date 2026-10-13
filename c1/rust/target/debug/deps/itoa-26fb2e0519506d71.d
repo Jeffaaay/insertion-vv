@@ -1,0 +1,6 @@
+C:\Users\jian\Documents\Codex\2026-10-12\chat-cloud-chat-chat-goal-blog\work\insertion-vv\c1\rust\target\debug\deps\itoa-26fb2e0519506d71.d: C:\Users\jian\Documents\Codex\2026-10-12\read-project-brief-md-fully-do\work\cargo\registry\src\index.crates.io-1949cf8c6b5b557f\itoa-1.0.18\src\lib.rs C:\Users\jian\Documents\Codex\2026-10-12\read-project-brief-md-fully-do\work\cargo\registry\src\index.crates.io-1949cf8c6b5b557f\itoa-1.0.18\src\u128_ext.rs
+
+C:\Users\jian\Documents\Codex\2026-10-12\chat-cloud-chat-chat-goal-blog\work\insertion-vv\c1\rust\target\debug\deps\libitoa-26fb2e0519506d71.rmeta: C:\Users\jian\Documents\Codex\2026-10-12\read-project-brief-md-fully-do\work\cargo\registry\src\index.crates.io-1949cf8c6b5b557f\itoa-1.0.18\src\lib.rs C:\Users\jian\Documents\Codex\2026-10-12\read-project-brief-md-fully-do\work\cargo\registry\src\index.crates.io-1949cf8c6b5b557f\itoa-1.0.18\src\u128_ext.rs
+
+C:\Users\jian\Documents\Codex\2026-10-12\read-project-brief-md-fully-do\work\cargo\registry\src\index.crates.io-1949cf8c6b5b557f\itoa-1.0.18\src\lib.rs:
+C:\Users\jian\Documents\Codex\2026-10-12\read-project-brief-md-fully-do\work\cargo\registry\src\index.crates.io-1949cf8c6b5b557f\itoa-1.0.18\src\u128_ext.rs:

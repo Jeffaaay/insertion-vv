@@ -35,8 +35,12 @@ class FaultInjector:
             raise ValueError("unregistered ablation")
         if self.fault != "none":
             spec = definitions()[self.fault]
+            if self.onset not in spec["onsets_ms"] or case["seed"] not in spec["seeds"]:
+                raise ValueError("unregistered onset or seed")
             if self.level not in spec["levels"]:
                 raise ValueError("unregistered fault severity")
+        if cfg.seed != case["seed"]:
+            raise ValueError("config/scenario seed mismatch")
         self.tables = tables or json.loads((ROOT / "faults/random-v1.json").read_text())
         self.rng = np.random.Generator(np.random.PCG64(cfg.seed))
         self.pending = deque()

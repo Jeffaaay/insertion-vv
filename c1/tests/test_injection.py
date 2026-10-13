@@ -1,3 +1,4 @@
+import itertools
 import json
 import os
 import struct
@@ -9,7 +10,7 @@ import pytest
 
 from c1.faults import ROOT, FaultInjector, definitions
 from c1.plant import drifting_target
-from c1.runner import execute, scenario
+from c1.runner import execute, measured_run, scenario
 from sim.config import Config, tissue_target
 from sim.run import simulate
 from sim.sensors import SensorModel
@@ -23,12 +24,48 @@ def test_f1_single_tick_and_window_boundaries():
     assert observed[216] == (201000, 201, 201.0, True)
 
 
+@pytest.mark.parametrize(
+    "case",
+    [
+        scenario(fault="F5", level=1.8, onset_ms=200),
+        scenario(fault="F2", level=50, onset_ms=200, seed=47),
+    ],
+)
+def test_unregistered_schedule_rejected(case):
+    with pytest.raises(ValueError, match="unregistered onset or seed"):
+        FaultInjector(Config(seed=case["seed"]), case)
+
+
+def test_invalid_nominal_and_interrupted_storage(tmp_path, monkeypatch, legacy_preview):
+    import c1.runner as runner
+
+    case = scenario(fault="F7", level=50, onset_ms=200)
+    wrong = {"scenario": scenario(controller="lab_frame_pd"), "verdict": {"status": "PASS"}}
+    with pytest.raises(ValueError, match="F7 nominal"):
+        measured_run(case, tmp_path, nominal=wrong)
+    monkeypatch.setattr(runner, "execute", lambda *args: (legacy_preview, 1.0))
+    compress = runner.gzip.compress
+
+    def interruption(*args, **kwargs):
+        raise OSError("simulated interrupted write")
+
+    monkeypatch.setattr(runner.gzip, "compress", interruption)
+    with pytest.raises(OSError, match="interrupted write"):
+        measured_run(scenario(), tmp_path)
+    assert not (tmp_path / "runs" / runner.run_id(scenario())).exists()
+    monkeypatch.setattr(runner.gzip, "compress", compress)
+    result = measured_run(scenario(), tmp_path)
+    assert result == measured_run(scenario(), tmp_path)
+
+
 def test_f4_matches_legacy_sampling_except_sequence():
-    f = FaultInjector(Config(), scenario(fault="F4", level=25, onset_ms=0))
+    f = FaultInjector(Config(), scenario(fault="F4", level=25, onset_ms=200))
     old = SensorModel(replace(Config(), surface_sample_hz=25))
-    for tick in range(160):
+    for tick in range(400):
         a = f.read(tick, 0.0, 0.0, tick * 1e-6)
         b = old.read(tick, 0.0, 0.0, tick * 1e-6)
+        if tick < 215:
+            continue
         assert (a.surface_z_m, a.surface_sample_time_us, a.surface_fresh) == (
             b.surface_z_m,
             b.surface_sample_time_us,
@@ -37,11 +74,11 @@ def test_f4_matches_legacy_sampling_except_sequence():
 
 
 def test_quantizer_is_not_an_identity_and_saturates():
-    f = FaultInjector(Config(), scenario(fault="F8", level=10, onset_ms=0, ablation="no-delay"))
-    assert f.capture(0, 0.01)[2] == 511 * (0.002 / 1024)
-    assert f.capture(1, -0.01)[2] == -0.001
+    f = FaultInjector(Config(), scenario(fault="F8", level=10, onset_ms=200, ablation="no-delay"))
+    assert f.capture(200, 0.01)[2] == 511 * (0.002 / 1024)
+    assert f.capture(201, -0.01)[2] == -0.001
     lsb = 0.002 / 1024
-    assert f.capture(2, 2.5 * lsb)[2] == 2 * lsb
+    assert f.capture(202, 2.5 * lsb)[2] == 2 * lsb
 
 
 def test_f6_skip_window_and_f7_clip():
@@ -128,10 +165,13 @@ def test_python_rust_binary_equivalence(tmp_path, legacy_preview):
     drift, _ = execute(scenario(fault="F5", level=1.8, onset_ms=2000))
     drift_samples = [r["tissue_z_m"] for r in drift.rows]
     for fault, spec in definitions().items():
-        for ablation in ("baseline", "no-delay"):
+        for level, seed, ablation in itertools.product(
+            spec["levels"], spec["seeds"], ("baseline", "no-delay")
+        ):
             case = scenario(
                 fault=fault,
-                level=spec["levels"][-1],
+                level=level,
+                seed=seed,
                 onset_ms=2000 if fault == "F5" else 200,
                 ablation=ablation,
             )
@@ -148,7 +188,7 @@ def test_python_rust_binary_equivalence(tmp_path, legacy_preview):
             subprocess.run(
                 [binary, str(ROOT), str(case_path), str(input_path), str(output_path)], check=True
             )
-            f = FaultInjector(Config(), case)
+            f = FaultInjector(Config(seed=seed), case)
             expected = bytearray()
             for i, value in enumerate(values):
                 sampled, seq, val, fresh = f.capture(i, value)

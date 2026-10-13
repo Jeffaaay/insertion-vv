@@ -29,6 +29,15 @@ impl FaultInjector {
             let spec: Value =
                 serde_json::from_slice(&fs::read(root.join(format!("faults/{fault}.yaml")))?)?;
             require(
+                spec["onsets_ms"]
+                    .as_array()
+                    .is_some_and(|a| a.contains(&case["onset_ms"]))
+                    && spec["seeds"]
+                        .as_array()
+                        .is_some_and(|a| a.contains(&case["seed"])),
+                "unregistered onset or seed",
+            )?;
+            require(
                 spec["levels"]
                     .as_array()
                     .is_some_and(|a| a.iter().any(|v| v.as_f64() == Some(level))),

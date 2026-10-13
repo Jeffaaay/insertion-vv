@@ -3,6 +3,7 @@
 import gzip
 import json
 import time
+import uuid
 from dataclasses import asdict, replace
 from pathlib import Path
 
@@ -144,6 +145,14 @@ def measured_run(case, output, build=None, nominal=None, provenance=None):
     start = time.monotonic()
     identity = run_id(case)
     directory = Path(output) / "runs" / identity
+    if case["fault"] == "F7":
+        expected = scenario(controller=case["controller"], ablation=case["ablation"])
+        if (
+            nominal is None
+            or nominal["scenario"] != expected
+            or nominal["verdict"]["status"] == "INVALID"
+        ):
+            raise ValueError("F7 nominal must be valid same-controller/ablation seed-42 no-fault")
     if directory.exists():
         row = json.loads((directory / "metrics.json").read_text(encoding="utf-8"))
         if row["scenario"] != case or row["provenance"] != provenance:
@@ -199,8 +208,11 @@ def measured_run(case, output, build=None, nominal=None, provenance=None):
         "trace_path": f"runs/{identity}/trace.jsonl.gz",
         "truth_path": f"runs/{identity}/truth.jsonl.gz",
     }
-    directory.mkdir(parents=True)
+    temporary = Path(output) / "pending" / (identity + "-" + uuid.uuid4().hex)
+    temporary.mkdir(parents=True)
     for stem, data in (("trace", first.trace), ("truth", first.truth_trace)):
-        (directory / f"{stem}.jsonl.gz").write_bytes(gzip.compress(data, compresslevel=6, mtime=0))
-    (directory / "metrics.json").write_bytes(canonical(row))
+        (temporary / f"{stem}.jsonl.gz").write_bytes(gzip.compress(data, compresslevel=6, mtime=0))
+    (temporary / "metrics.json").write_bytes(canonical(row))
+    directory.parent.mkdir(parents=True, exist_ok=True)
+    temporary.rename(directory)
     return row
