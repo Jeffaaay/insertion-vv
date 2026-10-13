@@ -866,3 +866,44 @@ The final local rerun after that CRC fix is
 bytes still match B1.2 for both profiles. Rust checks and the ARM core/protocol
 compile pass; `artifacts/b1-virtual-phase-a/ci_report.json` confirms the separate
 170-test Phase A job and eight experiments. Hosted confirmation follows this commit.
+
+B1.5 commit `b4d9992` passes [Phase B CI 38326652708](https://github.com/Jeffaaay/insertion-vv/actions/runs/38326652708)
+and [Phase A CI 38326652700](https://github.com/Jeffaaay/insertion-vv/actions/runs/38326652700).
+Both hosted backends and all cross-C32 comparisons pass. Sixteen historical Phase A
+comparisons pass again; old three-controller trace/truth hashes remain unchanged.
+
+## B1.6 H723 complete image, build-only
+
+The H723 image links the unchanged controller and virtual-board protocol handler
+with checksum-pinned ST CMSIS/HAL and Arm CMSIS sources. It configures ST-LINK VCP
+(USART3 PD8/PD9, 460800 8N1), circular RX DMA in noncached D2 SRAM, DWT compute
+cycles and a TIM6 1 kHz heartbeat. The chosen clock is ST's Nucleo example's
+520 MHz, not an assumed 550 MHz. Replay remains unsupported until B2; no timed
+control loop or board run is claimed from this compile-only checkpoint.
+
+The first verified local build (`artifacts/b1-firmware-verified/build.json`) has:
+
+| Allocation | Bytes |
+|---|---:|
+| Flash image incl. initialization and padding | 28960 |
+| AXI complete replay inputs | 256000 |
+| DTCM telemetry | 104000 |
+| Reserved DTCM stack | 16384 |
+| DTCM gap before stack | 9728 |
+| D2 DMA RX buffer | 512 |
+
+The linker asserts exact replay reservations and prevents stack/data overlap.
+Build checks also validate boot vectors, hard-float ABI and real IRQ handlers;
+stack-usage reports are retained but are not runtime high-water measurements.
+Instruction cache is enabled, data cache disabled, FPSCR=0. Complete provenance,
+clock assumptions and the limitation of DWT timestamps while the CPU sleeps are
+documented in [the H723 build notes](../firmware/h723/README.md). No board was
+detected, flashed or measured in these B1 builds.
+
+Final local workflow commands pass: Phase A 170 tests/eight experiments, Phase B
+22 Python and 10 Rust tests with both profiles through ctypes/FFI/TCP, Arm core/
+protocol compile, and full H723 link/checks. All local Phase A and C32/FFI/TCP
+trace/truth bytes equal their earlier baselines. Final local evidence is under
+`artifacts/b1-firmware-{phase-a,host,arm-core,final}`. Full-image CI is now part of
+the existing ARM job, separately uploaded as `phase-b-h723-<commit>`; rendering
+remains outside every CI dependency.

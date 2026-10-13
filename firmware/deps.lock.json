@@ -1,0 +1,306 @@
+{
+  "packages": {
+    "cmsis": {
+      "repository": "ARM-software/CMSIS_5",
+      "commit": "2b7495b8535bdcb306dac29b9ded4cfb679d7e5c"
+    },
+    "device": {
+      "repository": "STMicroelectronics/cmsis-device-h7",
+      "commit": "81db1ec63cdc191fae1565b772da3ea5aa29a683"
+    },
+    "hal": {
+      "repository": "STMicroelectronics/stm32h7xx-hal-driver",
+      "commit": "7e541d92019e18f98d211fc4ab9197ec8e8105f6"
+    }
+  },
+  "files": [
+    {
+      "package": "cmsis",
+      "path": "LICENSE.txt",
+      "url": "https://raw.githubusercontent.com/ARM-software/CMSIS_5/2b7495b8535bdcb306dac29b9ded4cfb679d7e5c/LICENSE.txt",
+      "sha256": "b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1"
+    },
+    {
+      "package": "cmsis",
+      "path": "CMSIS/Core/Include/core_cm7.h",
+      "url": "https://raw.githubusercontent.com/ARM-software/CMSIS_5/2b7495b8535bdcb306dac29b9ded4cfb679d7e5c/CMSIS/Core/Include/core_cm7.h",
+      "sha256": "e974d0a91752487d0154457cd422c37667328e9ddb7ba4fa2fed479a63577f63"
+    },
+    {
+      "package": "cmsis",
+      "path": "CMSIS/Core/Include/cmsis_version.h",
+      "url": "https://raw.githubusercontent.com/ARM-software/CMSIS_5/2b7495b8535bdcb306dac29b9ded4cfb679d7e5c/CMSIS/Core/Include/cmsis_version.h",
+      "sha256": "184c19fd3ee73632edf35a0b4d49cd48be75fbf49e6ccb19d9db05fa83bea4b3"
+    },
+    {
+      "package": "cmsis",
+      "path": "CMSIS/Core/Include/cmsis_compiler.h",
+      "url": "https://raw.githubusercontent.com/ARM-software/CMSIS_5/2b7495b8535bdcb306dac29b9ded4cfb679d7e5c/CMSIS/Core/Include/cmsis_compiler.h",
+      "sha256": "b51963d271c1571ca3463654c76aa7ea50c4eac5d0a2710df10414ac64d9e0f8"
+    },
+    {
+      "package": "cmsis",
+      "path": "CMSIS/Core/Include/cmsis_gcc.h",
+      "url": "https://raw.githubusercontent.com/ARM-software/CMSIS_5/2b7495b8535bdcb306dac29b9ded4cfb679d7e5c/CMSIS/Core/Include/cmsis_gcc.h",
+      "sha256": "43bfd1fe69fbbc2ca70aaf7d43cc3e20f16e0c7f66e1bdef9b51af6dc14b2617"
+    },
+    {
+      "package": "cmsis",
+      "path": "CMSIS/Core/Include/mpu_armv7.h",
+      "url": "https://raw.githubusercontent.com/ARM-software/CMSIS_5/2b7495b8535bdcb306dac29b9ded4cfb679d7e5c/CMSIS/Core/Include/mpu_armv7.h",
+      "sha256": "29206b52ee02290ed6f5a5415ebd4187de802cf176d9b3cb844390d8e5571372"
+    },
+    {
+      "package": "cmsis",
+      "path": "CMSIS/Core/Include/cachel1_armv7.h",
+      "url": "https://raw.githubusercontent.com/ARM-software/CMSIS_5/2b7495b8535bdcb306dac29b9ded4cfb679d7e5c/CMSIS/Core/Include/cachel1_armv7.h",
+      "sha256": "2e336a64f60a9c0eaf5a08e2c4845d94da86c3fd84d219d0d0c9f530e63bc9c3"
+    },
+    {
+      "package": "device",
+      "path": "LICENSE.md",
+      "url": "https://raw.githubusercontent.com/STMicroelectronics/cmsis-device-h7/81db1ec63cdc191fae1565b772da3ea5aa29a683/LICENSE.md",
+      "sha256": "053a83960032ab6bbd2231a3b6300bde3b4e526dcf11a61394907c0bdaacd713"
+    },
+    {
+      "package": "device",
+      "path": "Include/stm32h723xx.h",
+      "url": "https://raw.githubusercontent.com/STMicroelectronics/cmsis-device-h7/81db1ec63cdc191fae1565b772da3ea5aa29a683/Include/stm32h723xx.h",
+      "sha256": "2b240621f151e5c10b04d5cc62dbc5e4c44d388ad90dee8ad29e46fe33876e54"
+    },
+    {
+      "package": "device",
+      "path": "Include/stm32h7xx.h",
+      "url": "https://raw.githubusercontent.com/STMicroelectronics/cmsis-device-h7/81db1ec63cdc191fae1565b772da3ea5aa29a683/Include/stm32h7xx.h",
+      "sha256": "99ac7d4598e20d9bd74e0e001f0e63c2a8eb0a3584242d9e442be31ceb616cb9"
+    },
+    {
+      "package": "device",
+      "path": "Include/system_stm32h7xx.h",
+      "url": "https://raw.githubusercontent.com/STMicroelectronics/cmsis-device-h7/81db1ec63cdc191fae1565b772da3ea5aa29a683/Include/system_stm32h7xx.h",
+      "sha256": "e77e7dfe5ff780928c28cf37576135050e5af7bf31776400ac700e8b917d24be"
+    },
+    {
+      "package": "device",
+      "path": "Source/Templates/system_stm32h7xx.c",
+      "url": "https://raw.githubusercontent.com/STMicroelectronics/cmsis-device-h7/81db1ec63cdc191fae1565b772da3ea5aa29a683/Source/Templates/system_stm32h7xx.c",
+      "sha256": "95a8fc5a6d765a78a8b6f0dd1fedc48994096df544e611e951c6c2e4426570e6"
+    },
+    {
+      "package": "device",
+      "path": "Source/Templates/gcc/startup_stm32h723xx.s",
+      "url": "https://raw.githubusercontent.com/STMicroelectronics/cmsis-device-h7/81db1ec63cdc191fae1565b772da3ea5aa29a683/Source/Templates/gcc/startup_stm32h723xx.s",
+      "sha256": "0ffb354f56e04ae8735835c95231fef4f773cb5ba2dd2329546cb999434a0106"
+    },
+    {
+      "package": "hal",
+      "path": "LICENSE.md",
+      "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32h7xx-hal-driver/7e541d92019e18f98d211fc4ab9197ec8e8105f6/LICENSE.md",
+      "sha256": "1a0c3a2cf55d2d808048d452c6598d441f89890d62d0890147459ec6db61037a"
+    },
+    {
+      "package": "hal",
+      "path": "Inc/stm32h7xx_hal.h",
+      "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32h7xx-hal-driver/7e541d92019e18f98d211fc4ab9197ec8e8105f6/Inc/stm32h7xx_hal.h",
+      "sha256": "97aeb9e9e0c3acde0c91d025e89c7972b9ad13ab3cb735d40ad852dc395f6980"
+    },
+    {
+      "package": "hal",
+      "path": "Inc/stm32h7xx_hal_def.h",
+      "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32h7xx-hal-driver/7e541d92019e18f98d211fc4ab9197ec8e8105f6/Inc/stm32h7xx_hal_def.h",
+      "sha256": "f7e6ad2cff1b770393ad76961fbb220bef0a52593e9035746e7961137061ebfc"
+    },
+    {
+      "package": "hal",
+      "path": "Inc/stm32h7xx_hal_conf_template.h",
+      "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32h7xx-hal-driver/7e541d92019e18f98d211fc4ab9197ec8e8105f6/Inc/stm32h7xx_hal_conf_template.h",
+      "sha256": "78f808e304aeba6cd41f9b83ce32c942409f26770bb9dac65beabb4a8e8e3226"
+    },
+    {
+      "package": "hal",
+      "path": "Inc/Legacy/stm32_hal_legacy.h",
+      "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32h7xx-hal-driver/7e541d92019e18f98d211fc4ab9197ec8e8105f6/Inc/Legacy/stm32_hal_legacy.h",
+      "sha256": "37a057e32410712dbe30a3ec74a6cc838f767ae1c616f1b767687bede5dff68a"
+    },
+    {
+      "package": "hal",
+      "path": "Src/stm32h7xx_hal.c",
+      "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32h7xx-hal-driver/7e541d92019e18f98d211fc4ab9197ec8e8105f6/Src/stm32h7xx_hal.c",
+      "sha256": "716a36e0b7d7a09f3040ced03612abfb406dfdd6153505fd7482a24f12d0e734"
+    },
+    {
+      "package": "hal",
+      "path": "Inc/stm32h7xx_hal_cortex.h",
+      "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32h7xx-hal-driver/7e541d92019e18f98d211fc4ab9197ec8e8105f6/Inc/stm32h7xx_hal_cortex.h",
+      "sha256": "8b61853cb8eb65dabf5181e9f4a2effb3be70974800f6ddc38ae62f0310e78ae"
+    },
+    {
+      "package": "hal",
+      "path": "Inc/stm32h7xx_hal_dma.h",
+      "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32h7xx-hal-driver/7e541d92019e18f98d211fc4ab9197ec8e8105f6/Inc/stm32h7xx_hal_dma.h",
+      "sha256": "564d6d26015155743f4990a354d26124d5d434673813c75df5da9572e4ac2eae"
+    },
+    {
+      "package": "hal",
+      "path": "Inc/stm32h7xx_hal_dma_ex.h",
+      "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32h7xx-hal-driver/7e541d92019e18f98d211fc4ab9197ec8e8105f6/Inc/stm32h7xx_hal_dma_ex.h",
+      "sha256": "bc906d5cf9ed149185aa77a80a793e50aa4b2c7e0606f88df1a4b8900a8a26fa"
+    },
+    {
+      "package": "hal",
+      "path": "Inc/stm32h7xx_hal_flash.h",
+      "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32h7xx-hal-driver/7e541d92019e18f98d211fc4ab9197ec8e8105f6/Inc/stm32h7xx_hal_flash.h",
+      "sha256": "96340bb9572f6c53554323795b3aa8c86962d14b0596dab550322f34dfccba7c"
+    },
+    {
+      "package": "hal",
+      "path": "Inc/stm32h7xx_hal_flash_ex.h",
+      "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32h7xx-hal-driver/7e541d92019e18f98d211fc4ab9197ec8e8105f6/Inc/stm32h7xx_hal_flash_ex.h",
+      "sha256": "2f4fd8d9ce5dbf03691feb56a9c532282a79ac2e7731ab4a6781960e5116adfa"
+    },
+    {
+      "package": "hal",
+      "path": "Inc/stm32h7xx_hal_gpio.h",
+      "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32h7xx-hal-driver/7e541d92019e18f98d211fc4ab9197ec8e8105f6/Inc/stm32h7xx_hal_gpio.h",
+      "sha256": "75c7e634ec0b5fa2ad6ef90b9b010a4dbac1cdd9876daf80cab2253774c092bb"
+    },
+    {
+      "package": "hal",
+      "path": "Inc/stm32h7xx_hal_gpio_ex.h",
+      "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32h7xx-hal-driver/7e541d92019e18f98d211fc4ab9197ec8e8105f6/Inc/stm32h7xx_hal_gpio_ex.h",
+      "sha256": "81b441ab0ef72718230fc3b259a120c57e253018863d9aa9e50f4f6456c866f3"
+    },
+    {
+      "package": "hal",
+      "path": "Inc/stm32h7xx_hal_pwr.h",
+      "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32h7xx-hal-driver/7e541d92019e18f98d211fc4ab9197ec8e8105f6/Inc/stm32h7xx_hal_pwr.h",
+      "sha256": "65a883328691a724d5163403e5e7db38d5a1e8ec11f7bdcf5620329bf779cdfa"
+    },
+    {
+      "package": "hal",
+      "path": "Inc/stm32h7xx_hal_pwr_ex.h",
+      "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32h7xx-hal-driver/7e541d92019e18f98d211fc4ab9197ec8e8105f6/Inc/stm32h7xx_hal_pwr_ex.h",
+      "sha256": "76ec9d62421667db5a499309f50c8145d086d76b5529a7ece37331fe5de05842"
+    },
+    {
+      "package": "hal",
+      "path": "Inc/stm32h7xx_hal_rcc.h",
+      "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32h7xx-hal-driver/7e541d92019e18f98d211fc4ab9197ec8e8105f6/Inc/stm32h7xx_hal_rcc.h",
+      "sha256": "b97d21c439fb53c8cc83a555074b9cbd1fba107d95ff239ba317ffc28799ff16"
+    },
+    {
+      "package": "hal",
+      "path": "Inc/stm32h7xx_hal_rcc_ex.h",
+      "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32h7xx-hal-driver/7e541d92019e18f98d211fc4ab9197ec8e8105f6/Inc/stm32h7xx_hal_rcc_ex.h",
+      "sha256": "cbebc9c87db8acada7da2fd06994a998528d447960ec62737fd65cace4fd34bf"
+    },
+    {
+      "package": "hal",
+      "path": "Inc/stm32h7xx_hal_tim.h",
+      "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32h7xx-hal-driver/7e541d92019e18f98d211fc4ab9197ec8e8105f6/Inc/stm32h7xx_hal_tim.h",
+      "sha256": "f0411155b057e23cf932497d8186f227b5e3085e92ae60403e0a7a45c0f62add"
+    },
+    {
+      "package": "hal",
+      "path": "Inc/stm32h7xx_hal_tim_ex.h",
+      "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32h7xx-hal-driver/7e541d92019e18f98d211fc4ab9197ec8e8105f6/Inc/stm32h7xx_hal_tim_ex.h",
+      "sha256": "c6e76b135cc6bff07ad4b84a76d7eedb3a63ddba472131595c4655ac37ed7196"
+    },
+    {
+      "package": "hal",
+      "path": "Inc/stm32h7xx_hal_uart.h",
+      "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32h7xx-hal-driver/7e541d92019e18f98d211fc4ab9197ec8e8105f6/Inc/stm32h7xx_hal_uart.h",
+      "sha256": "7bb58e464579e53d6a5f88eb1c792f627e9b75a49901ff155a1b57728c871391"
+    },
+    {
+      "package": "hal",
+      "path": "Inc/stm32h7xx_hal_uart_ex.h",
+      "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32h7xx-hal-driver/7e541d92019e18f98d211fc4ab9197ec8e8105f6/Inc/stm32h7xx_hal_uart_ex.h",
+      "sha256": "99756f731f50013b1344f8ea0d1a0259ccacd5e085fb7477080c215dcf343841"
+    },
+    {
+      "package": "hal",
+      "path": "Src/stm32h7xx_hal_cortex.c",
+      "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32h7xx-hal-driver/7e541d92019e18f98d211fc4ab9197ec8e8105f6/Src/stm32h7xx_hal_cortex.c",
+      "sha256": "9df95c02feab163763ac752c17c07f0a10f6bd7d303f659e950dd8b6b4cce2c9"
+    },
+    {
+      "package": "hal",
+      "path": "Src/stm32h7xx_hal_dma.c",
+      "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32h7xx-hal-driver/7e541d92019e18f98d211fc4ab9197ec8e8105f6/Src/stm32h7xx_hal_dma.c",
+      "sha256": "0866ad377afc04840c4add568150f6511a7c8cae8633e1b4ebbd10cf8597b643"
+    },
+    {
+      "package": "hal",
+      "path": "Src/stm32h7xx_hal_dma_ex.c",
+      "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32h7xx-hal-driver/7e541d92019e18f98d211fc4ab9197ec8e8105f6/Src/stm32h7xx_hal_dma_ex.c",
+      "sha256": "a8bc1642a339acba8aaa7be9101854ab36319efcf2a3ba299760451af31585d1"
+    },
+    {
+      "package": "hal",
+      "path": "Src/stm32h7xx_hal_flash.c",
+      "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32h7xx-hal-driver/7e541d92019e18f98d211fc4ab9197ec8e8105f6/Src/stm32h7xx_hal_flash.c",
+      "sha256": "a1ef8504ed876dfee88c1338e6877f9d5a6ed3ce8eb510428d49f073411cde0b"
+    },
+    {
+      "package": "hal",
+      "path": "Src/stm32h7xx_hal_flash_ex.c",
+      "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32h7xx-hal-driver/7e541d92019e18f98d211fc4ab9197ec8e8105f6/Src/stm32h7xx_hal_flash_ex.c",
+      "sha256": "3a9618e04ed1586a29d3ed3fe83f5e27dbda2ed190c1511e0c21f697acb34af5"
+    },
+    {
+      "package": "hal",
+      "path": "Src/stm32h7xx_hal_gpio.c",
+      "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32h7xx-hal-driver/7e541d92019e18f98d211fc4ab9197ec8e8105f6/Src/stm32h7xx_hal_gpio.c",
+      "sha256": "8137010464bb904331c73d15292a97c8c40992c8d3e612dde08628a86ad5df79"
+    },
+    {
+      "package": "hal",
+      "path": "Src/stm32h7xx_hal_pwr.c",
+      "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32h7xx-hal-driver/7e541d92019e18f98d211fc4ab9197ec8e8105f6/Src/stm32h7xx_hal_pwr.c",
+      "sha256": "87dc25ff1b0a58773eeed5a87de133167cfe4306bf54aa884889a61d8a5bd7f4"
+    },
+    {
+      "package": "hal",
+      "path": "Src/stm32h7xx_hal_pwr_ex.c",
+      "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32h7xx-hal-driver/7e541d92019e18f98d211fc4ab9197ec8e8105f6/Src/stm32h7xx_hal_pwr_ex.c",
+      "sha256": "15469705b458ee696d3ca241ea85ec371c2463a5ac629ab9078d2912dab19c8c"
+    },
+    {
+      "package": "hal",
+      "path": "Src/stm32h7xx_hal_rcc.c",
+      "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32h7xx-hal-driver/7e541d92019e18f98d211fc4ab9197ec8e8105f6/Src/stm32h7xx_hal_rcc.c",
+      "sha256": "d94087028f3cfde2ce9e5d5c38b4daa594823c452052d1455a56e07cd33bd7c8"
+    },
+    {
+      "package": "hal",
+      "path": "Src/stm32h7xx_hal_rcc_ex.c",
+      "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32h7xx-hal-driver/7e541d92019e18f98d211fc4ab9197ec8e8105f6/Src/stm32h7xx_hal_rcc_ex.c",
+      "sha256": "ba3ffa42989a60a93e8de7f148cde4fa22c6853223d00d5d9954ad370c6012fe"
+    },
+    {
+      "package": "hal",
+      "path": "Src/stm32h7xx_hal_tim.c",
+      "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32h7xx-hal-driver/7e541d92019e18f98d211fc4ab9197ec8e8105f6/Src/stm32h7xx_hal_tim.c",
+      "sha256": "af3978504b1a9664d1874f513d4a9c1db075420731e0902310b215b8d407f86d"
+    },
+    {
+      "package": "hal",
+      "path": "Src/stm32h7xx_hal_tim_ex.c",
+      "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32h7xx-hal-driver/7e541d92019e18f98d211fc4ab9197ec8e8105f6/Src/stm32h7xx_hal_tim_ex.c",
+      "sha256": "61f54efc96bb1e25a98778a6e5767b7db7ef9351b9c1d54ab8d1ae7831da321e"
+    },
+    {
+      "package": "hal",
+      "path": "Src/stm32h7xx_hal_uart.c",
+      "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32h7xx-hal-driver/7e541d92019e18f98d211fc4ab9197ec8e8105f6/Src/stm32h7xx_hal_uart.c",
+      "sha256": "2cd40ae61e9d45aba939591dd748c1ae0b1372fb702e4026ef92b3319a9000a2"
+    },
+    {
+      "package": "hal",
+      "path": "Src/stm32h7xx_hal_uart_ex.c",
+      "url": "https://raw.githubusercontent.com/STMicroelectronics/stm32h7xx-hal-driver/7e541d92019e18f98d211fc4ab9197ec8e8105f6/Src/stm32h7xx_hal_uart_ex.c",
+      "sha256": "92c28a6208808ffc7527099a9d84075ee7cf072856df0253db9931ef3cbc7d6b"
+    }
+  ]
+}

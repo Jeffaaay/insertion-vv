@@ -105,6 +105,18 @@ jobs:
           tar -xJf .toolchains/arm.tar.xz -C .toolchains
       - name: Cross-compile Cortex-M7 core with Arm GNU 14.2
         run: python tools/build_controller.py --output artifacts/arm-build --arm-cc .toolchains/arm-gnu-toolchain-14.2.rel1-x86_64-arm-none-eabi/bin/arm-none-eabi-gcc
+      - uses: actions/cache@v4
+        with:
+          path: .toolchains/firmware-deps/
+          key: h723-vendor-${{ hashFiles('firmware/deps.lock.json') }}
+      - name: Link H723 firmware and check memory, vectors, and hard-float ABI
+        run: python -m tools.build_firmware --output artifacts/h723-build --arm-cc .toolchains/arm-gnu-toolchain-14.2.rel1-x86_64-arm-none-eabi/bin/arm-none-eabi-gcc
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: phase-b-h723-${{ github.sha }}
+          path: artifacts/h723-build/
+          if-no-files-found: error
       - uses: actions/upload-artifact@v4
         if: always()
         with:

@@ -33,6 +33,13 @@ def phase_b_source_hash():
     paths += sorted((REPO / "firmware/protocol").glob("*.c"))
     paths += sorted((REPO / "firmware/protocol").glob("*.h"))
     paths += [REPO / "firmware/virtual_board/main.c"]
+    paths += sorted((REPO / "firmware/h723").glob("*.c"))
+    paths += sorted((REPO / "firmware/h723").glob("*.h"))
+    paths += [
+        REPO / "firmware/h723/linker.ld",
+        REPO / "firmware/deps.lock.json",
+        REPO / "tools/build_firmware.py",
+    ]
     return sha256(
         source_hash().encode()
         + b"".join(
