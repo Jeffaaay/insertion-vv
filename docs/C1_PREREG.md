@@ -202,3 +202,27 @@ compressed; actual matrix size will be reported. Available local space at startu
 was about 699 GiB. Keep losslessly compressed full traces locally with hashes,
 never commit their gigabytes to git. M3 can therefore remain read-only without
 regenerating simulations. Publish compact curves and selected video evidence.
+
+## Prospective amendment A1 — before any Phase C simulation
+
+This explicit amendment supersedes only the ambiguous clauses below; the original
+text and prediction sentences above are retained for audit. No results informed it.
+- F1 freezes the last capture BEFORE onset (onset-1 tick), not onset's own value.
+  All N captures in [onset,onset+N) carry that old value. N=1 replaces exactly one
+  captured value and must differ on a changing signal. Metadata still advances.
+- F6 in this single-fault 1kHz schedule always resumes with a new fresh frame; the
+  mailbox fallback is never selected here. The earlier F3/F6 old-frame statement
+  is corrected: F3 can create >=15ms age at base=0; this argument does not apply
+  to F6. No synthetic resumption age is introduced.
+- P5 excludes no-fault reference rows and figure-4 comparison runs. It compares
+  five ablations against the matched preview baseline for every fault run. Strictly
+  largest flip count is required; a tie is NOT supported (shared maximum).
+- Expected C32 F6 ABI rejections (96 cases) are shown separately from valid-pair
+  agreement. Never hide them by reporting only a percentage: publish total pairs,
+  valid pairs, matching/disagreeing pairs, invalid counts by cause, plus F6 coverage.
+  Firmware tim6_body uses successive tick numbers while ISR service can be late;
+  its actual deadline-miss semantics require HIL measurement. This source-based
+  expectation is not proof of hardware behavior or a SIL/HIL agreement result.
+- New Rust crate c1/rust depends on ../../harness by path where shared types are
+  needed. All baseline files remain frozen. faults/README.md is historical; new
+  implementation documentation is c1/README.md.
