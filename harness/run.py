@@ -29,7 +29,7 @@ def phase_b_source_hash():
         REPO / "harness/Cargo.lock",
         REPO / "harness/build.rs",
     ]
-    paths += sorted((REPO / "harness/src").glob("*.rs"))
+    paths += sorted((REPO / "harness/src").rglob("*.rs"))
     paths += sorted((REPO / "firmware/protocol").glob("*.c"))
     paths += sorted((REPO / "firmware/protocol").glob("*.h"))
     paths += [REPO / "firmware/virtual_board/main.c"]
@@ -39,6 +39,7 @@ def phase_b_source_hash():
         REPO / "firmware/h723/linker.ld",
         REPO / "firmware/deps.lock.json",
         REPO / "tools/build_firmware.py",
+        REPO / "tools/board.py",
     ]
     return sha256(
         source_hash().encode()

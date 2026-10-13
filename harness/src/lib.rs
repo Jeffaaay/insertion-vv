@@ -1,6 +1,7 @@
 pub mod ffi;
 pub mod plant;
 pub mod protocol;
+pub mod replay;
 pub mod runner;
 pub mod serial;
 pub mod types;

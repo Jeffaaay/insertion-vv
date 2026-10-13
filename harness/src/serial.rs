@@ -55,6 +55,7 @@ pub struct ControllerSerial {
     events: Vec<Value>,
     started: Instant,
     finished: bool,
+    expected_hardware: Option<Value>,
 }
 
 impl ControllerSerial {
@@ -66,6 +67,9 @@ impl ControllerSerial {
             .stop_bits(serialport::StopBits::One)
             .flow_control(serialport::FlowControl::None)
             .open()
+            .map_err(|e| RunError(e.to_string()))?;
+        connection
+            .clear(serialport::ClearBuffer::All)
             .map_err(|e| RunError(e.to_string()))?;
         Ok(Self::new(
             Connection::Serial(connection),
@@ -87,6 +91,12 @@ impl ControllerSerial {
             address.to_string(),
         ))
     }
+    #[cfg(test)]
+    pub(crate) fn synthetic_hardware(address: &str, expected_source: String) -> Self {
+        let mut controller = Self::tcp(address, expected_source).unwrap();
+        controller.device_kind = 1;
+        controller
+    }
     fn new(
         connection: Connection,
         expected_source: String,
@@ -104,6 +114,7 @@ impl ControllerSerial {
             events: Vec::new(),
             started: Instant::now(),
             finished: false,
+            expected_hardware: None,
         }
     }
     fn remaining(deadline: Instant) -> Result<Duration> {
@@ -122,7 +133,7 @@ impl ControllerSerial {
         }
         Ok(())
     }
-    fn exchange(&mut self, frame: Frame, timeout: Duration) -> Result<Frame> {
+    pub(crate) fn exchange(&mut self, frame: Frame, timeout: Duration) -> Result<Frame> {
         let tx = frame.encode()?;
         let deadline = Instant::now() + timeout;
         self.events.push(json!({"direction":"tx","elapsed_ns":self.started.elapsed().as_nanos() as u64,"hex":hex(&tx)}));
@@ -145,7 +156,27 @@ impl ControllerSerial {
             "error":result.as_ref().err().map(ToString::to_string)}));
         result
     }
-    fn hello(&mut self) -> Result<()> {
+    pub fn bind_hardware(&mut self, build: &Value, receipt: &Value) -> Result<()> {
+        require(self.device_kind == 1, "hardware binding requires serial")?;
+        require(
+            receipt["status"] == "FLASH_VERIFIED"
+                && receipt["binary_sha256"] == build["binary_sha256"]
+                && receipt["elf_sha256"] == build["elf_sha256"]
+                && receipt["firmware_git"] == build["git_commit"]
+                && receipt["controller_source_sha256"] == self.expected_source,
+            "firmware/flash receipt mismatch",
+        )?;
+        let path = receipt["readback_file"]
+            .as_str()
+            .ok_or_else(|| RunError("missing readback evidence".into()))?;
+        require(
+            crate::sha256(&std::fs::read(path)?) == build["binary_sha256"],
+            "readback evidence checksum mismatch",
+        )?;
+        self.expected_hardware = Some(json!({"build":build,"receipt":receipt}));
+        Ok(())
+    }
+    pub(crate) fn hello(&mut self) -> Result<()> {
         let info = self.exchange(
             Frame {
                 kind: 1,
@@ -179,7 +210,20 @@ impl ControllerSerial {
                 "virtual timing/identity must be zero",
             )?;
         } else {
-            require(word(4) > 0 && word(8) > 0, "missing hardware clocks")?;
+            let expected = self.expected_hardware.as_ref().ok_or_else(|| {
+                RunError("serial requires verified firmware/readback identity".into())
+            })?;
+            let build = &expected["build"];
+            let identity = &expected["receipt"]["identity"];
+            require(
+                git == build["git_commit"]
+                    && hex(&p[120..132]) == identity["unique_id_hex"]
+                    && word(132) == identity["mcu_idcode"]
+                    && word(136) == identity["arm_cpuid"]
+                    && word(4) == build["configured_hardware"]["core_hz"]
+                    && word(8) == build["configured_hardware"]["timer_hz"],
+                "board identity/clocks differ from verified flash",
+            )?;
         }
         self.info = json!({"device_kind":p[0],"abi":p[1],"capabilities":u16::from_le_bytes([p[2],p[3]]),
             "core_clock_hz":word(4),"timer_clock_hz":word(8),"max_ticks":word(12),"git_commit":git,
@@ -188,7 +232,7 @@ impl ControllerSerial {
     }
 }
 
-fn new_session() -> Result<u32> {
+pub(crate) fn new_session() -> Result<u32> {
     static USED: OnceLock<Mutex<HashSet<u32>>> = OnceLock::new();
     let mut used = USED
         .get_or_init(|| Mutex::new(HashSet::new()))
@@ -238,7 +282,11 @@ impl Controller for ControllerSerial {
                 session: self.session,
                 payload: protocol::sensors_payload(sensors)?,
             },
-            Duration::from_secs(2),
+            if self.device_kind == 1 {
+                Duration::from_millis(200)
+            } else {
+                Duration::from_secs(2)
+            },
         )?;
         let command = protocol::command_payload(&response, self.session, sensors.tick)?;
         if self.device_kind == 0 {

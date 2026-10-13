@@ -943,3 +943,53 @@ gap), and 512-byte RX DMA buffer in D2. Flash CRC32 will be compared with the ho
 binary, separately from OpenOCD readback SHA and CI artifact SHA. The old B1 binary
 is not a replay image. No board detection, programming, timing PASS or hardware
 numerical equivalence is claimed at this build-only checkpoint.
+
+B2.1 commit `dad15b3` passes [Phase B CI 38328737834](https://github.com/Jeffaaay/insertion-vv/actions/runs/38328737834)
+and [Phase A CI 38328737818](https://github.com/Jeffaaay/insertion-vv/actions/runs/38328737818).
+The downloaded Linux and locally built clean-commit BIN match exactly:
+`7bb2abecf63f15c6115c488d3334b4e83f4969dab75861e7768fc0199a31e965`.
+All C32/FFI/TCP trace/truth bytes match B1.2 on each OS; 16 historical Phase A
+comparisons pass. This image has not been flashed.
+
+## B2.2 hardware host tooling, software-only checkpoint
+
+`tools.board` prepares green main-branch CI artifacts and validates source/image
+hashes. Identification checks the observed probe, MCU family/CPUID, UID, 1 MiB
+Flash and RDP Level 0. Programming first preserves original Flash locally, guards
+the UID again and verifies readback SHA. No protection/option-byte writes or
+original-backup uploads. Serial INFO must match the receipt's UID, firmware Git,
+controller source and configured clocks; board-computed Flash CRC32 is checked
+independently against the BIN. None alone is presented as a timing result.
+
+`harness.hardware` runs both same-board lockstep repetitions, binds actual wire
+inputs to trace values and compares against the prepared Linux reference. It adds
+the preregistered hardware-only <1% contact-RMS gate without relaxing existing C32
+or Phase A contracts. Replay uploads only the recorded canonical 29-byte inputs,
+checks the complete RAM CRC, stays quiet during TIM6 execution, then fetches raw
+commands and timing. Independent Python analysis checks every command bit, CRC,
+count, DWT-wrap interval, timing boundary and scheduled deadline before evaluating
+the compute/jitter/stack gates. Partial, corrupt or inconsistent evidence is INVALID;
+intact data exceeding a timing threshold is FAIL. Host USB elapsed is not a clock
+accuracy test. Absolute frequency remains UNVERIFIED without an external instrument.
+
+The new 24 Python tests use clearly synthetic parser/timing/identity fixtures and
+exercise strict gate boundaries, counter wrap, corrupt records, missing FINISH,
+wrong/protected devices and preservation of earlier evidence. Rust now has 13
+tests, including an actual fragmented TCP transfer of all 8000 replay records and
+a runtime-Flash mismatch rejection. That TCP fixture is compiled only for tests,
+not exposed by the hardware executable; its timestamps are not board measurements.
+`tools.plot_timing` is optional, uses saved verified raw records and adds no CI
+dependency. [The runbook](HARDWARE_RUNBOOK.md) supplies the actual-board procedure.
+
+No simulation, controller, firmware or numerical tolerance changed in B2.2.
+Software verification and subsequent hosted evidence are recorded with the release
+report under `artifacts/release/`; hardware detection/lockstep/replay are still
+pending physical connection and must not be inferred from a software CI pass.
+
+Full local workflow verification passes: Phase A 170 tests/eight experiments;
+Phase B 46 Python tests, 13 Rust tests, three native C suites, both profiles
+through ctypes/FFI/TCP, Arm core compile and full H723 link. Evidence is under
+`artifacts/b2-host-{phase-a,local,arm,firmware}`. All 28 local Phase A and C32
+backend trace/truth files are byte-identical to B2.1. Serial-port enumeration and
+present ST-LINK PnP enumeration are both empty at this checkpoint. Hosted results
+will be verified at the resulting commit before any programming step.

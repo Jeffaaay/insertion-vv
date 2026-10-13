@@ -29,6 +29,7 @@ fn execute() -> Result<()> {
             "--contact-profile",
             "--port",
             "--address",
+            "--board-evidence",
         ]
         .contains(&key.as_str())
         {
@@ -73,7 +74,13 @@ fn execute() -> Result<()> {
     )?;
     let mut controller: Box<dyn Controller> = match get("--backend")? {
         "ffi" => Box::new(ControllerInProcessC::new(&directory)?),
-        "serial" => Box::new(ControllerSerial::serial(get("--port")?, source)?),
+        "serial" => {
+            let receipt: serde_json::Value =
+                serde_json::from_slice(&std::fs::read(get("--board-evidence")?)?)?;
+            let mut serial = ControllerSerial::serial(get("--port")?, source)?;
+            serial.bind_hardware(&build, &receipt)?;
+            Box::new(serial)
+        }
         "tcp" => Box::new(ControllerSerial::tcp(get("--address")?, source)?),
         _ => return Err(RunError("unknown controller backend".into())),
     };

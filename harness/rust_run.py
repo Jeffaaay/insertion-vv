@@ -16,7 +16,7 @@ from .run import publish
 from .virtual_board import launch
 
 
-def capture_rust(cfg, executable, build, raw_directory, backend="ffi"):
+def capture_rust(cfg, executable, build, raw_directory, backend="ffi", port=None, receipt=None):
     command = [
         str(Path(executable).resolve()),
         "--backend",
@@ -31,6 +31,10 @@ def capture_rust(cfg, executable, build, raw_directory, backend="ffi"):
         cfg.contact_profile,
     ]
     raw_directory.mkdir(parents=True, exist_ok=False)
+    if backend == "serial":
+        if port is None or receipt is None:
+            raise ValueError("serial requires port and verified flash receipt")
+        command.extend(["--port", port, "--board-evidence", str(Path(receipt).resolve())])
     # Individual pipe requests have bounded deadlines; this is a final process
     # guard. A timeout remains INVALID and cannot publish a completed metrics run.
     try:

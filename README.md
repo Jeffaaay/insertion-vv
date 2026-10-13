@@ -20,6 +20,14 @@ numeric code and tolerances are unchanged. Old failed evidence is preserved.
 See the [Phase A summary](docs/PHASE_A_SUMMARY.md) and
 [B0 verification record](docs/REPLICATION_NOTES.md#b0-full-platform-fingerprint-closeout).
 
+Phase B software now includes the frozen portable C32 controller, Rust FFI/virtual
+transport, H723 lockstep/replay firmware, and host identification, backup, verified
+programming and timing analysis. Follow the [hardware runbook](docs/HARDWARE_RUNBOOK.md)
+after connecting the NUCLEO-H723ZG through ST-LINK CN1. **No actual board numerical
+or timing result is claimed yet.** CI covers software/synthetic protocol evidence;
+real UART, TIM6/DWT measurements and stack headroom remain hardware gates. Optional
+timing plots remain outside CI and its dependencies.
+
 | Lab-frame PD, seed 42 | `primary` | `paper_effective` |
 | --- | ---: | ---: |
 | Free-window RMS error, 1–2 s | 270.369 µm | 270.396 µm |
