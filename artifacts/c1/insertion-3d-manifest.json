@@ -1,0 +1,48 @@
+{
+  "matrix_sha256": "cc833c35864f0f8cfa4d67671bf605a129c2b18a5f59710be41ee11e2eb98aa9",
+  "source_run_id": "a3aab64245c595654c78dfbb",
+  "truth_sha256": "95fb57aaeb56ecd3cbb648430bc7033efda184a18aedfde79fe35f65bb3e7e76",
+  "plant_sha256": "aef8a51e84742568b0db6271e3ca946dcd345db3f4d426a60a906a75db587fe0",
+  "renderer": "mujoco.Renderer",
+  "mujoco_version": "3.8.0",
+  "physics_integration": false,
+  "controller_execution": false,
+  "state_updates": "mj_kinematics + mj_camlight from measured qpos/qvel",
+  "display_only": "tissue cutaway dimensions/alpha, capsule color, skybox, camera, annotations",
+  "needle_geometry": "unchanged original capsule; not a sharp-tip puncture model",
+  "target_depth_um": 300,
+  "fps": 25,
+  "frames": 300,
+  "duration_s": 12.0,
+  "width": 1280,
+  "height": 720,
+  "segments": [
+    {
+      "playback_s": [
+        0,
+        8
+      ],
+      "source_tick_range": [
+        0,
+        7960
+      ],
+      "stride": 40,
+      "speed": 1
+    },
+    {
+      "playback_s": [
+        8,
+        12
+      ],
+      "source_tick_range": [
+        2000,
+        2990
+      ],
+      "stride": 10,
+      "speed": 0.25
+    }
+  ],
+  "interpolation": false,
+  "limitations": "Soft-contact block; no fluid, material tearing, puncture or real hardware video",
+  "video_sha256": "1b254ab0c15253fc44a7831bfd84413e6a228b19f6ff429c01e60fcf62b92b27"
+}

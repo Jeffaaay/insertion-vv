@@ -51,6 +51,7 @@ def main():
             Path("c1/build_report.py"),
             Path("c1/hub-template.html"),
             Path("c1/build_journal.py"),
+            Path("c1/render_insertion_3d.py"),
             Path("c1/blog-template.html"),
             Path("docs/PROJECT_JOURNAL.md"),
             Path("docs/PHASE_C_SIL_SUMMARY.md"),

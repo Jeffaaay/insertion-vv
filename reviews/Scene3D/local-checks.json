@@ -1,0 +1,19 @@
+{
+  "decoded_frames": 300,
+  "fps": 25,
+  "duration_s": 12,
+  "size": [
+    1280,
+    720
+  ],
+  "original_fault_media_unchanged": 16,
+  "html_local_links_checked": 116,
+  "video_players_per_page": 9,
+  "sampled_frames": [
+    0,
+    60,
+    199,
+    200,
+    299
+  ]
+}

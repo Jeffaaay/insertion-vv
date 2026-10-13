@@ -57,5 +57,14 @@ normalizes text artifacts to UTF-8/LF and pins their bytes in derived-artifacts.
 `python -m c1.verify_public` checks the public matrix, render sources, all artifact
 hashes and nine original selected traces. Hosted CI repeats this from a fresh checkout.
 
+`python -m c1.render_insertion_3d` adds the introductory MuJoCo scene replay, using
+the existing visualization environment. It checks the sealed nominal truth and
+the original MJCF hash, then updates display geometry from measured poses via
+`mj_kinematics` and `mj_camlight`; it never integrates physics or runs control.
+The original capsule needle is retained. The transparent tissue cutaway, camera,
+colors and annotations are display-only, not a fluid/fracture simulation.
+The 12-second video contains 8 seconds at real time, followed by a 0.25x replay of
+source time 2–3 s. `insertion-3d-manifest.json` records exact sampled tick ranges.
+
 Full lossless evidence remains local under artifacts/c1/runs. Matrix, summaries,
 scientific figures, selected curves and videos are the compact published artifacts.

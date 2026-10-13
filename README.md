@@ -1,7 +1,10 @@
 # Current project record — Phase C SIL complete
 
 Start with the **[project journal: text, images and videos](docs/PROJECT_JOURNAL.md)**.
-It records the original predictions, the failures, review corrections and the
+Start visually with the [3D insertion replay](artifacts/c1/videos/insertion-3d.mp4)
+([preview](artifacts/c1/videos/insertion-3d-preview.png)). It uses sealed measured
+poses, with an explicitly labeled slow-motion insertion segment. The journal
+records the original predictions, the failures, review corrections and the
 hardware chapter that remains to be measured. The full multimedia article is
 [artifacts/c1/blog.html](artifacts/c1/blog.html); GitHub shows its source. To view
 it with embedded video, clone this branch and run:

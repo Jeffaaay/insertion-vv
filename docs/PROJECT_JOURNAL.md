@@ -13,6 +13,18 @@ python -m http.server 8765 --bind 127.0.0.1 --directory artifacts/c1
 然后在浏览器打开 `http://127.0.0.1:8765/blog.html`。页面也可以离线直接打开，
 视频无自动播放，所有媒体都在仓库里。这里是适合在 GitHub 阅读的文字入口。
 
+## 先看针插入组织的三维场景
+
+[![针插入半透明组织块的三维回放](../artifacts/c1/videos/insertion-3d-preview.png)](../artifacts/c1/videos/insertion-3d.mp4)
+
+[打开三维视频](../artifacts/c1/videos/insertion-3d.mp4)：先播放完整 8 秒，再用 4 秒
+以 0.25 倍速回看源时间 2–3 秒的插入过程。橙色是原模型的胶囊形针，青色是组织
+显示剖视；右侧显示源时间、针尖深度、接触力和误差。位置均来自封存 nominal
+轨迹，没有重跑控制器或积分物理。该模型是简化软接触块，不模拟液体或组织撕裂。
+
+[渲染清单](../artifacts/c1/insertion-3d-manifest.json) 记录源 run、哈希与慢放时序。
+图文版开头直接嵌入播放器，下面的八段故障视频继续用于分析对照。
+
 ## 从一个已经通过的控制器开始
 
 MuJoCo 模拟一根沿单轴运动的针，以及周期起伏的组织表面。控制器接收带延迟的

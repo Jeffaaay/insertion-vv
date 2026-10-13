@@ -5012,4 +5012,38 @@ are unchanged. A negative check confirms altered historical README text is rejec
 Hardware photographs, timing metrics and comparative outcomes are clearly pending.
 MCU HIL is distinguished from physical-actuator or clinical validation. The complete
 SIL evidence stays pinned to 8f5dacad; this is a subsequent editorial revision.
+</pre></details></section><section><h2>Scene3D</h2><details class="record"><summary>local-checks.json</summary><pre>{
+  &quot;decoded_frames&quot;: 300,
+  &quot;fps&quot;: 25,
+  &quot;duration_s&quot;: 12,
+  &quot;size&quot;: [
+    1280,
+    720
+  ],
+  &quot;original_fault_media_unchanged&quot;: 16,
+  &quot;html_local_links_checked&quot;: 116,
+  &quot;video_players_per_page&quot;: 9,
+  &quot;sampled_frames&quot;: [
+    0,
+    60,
+    199,
+    200,
+    299
+  ]
+}
+</pre></details><details class="record" open><summary>round-1.md</summary><pre># A physical scene as the visual entry point
+
+The user clarified that the missing video is a three-dimensional simulation view
+of the needle entering material, not a real-hardware recording.
+
+The new introductory clip uses the already sealed nominal preview run and original
+capsule needle geometry. It checks the MJCF source hash and decompressed truth hash.
+Only measured poses are replayed with mj_kinematics/mj_camlight. No physics integration,
+controller invocation, fluid simulation, puncture mechanics or hardware experiment
+is introduced. Tissue cutaway dimensions/color, camera and annotations are display-only.
+
+The 12-second, 25 fps clip first covers 8 seconds at 1x, then source ticks 2000–2990
+at 0.25x. All frames use actual 1 ms samples without interpolation. The slow segment
+is visibly labeled, including the original source time. The blog and evidence hub
+feature it before results; GitHub README and journal link the MP4 and poster.
 </pre></details></section></html>

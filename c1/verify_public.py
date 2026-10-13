@@ -24,6 +24,38 @@ def main():
         if hashlib.sha256(data).hexdigest() != expected:
             raise ValueError(f"source hash mismatch: {name}")
     lookup = {r["run_id"]: r for r in matrix["runs"]}
+    intro_path = root / "insertion-3d-manifest.json"
+    if intro_path.exists():
+        intro = json.loads(intro_path.read_text())
+        source = lookup[intro["source_run_id"]]
+        if (
+            intro["matrix_sha256"] != digest
+            or intro["truth_sha256"] != source["truth_sha256"]
+            or intro["plant_sha256"] != matrix["source_files"]["sim/plant.xml"]
+            or source["scenario"]["fault"] != "none"
+            or source["scenario"]["controller"] != "preview"
+            or source["scenario"]["ablation"] != "baseline"
+        ):
+            raise ValueError("3D introduction source mismatch")
+        video_sha = hashlib.sha256((root / "videos/insertion-3d.mp4").read_bytes()).hexdigest()
+        if video_sha != intro["video_sha256"]:
+            raise ValueError("3D introduction video mismatch")
+        frames = 0
+        for segment in intro["segments"]:
+            start, end = segment["source_tick_range"]
+            count = (end - start) // segment["stride"] + 1
+            duration = segment["playback_s"][1] - segment["playback_s"][0]
+            if (
+                start < 0
+                or end >= 8000
+                or (end - start) % segment["stride"]
+                or count != duration * intro["fps"]
+                or segment["stride"] * intro["fps"] / 1000 != segment["speed"]
+            ):
+                raise ValueError("3D introduction playback mapping mismatch")
+            frames += count
+        if frames != intro["frames"] or frames / intro["fps"] != intro["duration_s"]:
+            raise ValueError("3D introduction duration mismatch")
     with zipfile.ZipFile(root / "selected-traces.zip") as archive:
         if len(archive.infolist()) != 27:
             raise ValueError("selected archive inventory mismatch")
