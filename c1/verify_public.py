@@ -28,8 +28,9 @@ def main():
             if item.filename.endswith(".jsonl.gz"):
                 rid = item.filename.split("/")[1]
                 stem = item.filename.split("/")[-1].split(".")[0]
-                assert hashlib.sha256(gzip.decompress(archive.read(item))).hexdigest() == (
-                    lookup[rid][stem + "_sha256"]
+                assert (
+                    hashlib.sha256(gzip.decompress(archive.read(item))).hexdigest()
+                    == (lookup[rid][stem + "_sha256"])
                 )
     print(f"Public matrix, {len(manifest['files'])} artifacts, source hashes and 9-run subset PASS")
 
