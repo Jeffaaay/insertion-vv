@@ -25,11 +25,11 @@ def render(root: Path, output: Path) -> None:
             opened = "" if path.suffix in (".json", ".jsonl") else " open"
             cards.append(
                 f'<details class="{tone}"{opened}><summary>'
-                f'{html.escape(path.name)}</summary><pre>'
-                f'{html.escape(text)}</pre></details>'
+                f"{html.escape(path.name)}</summary><pre>"
+                f"{html.escape(text)}</pre></details>"
             )
-        blocks.append(f'<section><h2>{milestone}</h2>{"".join(cards)}</section>')
-    page = '''<!doctype html><html lang="zh-CN"><meta charset="utf-8">
+        blocks.append(f"<section><h2>{milestone}</h2>{''.join(cards)}</section>")
+    page = """<!doctype html><html lang="zh-CN"><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Phase C SIL — review evidence</title>
 <style>body{max-width:1050px;margin:40px auto;padding:0 20px;background:#f5f6fa;
@@ -39,7 +39,7 @@ details.escalate{border-color:#c56c20;background:#fff6e9}summary{cursor:pointer;
 font-weight:650}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6
 ui-monospace,monospace}header p{color:#556477}</style><header>
 <h1>Phase C SIL · 审阅记录</h1><p>事实、外部反馈和未决项。记录存在不代表里程碑通过。
-工具与数据记录默认折叠；网页回复不冒充 CLI 日志。</p></header>'''
+工具与数据记录默认折叠；网页回复不冒充 CLI 日志。</p></header>"""
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(page + "".join(blocks) + "</html>", encoding="utf-8")
 
