@@ -1,8 +1,0 @@
-C:\Users\jian\Documents\Codex\2026-10-12\chat-cloud-chat-chat-goal-blog\work\insertion-vv\c1\rust\target\debug\deps\unicode_ident-11ddcf39606b3c9e.d: C:\Users\jian\Documents\Codex\2026-10-12\read-project-brief-md-fully-do\work\cargo\registry\src\index.crates.io-1949cf8c6b5b557f\unicode-ident-1.0.27\src\lib.rs C:\Users\jian\Documents\Codex\2026-10-12\read-project-brief-md-fully-do\work\cargo\registry\src\index.crates.io-1949cf8c6b5b557f\unicode-ident-1.0.27\src\tables.rs
-
-C:\Users\jian\Documents\Codex\2026-10-12\chat-cloud-chat-chat-goal-blog\work\insertion-vv\c1\rust\target\debug\deps\libunicode_ident-11ddcf39606b3c9e.rlib: C:\Users\jian\Documents\Codex\2026-10-12\read-project-brief-md-fully-do\work\cargo\registry\src\index.crates.io-1949cf8c6b5b557f\unicode-ident-1.0.27\src\lib.rs C:\Users\jian\Documents\Codex\2026-10-12\read-project-brief-md-fully-do\work\cargo\registry\src\index.crates.io-1949cf8c6b5b557f\unicode-ident-1.0.27\src\tables.rs
-
-C:\Users\jian\Documents\Codex\2026-10-12\chat-cloud-chat-chat-goal-blog\work\insertion-vv\c1\rust\target\debug\deps\libunicode_ident-11ddcf39606b3c9e.rmeta: C:\Users\jian\Documents\Codex\2026-10-12\read-project-brief-md-fully-do\work\cargo\registry\src\index.crates.io-1949cf8c6b5b557f\unicode-ident-1.0.27\src\lib.rs C:\Users\jian\Documents\Codex\2026-10-12\read-project-brief-md-fully-do\work\cargo\registry\src\index.crates.io-1949cf8c6b5b557f\unicode-ident-1.0.27\src\tables.rs
-
-C:\Users\jian\Documents\Codex\2026-10-12\read-project-brief-md-fully-do\work\cargo\registry\src\index.crates.io-1949cf8c6b5b557f\unicode-ident-1.0.27\src\lib.rs:
-C:\Users\jian\Documents\Codex\2026-10-12\read-project-brief-md-fully-do\work\cargo\registry\src\index.crates.io-1949cf8c6b5b557f\unicode-ident-1.0.27\src\tables.rs:

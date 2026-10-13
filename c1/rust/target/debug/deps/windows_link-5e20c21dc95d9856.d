@@ -1,6 +1,0 @@
-C:\Users\jian\Documents\Codex\2026-10-12\chat-cloud-chat-chat-goal-blog\work\insertion-vv\c1\rust\target\debug\deps\windows_link-5e20c21dc95d9856.d: C:\Users\jian\Documents\Codex\2026-10-12\read-project-brief-md-fully-do\work\cargo\registry\src\index.crates.io-1949cf8c6b5b557f\windows-link-0.2.1\src\lib.rs C:\Users\jian\Documents\Codex\2026-10-12\read-project-brief-md-fully-do\work\cargo\registry\src\index.crates.io-1949cf8c6b5b557f\windows-link-0.2.1\src\../readme.md
-
-C:\Users\jian\Documents\Codex\2026-10-12\chat-cloud-chat-chat-goal-blog\work\insertion-vv\c1\rust\target\debug\deps\libwindows_link-5e20c21dc95d9856.rmeta: C:\Users\jian\Documents\Codex\2026-10-12\read-project-brief-md-fully-do\work\cargo\registry\src\index.crates.io-1949cf8c6b5b557f\windows-link-0.2.1\src\lib.rs C:\Users\jian\Documents\Codex\2026-10-12\read-project-brief-md-fully-do\work\cargo\registry\src\index.crates.io-1949cf8c6b5b557f\windows-link-0.2.1\src\../readme.md
-
-C:\Users\jian\Documents\Codex\2026-10-12\read-project-brief-md-fully-do\work\cargo\registry\src\index.crates.io-1949cf8c6b5b557f\windows-link-0.2.1\src\lib.rs:
-C:\Users\jian\Documents\Codex\2026-10-12\read-project-brief-md-fully-do\work\cargo\registry\src\index.crates.io-1949cf8c6b5b557f\windows-link-0.2.1\src\../readme.md:
