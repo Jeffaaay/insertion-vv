@@ -2,15 +2,17 @@
   "matrix_sha256": "cc833c35864f0f8cfa4d67671bf605a129c2b18a5f59710be41ee11e2eb98aa9",
   "analysis_introduced_commit": "d0b86986c7677985ccae5d358b3a3c2ba7128672",
   "annotation_analysis_base_commit": "ca5e99a8721c8eb721d0b321c64db99c1d7b1c07",
+  "text_encoding": "UTF-8, LF; identical to Git blob bytes",
   "render_source_sha256_lf": {
-    "c1\\analyze.py": "2d1189015dc9102e26b67ef5a976abdbe3bd0ac73cdf9cd69757737f5b42a4a1",
-    "c1\\visualize.py": "af5dcc69256cbc1e38590257b32659fb8f7c92921f943c7a4a593f943d47581a",
-    "c1\\heatmap-template.html": "ce52af0fb54051afe1236bf436e8948102b8e527fcecceed7aea7320ac2163d6"
+    "c1/analyze.py": "a339ef8f7701b8b45576d994e6d4157712c0ecadaf05b02c4432d757ea6d928f",
+    "c1/visualize.py": "00f6cd07b5973f486d81ce10aba7575219422449fec64315dbac542e3ec9ea0f",
+    "c1/heatmap-template.html": "ce52af0fb54051afe1236bf436e8948102b8e527fcecceed7aea7320ac2163d6",
+    "c1/seal_derived.py": "620a9fde43e7c36eb85d390f709843704e60491b870bf1ed77650ee59c24e4e8"
   },
   "files": {
     "evidence-audit.json": {
-      "sha256": "7b78d4ef927bfcdb4faeebc2133c237cb0744a98f905550ec70ff4e82e87186f",
-      "bytes": 224
+      "sha256": "4f23d8c306286c0783ce459eecefce3377a047f16d845092b64d3a5d6a27e30d",
+      "bytes": 217
     },
     "execution-manifest.json": {
       "sha256": "e0a4a2c4944d2a89ee6da115a2d44c6f2d33ccdef281c41ec820f820e77e7a56",
@@ -21,44 +23,44 @@
       "bytes": 410412
     },
     "figs/fig1_fault_severity_heatmap.svg": {
-      "sha256": "93f4f0a02c97df720c18cf3e6d519941c7f3d9e94211d01edcb9d1a05814f353",
-      "bytes": 31721
+      "sha256": "187cf7b223ed96ec528f49f35a8deb2ed5c6ff20cb071bef35f7fa6ed2947eb7",
+      "bytes": 31090
     },
     "figs/fig2_rms_vs_inject_time.png": {
       "sha256": "4361c727d45ea8150d201fb7cf95d3c265bfeb338c29ff9832f47d034e496dc8",
       "bytes": 273649
     },
     "figs/fig2_rms_vs_inject_time.svg": {
-      "sha256": "269e6b5e06bcb6362c3d01ea5fb92e4e0f4a13d45858ee3623f59e7431bcf8d2",
-      "bytes": 27791
+      "sha256": "d533a96ff8e57ccad3425a3bfa4ad34f8177d3c2afc5a755ca228759de3323a2",
+      "bytes": 27104
     },
     "figs/fig3_ablation_flips.png": {
       "sha256": "e80b684f84379f4d8b15e570bf933f508451a78e33aaa6fa9c62c28fde1cf23c",
       "bytes": 255241
     },
     "figs/fig3_ablation_flips.svg": {
-      "sha256": "53022c591c1c8af8f64895d916201600305e56ece5e621f306970928e9b7cf1a",
-      "bytes": 29473
+      "sha256": "03e45a0443fc951de9bc787a790a376e33d7e97bd4f8d9a9e2c6fbe9e801f6f2",
+      "bytes": 28786
     },
     "figs/fig4_controllers_vs_faults.png": {
       "sha256": "c8184c9e4be77f61e7c3d1ddcb04b09db33abc781a72c22c6451c8f8c9e5ce10",
       "bytes": 205325
     },
     "figs/fig4_controllers_vs_faults.svg": {
-      "sha256": "450daa98c634498b0453f202d9678b86a5cd89a04b905251ed5e4c4bc2b341b0",
-      "bytes": 23205
+      "sha256": "9902b4f3036fee4869ca6162b4f14546bf8e7251b7b6e8c6b27083a040450f7c",
+      "bytes": 22650
     },
     "figs/fig5_hil_only.png": {
       "sha256": "f063605b8a0e19c71dc47de5f5a54ffd938b13ee5c429eee03f29533085cb510",
       "bytes": 277090
     },
     "figs/fig5_hil_only.svg": {
-      "sha256": "a3e27315517f22c9dab580198985647456b117ecf74420f2bae0af65aace518a",
-      "bytes": 3912
+      "sha256": "dc86eb6353398a9ad4409b2eec28da00d524e6ab5f89207487948e0a52c981d6",
+      "bytes": 3846
     },
     "heatmap.html": {
-      "sha256": "9872912fe8e1e250d631c07e5653d2406b7764a0dc34831ab620ef39fa16c456",
-      "bytes": 2708459
+      "sha256": "1bf7c578bc80371fd8ad7356e778fa30a85e30e64e6edeb2db373c2240adf88f",
+      "bytes": 2708436
     },
     "matrix.json": {
       "sha256": "cc833c35864f0f8cfa4d67671bf605a129c2b18a5f59710be41ee11e2eb98aa9",
@@ -69,8 +71,8 @@
       "bytes": 9493167
     },
     "summary.json": {
-      "sha256": "8c5e21b42e0f0ac6fe7ac73f0abe7b170ca85e74725c1c3c27cc1539e2506dcc",
-      "bytes": 37884
+      "sha256": "a3b506fc31800dc1ab40019aa890c515d4111d4fcf548cae919665c4dd1bbcca",
+      "bytes": 36562
     },
     "videos/F1-preview.png": {
       "sha256": "6792bd55501dda4ddebd16fb4e923dc4a970b37df38a12c55ca6a9e9999a7b84",
@@ -137,8 +139,8 @@
       "bytes": 403318
     },
     "visualization-manifest.json": {
-      "sha256": "203f99b81294f46f0800a33812c3c935f3d0c224d69a716e83683bc9523c2ebe",
-      "bytes": 4938
+      "sha256": "9f3b75a810b95a8efe32230fcab7b453da2e8ddb1931b5c49fd59dd38baa80f6",
+      "bytes": 4826
     }
   },
   "full_evidence_archive": {

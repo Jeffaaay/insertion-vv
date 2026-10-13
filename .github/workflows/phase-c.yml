@@ -15,6 +15,7 @@ jobs:
       - run: python tools/review_gate.py --check-only
       - run: python tools/render_reviews.py
       - run: git diff --exit-code reviews/index.html
+      - run: python -m c1.verify_public
   injection:
     strategy:
       matrix:

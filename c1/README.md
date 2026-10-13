@@ -43,6 +43,10 @@ as 300 dpi PNG plus SVG. M3 visualization uses Pillow/imageio/imageio-ffmpeg;
 `python -m c1.visualize` reads sealed traces, producing an offline HTML explorer
 and eight 8-second MP4 videos. It never imports the simulation or runner modules.
 The video font path is Windows Arial; plots record local Windows provenance.
+After rendering, `python -m c1.seal_derived --archive PATH_TO_FULL_EVIDENCE_ZIP`
+normalizes text artifacts to UTF-8/LF and pins their bytes in derived-artifacts.json.
+`python -m c1.verify_public` checks the public matrix, render sources, all artifact
+hashes and nine original selected traces. Hosted CI repeats this from a fresh checkout.
 
 Full lossless evidence remains local under artifacts/c1/runs. Matrix, summaries,
 scientific figures, selected curves and videos are the compact published artifacts.

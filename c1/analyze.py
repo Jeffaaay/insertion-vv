@@ -282,6 +282,8 @@ def figures(matrix, summary, root):
         fig.text(0.02, 0.015, stamp, fontsize=8, color="#59616a")
         fig.savefig(folder / f"{name}.png", dpi=300, facecolor=fig.get_facecolor())
         fig.savefig(folder / f"{name}.svg", facecolor=fig.get_facecolor())
+        svg = folder / f"{name}.svg"
+        svg.write_bytes(svg.read_bytes().replace(b"\r\n", b"\n"))
         plt.close(fig)
 
     fig, ax = plt.subplots(figsize=(12, 6.8))
@@ -502,7 +504,7 @@ def main():
     args = parser.parse_args()
     matrix, digest = load_sealed(args.root)
     summary = assess(matrix, digest)
-    (args.root / "summary.json").write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
+    (args.root / "summary.json").write_bytes((json.dumps(summary, indent=2) + "\n").encode())
     figures(matrix, summary, args.root)
     print(
         json.dumps(

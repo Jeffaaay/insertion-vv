@@ -76,16 +76,16 @@ Full portable evidence archive SHA-256: `950046966e5a014df08d60c6eb5a9bc62110fd4
 | Derived artifact | SHA-256 |
 |---|---|
 | `figs/fig1_fault_severity_heatmap.png` | `92e2173c020bfe6a911c27f5349c8a8646c167a18094719e22e0a9387ba31a40` |
-| `figs/fig1_fault_severity_heatmap.svg` | `93f4f0a02c97df720c18cf3e6d519941c7f3d9e94211d01edcb9d1a05814f353` |
+| `figs/fig1_fault_severity_heatmap.svg` | `187cf7b223ed96ec528f49f35a8deb2ed5c6ff20cb071bef35f7fa6ed2947eb7` |
 | `figs/fig2_rms_vs_inject_time.png` | `4361c727d45ea8150d201fb7cf95d3c265bfeb338c29ff9832f47d034e496dc8` |
-| `figs/fig2_rms_vs_inject_time.svg` | `269e6b5e06bcb6362c3d01ea5fb92e4e0f4a13d45858ee3623f59e7431bcf8d2` |
+| `figs/fig2_rms_vs_inject_time.svg` | `d533a96ff8e57ccad3425a3bfa4ad34f8177d3c2afc5a755ca228759de3323a2` |
 | `figs/fig3_ablation_flips.png` | `e80b684f84379f4d8b15e570bf933f508451a78e33aaa6fa9c62c28fde1cf23c` |
-| `figs/fig3_ablation_flips.svg` | `53022c591c1c8af8f64895d916201600305e56ece5e621f306970928e9b7cf1a` |
+| `figs/fig3_ablation_flips.svg` | `03e45a0443fc951de9bc787a790a376e33d7e97bd4f8d9a9e2c6fbe9e801f6f2` |
 | `figs/fig4_controllers_vs_faults.png` | `c8184c9e4be77f61e7c3d1ddcb04b09db33abc781a72c22c6451c8f8c9e5ce10` |
-| `figs/fig4_controllers_vs_faults.svg` | `450daa98c634498b0453f202d9678b86a5cd89a04b905251ed5e4c4bc2b341b0` |
+| `figs/fig4_controllers_vs_faults.svg` | `9902b4f3036fee4869ca6162b4f14546bf8e7251b7b6e8c6b27083a040450f7c` |
 | `figs/fig5_hil_only.png` | `f063605b8a0e19c71dc47de5f5a54ffd938b13ee5c429eee03f29533085cb510` |
-| `figs/fig5_hil_only.svg` | `a3e27315517f22c9dab580198985647456b117ecf74420f2bae0af65aace518a` |
+| `figs/fig5_hil_only.svg` | `dc86eb6353398a9ad4409b2eec28da00d524e6ab5f89207487948e0a52c981d6` |
 | `selected-traces.zip` | `8ba5d81c618037113a51480bed930558bae084ca5f857c0e4321c4d0683ea1ae` |
-| `summary.json` | `8c5e21b42e0f0ac6fe7ac73f0abe7b170ca85e74725c1c3c27cc1539e2506dcc` |
+| `summary.json` | `a3b506fc31800dc1ab40019aa890c515d4111d4fcf548cae919665c4dd1bbcca` |
 
 Review interpretation: P5 is structurally supported, not evidence that delay modeling is necessary. Turning off jitter, quantization or dropout does not change any verdict in this registered range. F2/F3 are almost flat across onset; F1 is the material P4 counterexample. Across all baseline rows, maximum absolute CONTACT RMS differences from nominal for F2/F3/F8 are 2.52/8.21/3.32 nm (the reviewer’s <2 nm shorthand was corrected). Full RMS and velocity margins are in summary.json. Early F7 clipping is consistent with inadequate holding force; late injection also causes transient errors. An approximately 85% peak-force ratio is a HIL hypothesis only, never an interpolated boundary.

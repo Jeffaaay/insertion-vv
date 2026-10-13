@@ -55,7 +55,7 @@ def explorer(matrix, summary, root):
             )
     payload = json.dumps({"cells": cells, "sha": summary["matrix_sha256"]}, separators=(",", ":"))
     template = (Path(__file__).with_name("heatmap-template.html")).read_text(encoding="utf-8")
-    (root / "heatmap.html").write_text(template.replace("__DATA__", payload), encoding="utf-8")
+    (root / "heatmap.html").write_bytes(template.replace("__DATA__", payload).encode())
     return len(cells)
 
 
@@ -255,9 +255,13 @@ def main():
             "python": platform.python_version(),
             **{name: version(name) for name in ("pillow", "imageio", "imageio-ffmpeg")},
         },
-        "visualize_source_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+        "visualize_source_sha256_lf": hashlib.sha256(
+            Path(__file__).read_text(encoding="utf-8").encode()
+        ).hexdigest(),
     }
-    (args.root / "visualization-manifest.json").write_text(json.dumps(record, indent=2) + "\n")
+    (args.root / "visualization-manifest.json").write_bytes(
+        (json.dumps(record, indent=2) + "\n").encode()
+    )
 
 
 if __name__ == "__main__":
