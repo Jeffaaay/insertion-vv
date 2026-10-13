@@ -5034,6 +5034,13 @@ SIL evidence stays pinned to 8f5dacad; this is a subsequent editorial revision.
 {&quot;verdict&quot;:&quot;BLOCK&quot;,&quot;issues&quot;:[
 {&quot;severity&quot;:&quot;major&quot;,&quot;where&quot;:&quot;c1/render_insertion_3d.py 目标深度虚线; artifacts/c1/videos/insertion-3d.mp4 与 preview&quot;,&quot;what&quot;:&quot;虚线画在前表面 y=-0.68 mm，俯视 18° 投影下在针的屏幕位置比针轴处真实目标深度低约 290 µm（等效竖直距离），针在 300 µm 时看起来只插进一半，与右栏数值矛盾；改为过针轴、沿屏幕水平方向 (0.766,0.643,0) 的虚线或绕针的圆环，然后重新渲染视频和 poster&quot;,&quot;touches_frozen_or_registered&quot;:false}]}
 ```
+</pre></details><details class="pass" open><summary>claude-round-2.md</summary><pre>问题已闭合。我看了 poster（源时间 3.50 s，299.0 µm），也自己从 `362a862` 的视频里抽了 10.2 s 那一帧（源时间 2.55 s，303.9 µm）。两张图里针尖都正好压在虚线上，和右栏数值一致。
+
+代码改动只涉及虚线的位置：现在过点 (0, 0, top−0.0003)，方向 (sin az, −cos az, 0)，与我给的 (0.766, 0.643, 0) 一致。matrix 仍为 `cc833c35…`。
+
+```json
+{&quot;verdict&quot;:&quot;PASS&quot;,&quot;issues&quot;:[]}
+```
 </pre></details><details class="record"><summary>evidence.json</summary><pre>{
   &quot;reviewed_commit&quot;: &quot;2f20f353d8dc53374781e75c15a6750e7348930e&quot;,
   &quot;all_required_ci_pass&quot;: true,
@@ -5118,4 +5125,13 @@ The 12-second, 25 fps clip first covers 8 seconds at 1x, then source ticks 2000�
 at 0.25x. All frames use actual 1 ms samples without interpolation. The slow segment
 is visibly labeled, including the original source time. The blog and evidence hub
 feature it before results; GitHub README and journal link the MP4 and poster.
+</pre></details><details class="pass"><summary>round-2-integrity.json</summary><pre>{
+  &quot;conversation_url&quot;: &quot;https://claude.ai/chat/88a45c0b-4051-4fea-8c12-bdfa77bd4de1&quot;,
+  &quot;reviewed_commit&quot;: &quot;362a86214a72f928652435c394a58941ffb84284&quot;,
+  &quot;response_file&quot;: &quot;claude-round-2.md&quot;,
+  &quot;response_sha256&quot;: &quot;0607239389f52a558d27591744711f602d7d0ba1d35d126e7a9d52f6b2945381&quot;,
+  &quot;verdict&quot;: &quot;PASS&quot;,
+  &quot;issues&quot;: [],
+  &quot;transport&quot;: &quot;browser Copy response, copied verbatim; LF with final newline&quot;
+}
 </pre></details></section></html>
