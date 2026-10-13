@@ -1,0 +1,23 @@
+{
+  "schema": 1,
+  "id": "F8",
+  "levels": [
+    24,
+    16,
+    12,
+    10
+  ],
+  "unit": "bit",
+  "onsets_ms": [
+    200,
+    1500,
+    2400,
+    5000
+  ],
+  "seeds": [
+    42
+  ],
+  "layer": "sensor",
+  "duration": "persistent",
+  "random_table": "random-v1.json"
+}

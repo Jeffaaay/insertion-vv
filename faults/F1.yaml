@@ -1,0 +1,25 @@
+{
+  "schema": 1,
+  "id": "F1",
+  "levels": [
+    1,
+    5,
+    15,
+    30,
+    60,
+    120
+  ],
+  "unit": "tick",
+  "onsets_ms": [
+    200,
+    1500,
+    2400,
+    5000
+  ],
+  "seeds": [
+    42
+  ],
+  "layer": "sensor",
+  "duration": "N_ticks",
+  "random_table": "random-v1.json"
+}

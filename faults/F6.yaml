@@ -1,0 +1,23 @@
+{
+  "schema": 1,
+  "id": "F6",
+  "levels": [
+    1,
+    5,
+    15,
+    50
+  ],
+  "unit": "tick",
+  "onsets_ms": [
+    200,
+    1500,
+    2400,
+    5000
+  ],
+  "seeds": [
+    42
+  ],
+  "layer": "controller",
+  "duration": "N_ticks",
+  "random_table": "random-v1.json"
+}

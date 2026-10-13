@@ -15,3 +15,36 @@ jobs:
       - run: python tools/review_gate.py --check-only
       - run: python tools/render_reviews.py
       - run: git diff --exit-code reviews/index.html
+  injection:
+    strategy:
+      matrix:
+        os: [ubuntu-24.04, windows-2022]
+    runs-on: ${{ matrix.os }}
+    env:
+      OMP_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.10'
+          cache: pip
+          cache-dependency-path: requirements-lock.txt
+      - run: python -m pip install -r requirements-lock.txt
+      - run: rustup toolchain install 1.99.0 --profile minimal --component rustfmt --component clippy
+      - run: cargo +1.99.0 fmt --manifest-path c1/rust/Cargo.toml --check
+      - run: cargo +1.99.0 clippy --manifest-path c1/rust/Cargo.toml --locked --all-targets -- -D warnings
+      - run: cargo +1.99.0 build --manifest-path c1/rust/Cargo.toml --locked --release --target-dir artifacts/c1-rust
+      - run: python tools/build_controller.py --output artifacts/c1-build
+      - name: Frozen controller and cross-language injection acceptance
+        shell: bash
+        run: |
+          export C1_BUILD="$PWD/artifacts/c1-build"
+          export C1_RUST="$PWD/artifacts/c1-rust/release/c1-faults"
+          if [[ "$RUNNER_OS" == "Windows" ]]; then export C1_RUST="$C1_RUST.exe"; fi
+          python -m pytest c1/tests -q --junitxml=artifacts/c1-tests.xml
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: c1-injection-${{ matrix.os }}-${{ github.sha }}
+          path: artifacts/c1-tests.xml

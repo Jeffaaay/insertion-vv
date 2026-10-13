@@ -1,0 +1,8 @@
+{
+  "pytest_passed": 10,
+  "cross_language_rebuilt_binary": "PASS",
+  "ruff": "PASS",
+  "clippy": "PASS",
+  "frozen_checks": 104,
+  "scientific_matrix_run": false
+}

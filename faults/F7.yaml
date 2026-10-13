@@ -1,0 +1,23 @@
+{
+  "schema": 1,
+  "id": "F7",
+  "levels": [
+    100,
+    50,
+    25,
+    10
+  ],
+  "unit": "percent",
+  "onsets_ms": [
+    200,
+    1500,
+    2400,
+    5000
+  ],
+  "seeds": [
+    42
+  ],
+  "layer": "actuator",
+  "duration": "persistent",
+  "random_table": "random-v1.json"
+}

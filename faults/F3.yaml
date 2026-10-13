@@ -1,0 +1,28 @@
+{
+  "schema": 1,
+  "id": "F3",
+  "levels": [
+    0.5,
+    1,
+    2,
+    5,
+    10
+  ],
+  "unit": "ms",
+  "onsets_ms": [
+    200,
+    1500,
+    2400,
+    5000
+  ],
+  "seeds": [
+    42,
+    43,
+    44,
+    45,
+    46
+  ],
+  "layer": "sensor",
+  "duration": "300ms",
+  "random_table": "random-v1.json"
+}

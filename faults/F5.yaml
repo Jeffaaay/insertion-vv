@@ -1,0 +1,20 @@
+{
+  "schema": 1,
+  "id": "F5",
+  "levels": [
+    1.3,
+    1.4,
+    1.6,
+    1.8
+  ],
+  "unit": "Hz",
+  "onsets_ms": [
+    2000
+  ],
+  "seeds": [
+    42
+  ],
+  "layer": "plant",
+  "duration": "persistent",
+  "random_table": "random-v1.json"
+}
