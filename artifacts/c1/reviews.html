@@ -5171,6 +5171,21 @@ feature it before results; GitHub README and journal link the MP4 and poster.
 {&quot;severity&quot;:&quot;minor&quot;,&quot;where&quot;:&quot;overview 与 macro 叠加层&quot;,&quot;what&quot;:&quot;缺少尺度参照，约 1 cm 高的装置会被看成台式仪器；全景加 5 mm 比例尺，特写刻度尺标 0.2 mm/tick&quot;,&quot;touches_frozen_or_registered&quot;:false},
 {&quot;severity&quot;:&quot;minor&quot;,&quot;where&quot;:&quot;c1/compose_studio.py 慢放段文案&quot;,&quot;what&quot;:&quot;慢放段标题仍为 &#x27;Stay with the surface.&#x27;，与 &#x27;02 / INSERTION DETAIL&#x27; 不对应&quot;,&quot;touches_frozen_or_registered&quot;:false}]}
 ```
+</pre></details><details class="pass" open><summary>claude-round-2.md</summary><pre>四个问题都已闭合，我看了 overview、preview（源时间 3.60 s），以及视频 2.24 s 和 10.0 s（源时间 2.50 s）两帧。matrix 仍为 `cc833c35…`。
+
+1. **剖面已闭合。** 深色加斜线的截面一眼能看出是&quot;切开的&quot;，表面亮线和 `SURFACE · 0 µm` 标注让上下关系不再有歧义，俯角降低后错觉也消失了：
+   - 2.24 s（−125.1 µm）：针尖白点在表面线之上；
+   - 2.50 s（+249.3 µm）：针尖在表面之下、目标线之上；
+   - 3.60 s（+298.0 µm）：针尖压在 300 µm 虚线上。
+
+   三种状态和右侧数值一致，&quot;针进入材料&quot;现在能直接看出来。
+2. **`Z/01` 已闭合。** 立柱上的文字已移除。
+3. **比例尺已闭合。** 5 mm 比例尺按 `1920 / ortho_scale` 逐帧计算，只在镜头推进前的第 0–25 帧显示，推进过程中不会出现长度错误的比例尺。特写里刻度尺已标 `0.2 mm / tick`。
+4. **慢放标题已闭合。** 已改为 &quot;Into the sample.&quot;，与 `02 / INSERTION DETAIL` 对应。
+
+```json
+{&quot;verdict&quot;:&quot;PASS&quot;,&quot;issues&quot;:[]}
+```
 </pre></details><details class="record"><summary>evidence.json</summary><pre>{
   &quot;reviewed_commit&quot;: &quot;bf5105d762e609c58dfa2de0c8f9a62f175743da&quot;,
   &quot;all_required_ci_pass&quot;: true,
@@ -5264,4 +5279,39 @@ The stage, carrier and slender pointed needle are illustrative geometry. Origina
 ## Review focus
 
 Check provenance and timing, the visual needle/physics distinction, cutaway and target projection, and whether the new apparatus, camera and typography make the process understandable. Inspect actual MP4 frames and both stills, not just code. Distinguish visual-quality comments from scientific validation. Do not request new physical experiments for this presentation-only change.
+</pre></details><details class="record"><summary>round-2-evidence.json</summary><pre>{
+  &quot;reviewed_commit&quot;: &quot;61ea71f9dd900f4f2e66ca2ddfdb372df93c68b9&quot;,
+  &quot;all_required_ci_pass&quot;: true,
+  &quot;runs&quot;: {
+    &quot;Phase C integrity&quot;: {
+      &quot;conclusion&quot;: &quot;success&quot;,
+      &quot;headSha&quot;: &quot;61ea71f9dd900f4f2e66ca2ddfdb372df93c68b9&quot;,
+      &quot;name&quot;: &quot;Phase C integrity&quot;,
+      &quot;status&quot;: &quot;completed&quot;,
+      &quot;url&quot;: &quot;https://github.com/Jeffaaay/insertion-vv/actions/runs/38360490588&quot;
+    },
+    &quot;Phase A SIL&quot;: {
+      &quot;conclusion&quot;: &quot;success&quot;,
+      &quot;headSha&quot;: &quot;61ea71f9dd900f4f2e66ca2ddfdb372df93c68b9&quot;,
+      &quot;name&quot;: &quot;Phase A SIL&quot;,
+      &quot;status&quot;: &quot;completed&quot;,
+      &quot;url&quot;: &quot;https://github.com/Jeffaaay/insertion-vv/actions/runs/38360490467&quot;
+    },
+    &quot;Phase B C32&quot;: {
+      &quot;conclusion&quot;: &quot;success&quot;,
+      &quot;headSha&quot;: &quot;61ea71f9dd900f4f2e66ca2ddfdb372df93c68b9&quot;,
+      &quot;name&quot;: &quot;Phase B C32&quot;,
+      &quot;status&quot;: &quot;completed&quot;,
+      &quot;url&quot;: &quot;https://github.com/Jeffaaay/insertion-vv/actions/runs/38360490617&quot;
+    }
+  }
+}
+</pre></details><details class="pass"><summary>round-2-integrity.json</summary><pre>{
+  &quot;conversation_url&quot;: &quot;https://claude.ai/chat/88a45c0b-4051-4fea-8c12-bdfa77bd4de1&quot;,
+  &quot;reviewed_commit&quot;: &quot;61ea71f9dd900f4f2e66ca2ddfdb372df93c68b9&quot;,
+  &quot;response_file&quot;: &quot;claude-round-2.md&quot;,
+  &quot;response_sha256&quot;: &quot;97724a0ef24894f0428ca4e4fd43e2fcf26c04d8dcef12a2dc282e257ff0c6cd&quot;,
+  &quot;transport&quot;: &quot;browser Copy response, copied verbatim; LF with final newline&quot;,
+  &quot;verdict&quot;: &quot;PASS&quot;
+}
 </pre></details></section></html>
